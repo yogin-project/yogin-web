@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+📦 next-mui-intial
+├── 📂 app # Next.js App Router의 주요 폴더
+│ ├── 📂 (public) # 공개적으로 접근 가능한 페이지 (예: 로그인, 회원가입)
+│ ├── 📂 (private) # 인증이 필요한 페이지 (예: 대시보드, 프로필)
+│ ├── 📂 api # Next.js 서버 액션 및 API 라우트 핸들러
+│ ├── 📂 provider # 전역 Provider
+│ ├── 📂 layout # 공통 레이아웃 파일 (예: 다크모드, 글로벌 UI)
+│ │ ├── layout.tsx # Root layout (헤더, 푸터, 스타일링)
+│ ├── 📂 dashboard # 인증된 사용자가 접근하는 페이지
+│ │ ├── page.tsx
+│ │ ├── settings.tsx
+│ ├── 📂 auth # 인증 관련 페이지
+│ │ ├── login.tsx
+│ │ ├── register.tsx
+│ ├── page.tsx # 메인 페이지
+├── 📂 components # 재사용 가능한 UI 컴포넌트
+│ ├── 📂 ui # 버튼, 카드 등 공통 UI
+│ ├── 📂 forms # 로그인, 회원가입 폼
+│ ├── 📂 layout # 헤더, 푸터 등 레이아웃 컴포넌트
+├── 📂 hooks # 커스텀 훅
+│ ├── useAuth.ts # 인증 관련 훅
+│ ├── useThemeMode.ts # MUI 다크모드 훅
+│ ├── useQueryData.ts # React Query 관련 훅
+├── 📂 lib # 외부 라이브러리 관련 설정
+│ ├── axios.ts # Axios 인스턴스 설정
+│ ├── theme.ts # MUI 테마 설정
+│ ├── jotaiStore.ts # Jotai Store 설정
+│ ├── queryClient.ts # React Query Client 설정
+├── 📂 styles # 전역 스타일 관리
+│ ├── global.css
+│ ├── mui-overrides.css
+├── 📂 types # 타입 정의
+│ ├── auth.ts
+│ ├── user.ts
+│ ├── api.ts
+├── next.config.mjs # Next.js 설정
+├── tsconfig.json # TypeScript 설정
+├── package.json # 패키지 목록

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import "./globals.css";
+import MultiProvider from "./provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,9 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AppRouterCacheProvider>
+      <MultiProvider>
         <body>{children}</body>
-      </AppRouterCacheProvider>
+      </MultiProvider>
     </html>
   );
 }
