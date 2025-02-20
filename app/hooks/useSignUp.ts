@@ -1,17 +1,4 @@
-// hooks/useSignUp.ts
 import { useApiManager } from "../libs/apiManager";
-
-interface SignUpParams {
-  type: "MANAGER";
-  email: string;
-  password: string;
-  phoneNumber: string;
-  isAllowedST: number;
-  isAllowedPT: number;
-  name: string;
-  branchName: string;
-  region: string;
-}
 
 export const useSignUpMutation = () => {
   return useApiManager({
