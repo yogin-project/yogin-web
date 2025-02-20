@@ -1,4 +1,4 @@
-import { objToUrl, pathEncoded } from "../util";
+import { objToUrl, pathEncoded } from "../utils";
 
 // API 기본 URL 설정
 const getBaseUrl = () => {

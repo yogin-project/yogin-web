@@ -5,7 +5,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { Provider } from "jotai";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@mui/material";
-import theme from "../lib/theme";
+import theme from "../libs/theme";
 
 function MultiProvider({
   children,
