@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSignUpMutation } from "../hooks/useSignUp";
+import { useSignUpMutation } from "../hooks/apis/useSignUp";
 
 export default function SignUpForm() {
   const { mutate, isPending } = useSignUpMutation();

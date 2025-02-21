@@ -1,4 +1,4 @@
-import { useApiManager } from "../libs/apiManager";
+import { useApiManager } from "../../libs/apiManager";
 
 export const useSignUpMutation = () => {
   return useApiManager({

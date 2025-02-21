@@ -7,6 +7,12 @@ export const BREAKPOINTS = {
   desktop: 1200,
 };
 
+export const BREAKPOINTS_PX = {
+  mobile: `${BREAKPOINTS.mobile}px`,
+  tablet: `${BREAKPOINTS.tablet}px`,
+  desktop: `${BREAKPOINTS.desktop}px`,
+};
+
 const theme = createTheme({
   breakpoints: {
     values: {
