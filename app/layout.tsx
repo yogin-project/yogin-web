@@ -4,6 +4,7 @@ import "./globals.css";
 import MultiProvider from "./provider";
 import i18n from "../i18n";
 import { useEffect } from "react";
+import Header from "./components/Header";
 
 export default function RootLayout({
   children,
@@ -18,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <MultiProvider>
-        <body>{children}</body>
+        <body>
+          <Header />
+          {children}
+        </body>
       </MultiProvider>
     </html>
   );
