@@ -4,7 +4,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 function HeaderMobile() {
   return (
-    <Stack width="100%" height={80} display="flex" justifyContent="center">
+    <Stack
+      width="100%"
+      height={80}
+      display="flex"
+      justifyContent="center"
+      px={3}
+    >
       <Stack
         height="100%"
         width="100%"

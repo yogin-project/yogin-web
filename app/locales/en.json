@@ -1,7 +1,11 @@
 {
-  "current_lang": "🇺🇸 English",
+  "current_lang": "🇰🇷 한국어",
   "home": "홈",
   "policy_funding": "정책자금신청",
   "login": "로그인",
-  "sign_up": "회원가입"
+  "sign_up": "회원가입",
+  "select_signup_type": "회원 가입 유형을 선택해주세요",
+  "corporate": "기업",
+  "banker": "은행사",
+  "professor": "교수"
 }

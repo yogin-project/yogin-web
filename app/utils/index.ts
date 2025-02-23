@@ -1,3 +1,5 @@
+export const fullVhWithoutHeader = "calc(100vh - 80px)";
+
 export const pathEncoded = (path: string | undefined) => {
   const encodedPath = path
     ?.split("/")
