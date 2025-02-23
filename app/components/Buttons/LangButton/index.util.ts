@@ -1,4 +1,4 @@
-import { Language } from "./index.type";
+import { Language } from "@/app/types/common";
 import i18next from "i18next";
 
 export const handleChangeLang = (language: Language) => {
