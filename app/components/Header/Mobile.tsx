@@ -1,6 +1,7 @@
 import { Icon, Stack } from "@mui/material";
 import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import { headerToFixed } from "./index.styles";
 
 function HeaderMobile() {
   return (
@@ -10,6 +11,7 @@ function HeaderMobile() {
       display="flex"
       justifyContent="center"
       px={3}
+      sx={headerToFixed}
     >
       <Stack
         height="100%"

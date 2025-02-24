@@ -4,12 +4,19 @@ import { BREAKPOINTS } from "@/app/libs/theme";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { headerToFixed } from "./index.styles";
 
 function HeaderDesktop() {
   const { t } = useTranslation();
 
   return (
-    <Stack width="100%" height={80} display="flex" justifyContent="center">
+    <Stack
+      width="100%"
+      height={80}
+      display="flex"
+      justifyContent="center"
+      sx={headerToFixed}
+    >
       <Stack
         maxWidth={BREAKPOINTS.desktop}
         height="100%"
