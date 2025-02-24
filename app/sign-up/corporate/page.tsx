@@ -4,40 +4,29 @@ import MobileWrapper from "@/app/layout/MobileWrapper";
 import {
   Box,
   Button,
-  Checkbox,
   Divider,
-  FormControlLabel,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import AgreementSection from "../_components/AgreementSection";
 
 function SignUpCorporate() {
-  const [agreeAll, setAgreeAll] = useState(false);
   const [agreements, setAgreements] = useState({
     personalInfo: false,
     terms: false,
   });
 
-  const handleAgreementChange = (key) => {
-    setAgreements((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  const handleAgreeAllChange = () => {
-    const newAgreeState = !agreeAll;
-    setAgreeAll(newAgreeState);
-    setAgreements({
-      personalInfo: newAgreeState,
-      terms: newAgreeState,
-    });
+  const handleAgreementChange = (updatedAgreements) => {
+    setAgreements(updatedAgreements);
   };
 
   const isSignupEnabled = agreements.personalInfo && agreements.terms;
 
   return (
     <MobileWrapper>
-      <Typography variant="h6" mb={1}>
+      <Typography variant="h6" mb={6}>
         기업 회원가입
       </Typography>
       <Typography variant="body1" mb={1}>
@@ -67,52 +56,10 @@ function SignUpCorporate() {
       </Stack>
       <Box height={32} />
 
-      {/* 약관 동의 섹션 */}
-      <Stack border={1} borderColor="grey.300" p={2} borderRadius={1}>
-        <FormControlLabel
-          control={
-            <Checkbox checked={agreeAll} onChange={handleAgreeAllChange} />
-          }
-          label="전체 동의"
-        />
-        <Divider sx={{ my: 1 }} />
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={agreements.personalInfo}
-                onChange={() => handleAgreementChange("personalInfo")}
-              />
-            }
-            label="개인 정보 수집 및 이용 동의 (필수)"
-          />
-          <Button variant="outlined" size="small">
-            보기
-          </Button>
-        </Stack>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={agreements.terms}
-                onChange={() => handleAgreementChange("terms")}
-              />
-            }
-            label="이용 약관 동의 (필수)"
-          />
-          <Button variant="outlined" size="small">
-            보기
-          </Button>
-        </Stack>
-      </Stack>
+      <AgreementSection
+        agreements={agreements}
+        onAgreementChange={handleAgreementChange}
+      />
 
       <Box height={32} />
       <Button variant="contained" fullWidth disabled={!isSignupEnabled}>
