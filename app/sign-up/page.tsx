@@ -14,7 +14,6 @@ function SignUp() {
   const isMobile = useIsMobile();
   const handleRouteSignUp = useRouteSignUp();
 
-  // 버튼 리스트를 배열로 관리하여 코드 간결화
   const signupOptions: { key: MemberType; label: string }[] = [
     { key: "corporate", label: t("corporate") },
     { key: "professor", label: t("professor") },
@@ -31,7 +30,7 @@ function SignUp() {
           {t("select_signup_type")}
         </Typography>
         <Divider />
-        <Grid2 container spacing={2} minWidth="100%" mt={4}>
+        <Grid2 container spacing={2} minWidth="100%" mt={4} key={"sign-up"}>
           {signupOptions.map(({ key, label }) => (
             <Grid2 size={isMobile ? 12 : 4}>
               <Button

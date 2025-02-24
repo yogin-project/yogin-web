@@ -5,9 +5,11 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { headerToFixed } from "./index.styles";
+import { useRouteInHeader } from "./index.hooks";
 
 function HeaderDesktop() {
   const { t } = useTranslation();
+  const handleRouteHeader = useRouteInHeader();
 
   return (
     <Stack
@@ -43,10 +45,18 @@ function HeaderDesktop() {
           </Box>
         </Stack>
         <Stack direction={"row"} gap={1.5}>
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => handleRouteHeader("sign-in")}
+          >
             {t("login")}
           </Button>
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => handleRouteHeader("sign-up")}
+          >
             {t("sign_up")}
           </Button>
         </Stack>
