@@ -10,9 +10,13 @@ import {
   Typography,
   Select,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import React, { useState } from "react";
 import Image from "next/image";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
 
 function SignUpBank() {
@@ -20,9 +24,19 @@ function SignUpBank() {
     personalInfo: false,
     terms: false,
   });
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);
+  };
+
+  const handleFileUpload = (event) => {
+    const files = Array.from(event.target.files);
+    setUploadedFiles((prevFiles) => [...prevFiles, ...files]);
+  };
+
+  const handleFileDelete = (index) => {
+    setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
   const isSignupEnabled = agreements.personalInfo && agreements.terms;
@@ -67,14 +81,58 @@ function SignUpBank() {
       <Typography variant="body2" mt={2}>
         증빙서류 (명함)
       </Typography>
-      <Box width="100%" display="flex" justifyContent="center">
-        <Image
-          src="/images/common/select-file.png"
-          height={172}
-          width={408}
-          style={{ minWidth: "100%", height: "auto" }}
+
+      <Box width="100%" display="flex" justifyContent="center" mt={1}>
+        <label
+          htmlFor="file-upload"
+          style={{ cursor: "pointer", width: "100%" }}
+        >
+          <Image
+            src="/images/common/select-file.png"
+            height={172}
+            width={408}
+            style={{ minWidth: "100%", height: "auto" }}
+            alt=""
+          />
+        </label>
+        <input
+          id="file-upload"
+          type="file"
+          multiple
+          hidden
+          onChange={handleFileUpload}
         />
       </Box>
+      {uploadedFiles.length > 0 && (
+        <Box mt={2}>
+          {uploadedFiles.map((file, index) => (
+            <Box
+              key={index}
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              p={1}
+              border={1}
+              borderRadius={1}
+              borderColor="grey.300"
+              mt={1}
+            >
+              <Stack direction="row" alignItems="center" gap={1}>
+                <InsertDriveFileIcon color="primary" />
+                <Typography variant="body2">
+                  {file.name} ({(file.size / 1024).toFixed(2)} KB) • Complete
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center" gap={1}>
+                <CheckCircleIcon color="success" />
+                <IconButton onClick={() => handleFileDelete(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Stack>
+            </Box>
+          ))}
+        </Box>
+      )}
       <Box height={32} />
 
       <AgreementSection
