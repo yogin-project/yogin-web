@@ -11,8 +11,11 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import AgreementSection from "../_components/AgreementSection";
+import { useRouter } from "next/navigation";
 
 function SignUpCorporate() {
+  const router = useRouter();
+
   const [agreements, setAgreements] = useState({
     personalInfo: false,
     terms: false,
@@ -66,7 +69,7 @@ function SignUpCorporate() {
         회원가입
       </Button>
       <Box height={8} />
-      <Button variant="outlined" fullWidth>
+      <Button variant="outlined" fullWidth onClick={() => router.back()}>
         이전으로
       </Button>
       <Box height={32} />

@@ -18,8 +18,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
+import { useRouter } from "next/navigation";
 
 function SignUpProfessor() {
+  const router = useRouter();
+
   const [agreements, setAgreements] = useState({
     personalInfo: false,
     terms: false,
@@ -62,24 +65,17 @@ function SignUpProfessor() {
       <TextField variant="standard" label="휴대폰 번호" />
       <Box height={32} />
       <Typography variant="body1" mt={4} mb={1}>
-        은행사정보
+        학교정보
       </Typography>
       <Divider />
       <Box height={32} />
-      <Select variant="standard" displayEmpty fullWidth>
-        <MenuItem value="" disabled>
-          은행사 선택
-        </MenuItem>
-        <MenuItem value="은행A">은행A</MenuItem>
-        <MenuItem value="은행B">은행B</MenuItem>
-      </Select>
-      <Box height={8} />
-      <TextField variant="standard" label="지점명" />
+
+      <TextField variant="standard" label="학교 또는 소속" />
       <Box height={8} />
       <TextField variant="standard" label="담당 지역" />
       <Box height={8} />
       <Typography variant="body2" mt={2}>
-        증빙서류 (명함)
+        증빙사진 (재직증명서)
       </Typography>
       <Box width="100%" display="flex" justifyContent="center" mt={1}>
         <label
@@ -144,7 +140,7 @@ function SignUpProfessor() {
         가입 신청
       </Button>
       <Box height={8} />
-      <Button variant="outlined" fullWidth>
+      <Button variant="outlined" fullWidth onClick={() => router.back()}>
         이전으로
       </Button>
       <Box height={32} />

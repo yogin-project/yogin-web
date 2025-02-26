@@ -30,6 +30,8 @@ function HeaderDesktop() {
       >
         <Stack direction={"row"} gap={4}>
           <Box
+            component={"div"}
+            onClick={() => handleRouteHeader("")}
             sx={{
               cursor: "pointer",
             }}

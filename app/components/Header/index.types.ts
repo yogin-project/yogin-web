@@ -1,1 +1,1 @@
-export type routerType = "sign-in" | "sign-up";
+export type routerType = "sign-in" | "sign-up" | "";

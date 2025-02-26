@@ -18,6 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
+import { useRouter } from "next/navigation";
 
 function SignUpBank() {
   const [agreements, setAgreements] = useState({
@@ -25,6 +26,7 @@ function SignUpBank() {
     terms: false,
   });
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const router = useRouter();
 
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);
@@ -145,7 +147,7 @@ function SignUpBank() {
         가입 신청
       </Button>
       <Box height={8} />
-      <Button variant="outlined" fullWidth>
+      <Button variant="outlined" fullWidth onClick={() => router.back()}>
         이전으로
       </Button>
       <Box height={32} />
