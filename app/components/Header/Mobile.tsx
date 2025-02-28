@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { headerToFixed } from "./index.styles";
 
 function HeaderMobile() {
-  return (
+\  return (
     <Stack
       width="100%"
       height={80}

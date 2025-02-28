@@ -27,7 +27,7 @@ function SignIn() {
       <Box height={32} />
       <TextField variant="standard" label="이메일" />
       <Box height={16} />
-      <TextField variant="standard" label="비밀번호" />
+      <TextField variant="standard" label="비밀번호" type="password" />
       <Stack direction="row" alignItems="center" mt={4} mb={2}>
         <FormControlLabel
           control={<Checkbox checked={true} onChange={() => {}} />}
