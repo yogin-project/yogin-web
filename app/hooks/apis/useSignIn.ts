@@ -6,10 +6,10 @@ export const useSignInMutation = () => {
     path: "auth/sign-in",
     mutationOption: {
       onSuccess: (data: any) => {
-        console.log("회원가입 성공:", data);
+        console.log("로그인 성공:", data);
       },
       onError: (error: any) => {
-        console.error("회원가입 실패:", error);
+        console.error("로그인 실패:", error);
       },
     },
   }).setUseMutation;
