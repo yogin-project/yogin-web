@@ -10,11 +10,13 @@ import {
   Stack,
   TextField,
   Typography,
+  Dialog,
 } from "@mui/material";
 import React, { useState } from "react";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
 import { locations } from "@/app/utils";
+import DaumPostcode from "react-daum-postcode"; // 카카오 주소 검색 라이브러리
 
 function SignUpCorporate() {
   const router = useRouter();
@@ -25,6 +27,8 @@ function SignUpCorporate() {
   });
 
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [address, setAddress] = useState(""); // 주소 상태 추가
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false); // 주소 검색 모달 상태
 
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);
@@ -32,6 +36,15 @@ function SignUpCorporate() {
 
   const handleLocationChange = (event) => {
     setSelectedLocation(event.target.value);
+  };
+
+  const handleAddressSearch = () => {
+    setIsAddressModalOpen(true);
+  };
+
+  const handleAddressSelect = (data) => {
+    setAddress(data.address); // 선택된 주소를 저장
+    setIsAddressModalOpen(false); // 모달 닫기
   };
 
   const isSignupEnabled = agreements.personalInfo && agreements.terms;
@@ -62,14 +75,11 @@ function SignUpCorporate() {
       <Divider />
       <Box height={32} />
       <TextField variant="standard" label="기업명" />
-      <Stack flexDirection={"row"} gap={2} mt={2}>
-        <TextField variant="standard" label="사업자 번호" sx={{ flex: 1 }} />
-        <Button variant="contained" size="large" sx={{ maxWidth: 73 }}>
-          확인
-        </Button>
-      </Stack>
       <Box height={8} />
-      <Typography variant="body1" mt={4} mb={1}>
+      <TextField variant="standard" label="사업자 번호" />
+
+      <Box height={8} />
+      <Typography variant="body1" mt={2} mb={1}>
         소재지
       </Typography>
       <Select
@@ -90,8 +100,21 @@ function SignUpCorporate() {
       </Select>
       <Box height={8} />
       <Stack flexDirection={"row"} gap={2} mt={2}>
-        <TextField variant="standard" label="주소 검색" sx={{ flex: 1 }} />
-        <Button variant="contained" size="large" sx={{ maxWidth: 120 }}>
+        <TextField
+          variant="standard"
+          label="주소 검색"
+          sx={{ flex: 1 }}
+          value={address} // 주소 입력 필드 값
+          InputProps={{
+            readOnly: true, // 직접 입력 방지
+          }}
+        />
+        <Button
+          variant="contained"
+          size="large"
+          sx={{ maxWidth: 120 }}
+          onClick={handleAddressSearch}
+        >
           주소 찾기
         </Button>
       </Stack>
@@ -113,6 +136,17 @@ function SignUpCorporate() {
         이전으로
       </Button>
       <Box height={32} />
+
+      {/* 주소 검색 모달 */}
+      <Dialog
+        open={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        fullWidth
+      >
+        <Box p={2}>
+          <DaumPostcode onComplete={handleAddressSelect} />
+        </Box>
+      </Dialog>
     </MobileWrapper>
   );
 }
