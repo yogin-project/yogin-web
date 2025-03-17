@@ -1,7 +1,14 @@
 "use client";
 
 import MobileWrapper from "@/app/layout/MobileWrapper";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  TextField,
+  Typography,
+  Stack,
+} from "@mui/material";
 import React, { useState } from "react";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
@@ -17,6 +24,7 @@ function SignUpCorporate() {
     type: "CORPORATE",
     email: "",
     password: "",
+    confirmPassword: "", // API에 포함되지 않음
     phoneNumber: "",
     name: "",
     corpName: "",
@@ -32,10 +40,17 @@ function SignUpCorporate() {
     terms: false,
   });
 
+  const [passwordError, setPasswordError] = useState(false); // 비밀번호 불일치 상태
+
   // 입력 필드 값 변경 핸들러
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // 비밀번호, 비밀번호 확인 필드 변경 시 에러 초기화
+    if (name === "password" || name === "confirmPassword") {
+      setPasswordError(false);
+    }
   };
 
   // 약관 동의 변경 핸들러
@@ -48,21 +63,22 @@ function SignUpCorporate() {
     e.preventDefault();
 
     // 비밀번호 확인 체크
-    // if (formData.password !== formData.confirmPassword) {
-    //   alert("비밀번호가 일치하지 않습니다.");
-    //   return;
-    // }
+    if (formData.password !== formData.confirmPassword) {
+      setPasswordError(true);
+      return;
+    }
 
-    // API 요청 (JSON 방식)
+    // API 요청 시 confirmPassword 제외
+    const { confirmPassword, ...requestData } = formData;
+
     mutate(
       {
-        body: {
-          ...formData,
-        },
+        body: requestData,
       },
       {
         onSuccess: () => {
           alert("회원가입이 완료되었습니다!");
+          router.push("/login");
         },
         onError: (error) => {
           console.error("회원가입 실패:", error);
@@ -78,6 +94,7 @@ function SignUpCorporate() {
     agreements.terms &&
     formData.email &&
     formData.password &&
+    formData.confirmPassword &&
     formData.phoneNumber &&
     formData.name &&
     formData.corpName &&
@@ -91,71 +108,78 @@ function SignUpCorporate() {
         기업 회원가입
       </Typography>
 
-      <form onSubmit={handleSignUp}>
-        <Typography variant="body1" mb={1}>
-          계정정보
-        </Typography>
+      <Box
+        component="form"
+        onSubmit={handleSignUp}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        {/* ✅ 계정정보 */}
+        <Typography variant="body1">계정정보</Typography>
         <Divider />
-        <Box height={32} />
         <TextField
           name="name"
           variant="standard"
           label="이름"
+          fullWidth
           onChange={handleInputChange}
         />
-        <Box height={8} />
         <TextField
           name="email"
           variant="standard"
           label="이메일"
+          fullWidth
           onChange={handleInputChange}
         />
-        <Box height={8} />
         <TextField
           name="password"
           variant="standard"
           label="비밀번호"
           type="password"
+          fullWidth
           onChange={handleInputChange}
+          error={passwordError}
+          helperText={passwordError ? "비밀번호가 일치하지 않습니다." : ""}
         />
-        <Box height={8} />
         <TextField
           name="confirmPassword"
           variant="standard"
           label="비밀번호 확인"
           type="password"
+          fullWidth
           onChange={handleInputChange}
+          error={passwordError}
+          helperText={passwordError ? "비밀번호가 일치하지 않습니다." : ""}
         />
-        <Box height={8} />
         <TextField
           name="phoneNumber"
           variant="standard"
           label="휴대폰 번호"
+          fullWidth
           onChange={handleInputChange}
         />
-        <Box height={32} />
 
-        <Typography variant="body1" mt={4} mb={1}>
+        {/* ✅ 기업정보 */}
+        <Typography variant="body1" mt={2}>
           기업정보
         </Typography>
         <Divider />
-        <Box height={32} />
         <TextField
           name="corpName"
           variant="standard"
           label="기업명"
+          fullWidth
           onChange={handleInputChange}
         />
-        <Box height={8} />
         <TextField
           name="businessNo"
           variant="standard"
           label="사업자 번호"
+          fullWidth
           onChange={handleInputChange}
         />
-        <Box height={8} />
 
-        <Typography variant="body1" mt={2} mb={1}>
+        {/* ✅ 소재지 */}
+        <Typography variant="body1" mt={2}>
           소재지
         </Typography>
         <AddressSearch
@@ -169,27 +193,27 @@ function SignUpCorporate() {
           }
         />
 
-        <Box height={32} />
+        {/* ✅ 약관 동의 */}
         <AgreementSection
           agreements={agreements}
           onAgreementChange={handleAgreementChange}
         />
 
-        <Box height={32} />
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          disabled={!isSignupEnabled || isPending}
-        >
-          {isPending ? "가입 중..." : "회원가입"}
-        </Button>
-        <Box height={8} />
-        <Button variant="outlined" fullWidth onClick={() => router.back()}>
-          이전으로
-        </Button>
-        <Box height={32} />
-      </form>
+        {/* ✅ 회원가입 버튼 */}
+        <Stack spacing={1}>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={!isSignupEnabled || isPending}
+          >
+            {isPending ? "가입 중..." : "회원가입"}
+          </Button>
+          <Button variant="outlined" fullWidth onClick={() => router.back()}>
+            이전으로
+          </Button>
+        </Stack>
+      </Box>
     </MobileWrapper>
   );
 }
