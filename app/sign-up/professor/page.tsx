@@ -19,9 +19,12 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
+import { locations } from "@/app/utils";
 
 function SignUpProfessor() {
   const router = useRouter();
+
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   const [agreements, setAgreements] = useState({
     personalInfo: false,
@@ -42,19 +45,23 @@ function SignUpProfessor() {
     setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
+  const handleLocationChange = (event) => {
+    setSelectedLocation(event.target.value);
+  };
+
   const isSignupEnabled = agreements.personalInfo && agreements.terms;
 
   return (
     <MobileWrapper>
       <Typography variant="h6" mb={1}>
-        은행사 회원가입
+        교수 회원가입
       </Typography>
       <Typography variant="body1" mb={1}>
         계정정보
       </Typography>
       <Divider />
       <Box height={32} />
-      <TextField variant="standard" label="성명" />
+      <TextField variant="standard" label="이름" />
       <Box height={8} />
       <TextField variant="standard" label="이메일" />
       <Box height={8} />
@@ -65,14 +72,32 @@ function SignUpProfessor() {
       <TextField variant="standard" label="휴대폰 번호" />
       <Box height={32} />
       <Typography variant="body1" mt={4} mb={1}>
-        학교정보
+        학교 / 소속 정보
       </Typography>
       <Divider />
       <Box height={32} />
 
       <TextField variant="standard" label="학교 또는 소속" />
       <Box height={8} />
-      <TextField variant="standard" label="담당 지역" />
+      <Typography variant="body1" mt={2} mb={1}>
+        소재지
+      </Typography>
+      <Select
+        variant="standard"
+        displayEmpty
+        fullWidth
+        value={selectedLocation}
+        onChange={handleLocationChange}
+      >
+        <MenuItem value="" disabled>
+          소재지 선택
+        </MenuItem>
+        {locations.map((location) => (
+          <MenuItem key={location} value={location}>
+            {location}
+          </MenuItem>
+        ))}
+      </Select>
       <Box height={8} />
       <Typography variant="body2" mt={2}>
         증빙사진 (재직증명서)

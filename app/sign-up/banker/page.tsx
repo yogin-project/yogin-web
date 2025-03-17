@@ -11,6 +11,7 @@ import {
   Select,
   MenuItem,
   IconButton,
+  Dialog,
 } from "@mui/material";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -19,6 +20,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
+import { bankList, locations } from "@/app/utils";
+import DaumPostcode from "react-daum-postcode"; // 카카오 주소 검색 라이브러리
 
 function SignUpBank() {
   const [agreements, setAgreements] = useState({
@@ -26,6 +29,11 @@ function SignUpBank() {
     terms: false,
   });
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [address, setAddress] = useState(""); // 주소 상태 추가
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false); // 주소 검색 모달 상태
+
+  const [selectedBank, setSelectedBank] = useState("");
   const router = useRouter();
 
   const handleAgreementChange = (updatedAgreements) => {
@@ -41,6 +49,23 @@ function SignUpBank() {
     setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
+  const handleLocationChange = (event) => {
+    setSelectedLocation(event.target.value);
+  };
+
+  const handleAddressSearch = () => {
+    setIsAddressModalOpen(true);
+  };
+
+  const handleBankChange = (event) => {
+    setSelectedBank(event.target.value);
+  };
+
+  const handleAddressSelect = (data) => {
+    setAddress(data.address); // 선택된 주소를 저장
+    setIsAddressModalOpen(false); // 모달 닫기
+  };
+
   const isSignupEnabled = agreements.personalInfo && agreements.terms;
 
   return (
@@ -53,7 +78,7 @@ function SignUpBank() {
       </Typography>
       <Divider />
       <Box height={32} />
-      <TextField variant="standard" label="성명" />
+      <TextField variant="standard" label="이름" />
       <Box height={8} />
       <TextField variant="standard" label="이메일" />
       <Box height={8} />
@@ -64,21 +89,71 @@ function SignUpBank() {
       <TextField variant="standard" label="휴대폰 번호" />
       <Box height={32} />
       <Typography variant="body1" mt={4} mb={1}>
-        은행사정보
+        은행정보
       </Typography>
       <Divider />
       <Box height={32} />
-      <Select variant="standard" displayEmpty fullWidth>
+      <Select
+        variant="standard"
+        displayEmpty
+        fullWidth
+        value={selectedBank}
+        onChange={handleBankChange}
+      >
         <MenuItem value="" disabled>
-          은행사 선택
+          은행 선택
         </MenuItem>
-        <MenuItem value="은행A">은행A</MenuItem>
-        <MenuItem value="은행B">은행B</MenuItem>
+        {bankList.map((bank) => (
+          <MenuItem key={bank} value={bank}>
+            {bank}
+          </MenuItem>
+        ))}
       </Select>
+
       <Box height={8} />
       <TextField variant="standard" label="지점명" />
       <Box height={8} />
-      <TextField variant="standard" label="담당 지역" />
+
+      <Typography variant="body1" mt={2} mb={1}>
+        소재지
+      </Typography>
+      <Select
+        variant="standard"
+        displayEmpty
+        fullWidth
+        value={selectedLocation}
+        onChange={handleLocationChange}
+      >
+        <MenuItem value="" disabled>
+          소재지 선택
+        </MenuItem>
+        {locations.map((location) => (
+          <MenuItem key={location} value={location}>
+            {location}
+          </MenuItem>
+        ))}
+      </Select>
+      <Box height={8} />
+      <Stack flexDirection={"row"} gap={2} mt={2}>
+        <TextField
+          variant="standard"
+          label="주소 검색"
+          sx={{ flex: 1 }}
+          value={address} // 주소 입력 필드 값
+          InputProps={{
+            readOnly: true, // 직접 입력 방지
+          }}
+        />
+        <Button
+          variant="contained"
+          size="large"
+          sx={{ maxWidth: 120 }}
+          onClick={handleAddressSearch}
+        >
+          주소 찾기
+        </Button>
+      </Stack>
+      <TextField variant="standard" label="상세 주소 입력" sx={{ flex: 1 }} />
       <Box height={8} />
       <Typography variant="body2" mt={2}>
         증빙서류 (명함)
@@ -151,6 +226,17 @@ function SignUpBank() {
         이전으로
       </Button>
       <Box height={32} />
+
+      {/* 주소 검색 모달 */}
+      <Dialog
+        open={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        fullWidth
+      >
+        <Box p={2}>
+          <DaumPostcode onComplete={handleAddressSelect} />
+        </Box>
+      </Dialog>
     </MobileWrapper>
   );
 }
