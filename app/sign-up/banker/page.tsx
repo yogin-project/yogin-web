@@ -11,7 +11,6 @@ import {
   Select,
   MenuItem,
   IconButton,
-  Dialog,
 } from "@mui/material";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -20,8 +19,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
-import { bankList, locations } from "@/app/utils";
-import DaumPostcode from "react-daum-postcode"; // 카카오 주소 검색 라이브러리
+import { bankList } from "@/app/utils";
+import AddressSearch from "@/app/components/AddSearch";
 
 function SignUpBank() {
   const [agreements, setAgreements] = useState({
@@ -117,43 +116,13 @@ function SignUpBank() {
       <Typography variant="body1" mt={2} mb={1}>
         소재지
       </Typography>
-      <Select
-        variant="standard"
-        displayEmpty
-        fullWidth
-        value={selectedLocation}
-        onChange={handleLocationChange}
-      >
-        <MenuItem value="" disabled>
-          소재지 선택
-        </MenuItem>
-        {locations.map((location) => (
-          <MenuItem key={location} value={location}>
-            {location}
-          </MenuItem>
-        ))}
-      </Select>
-      <Box height={8} />
-      <Stack flexDirection={"row"} gap={2} mt={2}>
-        <TextField
-          variant="standard"
-          label="주소 검색"
-          sx={{ flex: 1 }}
-          value={address} // 주소 입력 필드 값
-          InputProps={{
-            readOnly: true, // 직접 입력 방지
-          }}
-        />
-        <Button
-          variant="contained"
-          size="large"
-          sx={{ maxWidth: 120 }}
-          onClick={handleAddressSearch}
-        >
-          주소 찾기
-        </Button>
-      </Stack>
-      <TextField variant="standard" label="상세 주소 입력" sx={{ flex: 1 }} />
+      <AddressSearch
+        selectedLocation={selectedLocation}
+        setSelectedLocation={setSelectedLocation}
+        address={address}
+        setAddress={setAddress}
+      />
+
       <Box height={8} />
       <Typography variant="body2" mt={2}>
         증빙서류 (명함)
@@ -226,17 +195,6 @@ function SignUpBank() {
         이전으로
       </Button>
       <Box height={32} />
-
-      {/* 주소 검색 모달 */}
-      <Dialog
-        open={isAddressModalOpen}
-        onClose={() => setIsAddressModalOpen(false)}
-        fullWidth
-      >
-        <Box p={2}>
-          <DaumPostcode onComplete={handleAddressSelect} />
-        </Box>
-      </Dialog>
     </MobileWrapper>
   );
 }
