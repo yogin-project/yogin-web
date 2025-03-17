@@ -27,11 +27,19 @@ function SignIn() {
   });
 
   const [rememberMe, setRememberMe] = useState(true); // 로그인 유지 체크박스
+  const [passwordError, setPasswordError] = useState(false); // 비밀번호 오류 상태
+  const [errorMessage, setErrorMessage] = useState(""); // 오류 메시지 저장
 
   // 입력 필드 값 변경 핸들러
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // 입력이 변경되면 비밀번호 오류 메시지 초기화
+    if (name === "password") {
+      setPasswordError(false);
+      setErrorMessage("");
+    }
   };
 
   // 로그인 요청
@@ -62,7 +70,15 @@ function SignIn() {
         },
         onError: (error) => {
           console.error("로그인 실패:", error);
-          alert("로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.");
+          if (error?.details.errorCode === "BAD_PASSWORD") {
+            setPasswordError(true);
+            setErrorMessage("비밀번호가 틀렸습니다. 다시 시도해주세요.");
+          } else if (error?.details.errorCode === "NO_EXISTS_USER") {
+            setPasswordError(true);
+            setErrorMessage("등록되지 않은 이메일 정보입니다.");
+          } else {
+            setErrorMessage("잠시 후 시도해주세요.");
+          }
         },
       }
     );
@@ -90,6 +106,8 @@ function SignIn() {
         type="password"
         fullWidth
         onChange={handleInputChange}
+        error={passwordError} // 비밀번호 오류 시 빨간 테두리
+        helperText={passwordError ? errorMessage : ""} // 오류 메시지 표시
       />
       <Stack direction="row" alignItems="center" mt={4} mb={2}>
         <FormControlLabel
