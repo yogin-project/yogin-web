@@ -32,10 +32,10 @@ function SignUp() {
         <Divider />
         <Grid2 container spacing={2} minWidth="100%" mt={4} key={"sign-up"}>
           {signupOptions.map(({ key, label }) => (
-            <Grid2 size={isMobile ? 12 : 4}>
+            <Grid2 size={12}>
               <Button
                 fullWidth
-                variant="contained"
+                variant="outlined"
                 size="large"
                 onClick={() => handleRouteSignUp(key)}
               >

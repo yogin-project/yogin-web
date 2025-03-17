@@ -6,6 +6,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { headerToFixed } from "./index.styles";
 import { useRouteInHeader } from "./index.hooks";
+import Image from "next/image";
 
 function HeaderDesktop() {
   const { t } = useTranslation();
@@ -29,6 +30,12 @@ function HeaderDesktop() {
         alignItems={"center"}
       >
         <Stack direction={"row"} gap={4}>
+          <Image
+            src={"/images/common/logo.png"}
+            width={85}
+            height={23}
+            alt=""
+          />
           <Box
             component={"div"}
             onClick={() => handleRouteHeader("")}

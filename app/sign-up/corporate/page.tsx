@@ -5,6 +5,8 @@ import {
   Box,
   Button,
   Divider,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -12,6 +14,7 @@ import {
 import React, { useState } from "react";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
+import { locations } from "@/app/utils";
 
 function SignUpCorporate() {
   const router = useRouter();
@@ -21,8 +24,14 @@ function SignUpCorporate() {
     terms: false,
   });
 
+  const [selectedLocation, setSelectedLocation] = useState("");
+
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);
+  };
+
+  const handleLocationChange = (event) => {
+    setSelectedLocation(event.target.value);
   };
 
   const isSignupEnabled = agreements.personalInfo && agreements.terms;
@@ -37,6 +46,8 @@ function SignUpCorporate() {
       </Typography>
       <Divider />
       <Box height={32} />
+      <TextField variant="standard" label="이름" />
+      <Box height={8} />
       <TextField variant="standard" label="이메일" />
       <Box height={8} />
       <TextField variant="standard" label="비밀번호" type="password" />
@@ -57,8 +68,37 @@ function SignUpCorporate() {
           확인
         </Button>
       </Stack>
-      <Box height={32} />
+      <Box height={8} />
+      <Typography variant="body1" mt={4} mb={1}>
+        소재지
+      </Typography>
+      <Select
+        variant="standard"
+        displayEmpty
+        fullWidth
+        value={selectedLocation}
+        onChange={handleLocationChange}
+      >
+        <MenuItem value="" disabled>
+          소재지 선택
+        </MenuItem>
+        {locations.map((location) => (
+          <MenuItem key={location} value={location}>
+            {location}
+          </MenuItem>
+        ))}
+      </Select>
+      <Box height={8} />
+      <Stack flexDirection={"row"} gap={2} mt={2}>
+        <TextField variant="standard" label="주소 검색" sx={{ flex: 1 }} />
+        <Button variant="contained" size="large" sx={{ maxWidth: 120 }}>
+          주소 찾기
+        </Button>
+      </Stack>
+      <Box height={8} />
 
+      <TextField variant="standard" label="상세 주소 입력" sx={{ flex: 1 }} />
+      <Box height={32} />
       <AgreementSection
         agreements={agreements}
         onAgreementChange={handleAgreementChange}
