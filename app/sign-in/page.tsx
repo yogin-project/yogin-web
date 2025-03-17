@@ -46,10 +46,19 @@ function SignIn() {
         body: formData,
       },
       {
-        onSuccess: (data) => {
-          console.log("로그인 성공:", data);
-          alert("로그인 성공!");
-          // TODO: 로그인 성공 시 토큰 저장 및 페이지 이동 로직 추가
+        onSuccess: (response) => {
+          console.log("로그인 성공:", response);
+
+          const token = response?.data?.token; // 응답에서 토큰 추출
+          if (token) {
+            if (rememberMe) {
+              localStorage.setItem("authToken", token); // 자동 로그인 → localStorage
+            } else {
+              sessionStorage.setItem("authToken", token); // 일반 로그인 → sessionStorage
+            }
+            alert("로그인 성공!");
+            // TODO: 로그인 성공 후 대시보드 또는 홈으로 이동 (예: router.push("/dashboard"))
+          }
         },
         onError: (error) => {
           console.error("로그인 실패:", error);
