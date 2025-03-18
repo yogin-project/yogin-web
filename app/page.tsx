@@ -1,100 +1,76 @@
+"use client";
+
+import { Box, Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
-import styles from "./page.module.css";
-import LangButton from "./components/Buttons/LangButton";
-import SignUpForm from "./components/example";
-import Header from "./components/Header";
+import React from "react";
+import { BREAKPOINTS } from "./libs/theme";
 
-export default function Home() {
+function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <LangButton />
-        <SignUpForm />
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <Stack width="100%" display="flex" justifyContent="center" sx={{ py: 8 }}>
+      <Stack
+        maxWidth={BREAKPOINTS.desktop}
+        width="100%"
+        margin="0 auto"
+        direction={{ xs: "column", md: "row" }} // 모바일: 세로 / 데스크탑: 가로
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={4}
+      >
+        {/* 왼쪽 텍스트 영역 */}
+        <Stack maxWidth={655}>
+          <Typography variant="h3" fontWeight="bold" mb={2}>
+            정책 자금은 <br />
+            요긴에서{" "}
+            <Typography
+              component="span"
+              color="primary"
+              fontWeight="bold"
+              sx={{ fontSize: "inherit", display: "inline" }}
+            >
+              무료
+            </Typography>
+            로 신청하세요!
+          </Typography>
+          <Typography variant="h6" color="textSecondary">
+            더 이상 불필요한 컨설팅 수수료를 지불하지 마세요.
+          </Typography>
+          <Typography variant="h6" color="textSecondary" fontWeight={"bold"}>
+            기업의 자금 조달 가능성을 극대화할 수 있도록 지원합니다.
+          </Typography>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+          {/* 버튼 그룹 */}
+          <Stack direction="row" spacing={2} mt={2}>
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                backgroundColor: "primary.main",
+                color: "white",
+                "&:hover": { backgroundColor: "primary.dark" },
+              }}
+            >
+              0원으로 시작하기
+            </Button>
+            <Button variant="outlined" size="large">
+              앱으로 보기
+            </Button>
+          </Stack>
+        </Stack>
+
+        {/* 오른쪽 이미지 영역 */}
+        <Box>
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src="/images/free_policy_funding.png" // 실제 이미지 경로로 변경
+            width={300} // 원하는 크기 설정
+            height={300}
+            alt="무료 정책 자금 신청"
+            style={{ maxWidth: "100%", height: "auto" }}
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        </Box>
+      </Stack>
+    </Stack>
   );
 }
+
+export default Home;

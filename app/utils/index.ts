@@ -75,3 +75,11 @@ export const bankList = [
   "케이뱅크",
   "토스뱅크",
 ];
+
+export const isAuthenticated = (): boolean => {
+  if (typeof window === "undefined") return false; // SSR 환경 방어
+
+  const token =
+    localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+  return !!token; // `authToken`이 존재하면 true, 없으면 false
+};
