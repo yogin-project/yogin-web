@@ -19,7 +19,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
-import { locations } from "@/app/utils";
+import AddressSearch from "@/app/components/AddSearch";
 
 function SignUpProfessor() {
   const router = useRouter();
@@ -31,6 +31,24 @@ function SignUpProfessor() {
     terms: false,
   });
   const [uploadedFiles, setUploadedFiles] = useState([]);
+
+  // 회원가입 폼 상태
+  const [formData, setFormData] = useState({
+    type: "PROFESSOR",
+    email: "",
+    password: "",
+    confirmPassword: "", // API에 포함되지 않음
+    phoneNumber: "",
+    isAllowedST: "1",
+    isAllowedPT: "1",
+    name: "",
+    location: "", // 소재지
+    branchName: "", // 지점
+    organization: "",
+    address: "",
+    position: "",
+    file: "",
+  });
 
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);
@@ -82,22 +100,14 @@ function SignUpProfessor() {
       <Typography variant="body1" mt={2} mb={1}>
         소재지
       </Typography>
-      <Select
-        variant="standard"
-        displayEmpty
-        fullWidth
-        value={selectedLocation}
-        onChange={handleLocationChange}
-      >
-        <MenuItem value="" disabled>
-          소재지 선택
-        </MenuItem>
-        {locations.map((location) => (
-          <MenuItem key={location} value={location}>
-            {location}
-          </MenuItem>
-        ))}
-      </Select>
+      <AddressSearch
+        selectedLocation={formData.location}
+        setSelectedLocation={(location) =>
+          setFormData((prev) => ({ ...prev, location }))
+        }
+        address={formData.address}
+        setAddress={(address) => setFormData((prev) => ({ ...prev, address }))}
+      />
       <Box height={8} />
       <Typography variant="body2" mt={2}>
         증빙사진 (재직증명서)
@@ -123,6 +133,11 @@ function SignUpProfessor() {
           onChange={handleFileUpload}
         />
       </Box>
+      <Select variant="standard" displayEmpty fullWidth>
+        <MenuItem value="" disabled>
+          직책 선택
+        </MenuItem>
+      </Select>
       {uploadedFiles.length > 0 && (
         <Box mt={2}>
           {uploadedFiles.map((file, index) => (
