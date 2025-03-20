@@ -25,6 +25,7 @@ export const apiClient = async ({
         "Content-Type": "application/json",
         ...(authToken && { Authorization: `Bearer ${authToken}` }),
       },
+      credentials: "include",
     };
 
     if (method !== "GET") {
