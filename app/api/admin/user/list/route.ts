@@ -5,7 +5,7 @@ export async function GET(req: Request) {
     const body = await req.json();
     const API_URL = process.env.API_URL;
 
-    const response = await fetch(`${API_URL}/user/profile`, {
+    const response = await fetch(`${API_URL}/admin/user/list`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

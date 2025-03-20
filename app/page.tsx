@@ -1,9 +1,7 @@
 "use client";
 
-import { Box, Button, Stack, Typography } from "@mui/material";
-import Image from "next/image";
+import { Stack } from "@mui/material";
 import React from "react";
-import { BREAKPOINTS } from "./libs/theme";
 import Section1 from "./_components/Section1";
 
 function Home() {

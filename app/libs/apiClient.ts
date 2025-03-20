@@ -11,13 +11,19 @@ export const apiClient = async ({
   body?: any;
 }) => {
   try {
-    const url = `/api/${path}`; // Next.js API Route 호출
+    const url = `/api/${path}`;
+
+    const authToken =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+
+    console.log("authToken: ", authToken);
 
     const requestOptions: RequestInit = {
       method,
       headers: {
         ...headers,
         "Content-Type": "application/json",
+        ...(authToken && { Authorization: `Bearer ${authToken}` }),
       },
     };
 
