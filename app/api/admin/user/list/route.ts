@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+// TODO: 유저 프로필 api을 보고 마이그레이션
 export async function GET(req: Request) {
   try {
     const body = await req.json();

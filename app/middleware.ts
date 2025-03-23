@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export async function GET() {
-  const response = NextResponse.json({ message: "Success" });
+export function middleware(req: NextRequest) {
+  const response = NextResponse.next();
 
   response.headers.set("Access-Control-Allow-Origin", "*");
   response.headers.set(
@@ -12,7 +13,12 @@ export async function GET() {
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization"
   );
-  response.headers.set("Access-Control-Allow-Credentials", "true"); // 인증 정보 허용
+  response.headers.set("Access-Control-Allow-Credentials", "true");
 
   return response;
 }
+
+// API 경로에서만 적용
+export const config = {
+  matcher: "/api/:path*",
+};
