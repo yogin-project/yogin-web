@@ -14,6 +14,14 @@ export const BREAKPOINTS_PX = {
 };
 
 const theme = createTheme({
+  // TODO: 다크모드가 되지 않게 하려고 설정하였는데 안됨
+  colorSchemes: {
+    dark: false,
+  },
+  palette: {
+    mode: "light",
+  },
+
   breakpoints: {
     values: {
       xs: 0,

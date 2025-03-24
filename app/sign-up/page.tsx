@@ -2,7 +2,14 @@
 
 import React from "react";
 import MobileWrapper from "../layout/MobileWrapper";
-import { Button, Divider, Grid2, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Grid2,
+  Stack,
+  Typography,
+  Paper,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useIsMobile } from "../hooks/useIsMobileSize";
 import { fullVhWithoutHeader } from "../utils";
@@ -25,25 +32,39 @@ function SignUp() {
       <Stack
         height={isMobile ? fullVhWithoutHeader : ""}
         justifyContent={isMobile ? "center" : "unset"}
+        alignItems="center"
+        px={2}
+        py={4}
       >
-        <Typography variant="h6" mb={1}>
-          {t("select_signup_type")}
-        </Typography>
-        <Divider />
-        <Grid2 container spacing={2} minWidth="100%" mt={4} key={"sign-up"}>
-          {signupOptions.map(({ key, label }) => (
-            <Grid2 size={12}>
-              <Button
-                fullWidth
-                variant="outlined"
-                size="large"
-                onClick={() => handleRouteSignUp(key)}
-              >
-                {label}
-              </Button>
-            </Grid2>
-          ))}
-        </Grid2>
+        <Paper
+          elevation={3}
+          sx={{
+            width: "100%",
+
+            p: 4,
+            borderRadius: 3,
+            backgroundColor: "#fff",
+          }}
+        >
+          <Typography variant="h6" mb={1}>
+            {t("select_signup_type")}
+          </Typography>
+          <Divider />
+          <Grid2 container spacing={2} minWidth="100%" mt={4} key={"sign-up"}>
+            {signupOptions.map(({ key, label }) => (
+              <Grid2 size={12} key={key}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  size="large"
+                  onClick={() => handleRouteSignUp(key)}
+                >
+                  {label}
+                </Button>
+              </Grid2>
+            ))}
+          </Grid2>
+        </Paper>
       </Stack>
     </MobileWrapper>
   );

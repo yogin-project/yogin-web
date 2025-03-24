@@ -39,20 +39,16 @@ function HeaderDesktop() {
       >
         <Stack direction={"row"} gap={4}>
           <Image
+            onClick={() => handleRouteHeader("")}
             src={"/images/common/logo.png"}
             width={85}
             height={23}
-            alt=""
-          />
-          <Box
-            component={"div"}
-            onClick={() => handleRouteHeader("")}
-            sx={{
+            style={{
               cursor: "pointer",
             }}
-          >
-            <Typography>{t("home")}</Typography>
-          </Box>
+            alt=""
+          />
+
           <Box
             sx={{
               cursor: "pointer",
