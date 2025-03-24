@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import MobileWrapper from "../layout/MobileWrapper";
 import {
@@ -8,6 +10,7 @@ import {
   Divider,
   TextField,
   Typography,
+  Paper,
 } from "@mui/material";
 
 function PasswordReset() {
@@ -21,28 +24,42 @@ function PasswordReset() {
           비밀번호를 변경해주시기 바랍니다.
         </Typography>
       </Alert>
-      <Box height={56} />
-      <Typography variant="h6">비밀번호 초기화</Typography>
-      <Box height={12} />
-      <Typography variant="body1">본인 인증</Typography>
-      <Box height={8} />
-      <Divider />
+
       <Box height={32} />
-      <TextField variant="standard" label="이메일" />
-      <Box height={16} />
-      <Button variant="contained" size="large" color="primary">
-        인증번호 발송
-      </Button>
-      <Box height={56} />
-      <Typography variant="body1">새로운 비밀번호 발송</Typography>
-      <Box height={8} />
-      <Divider />
-      <Box height={32} />
-      <TextField variant="standard" label="인증번호 확인" />
-      <Box height={16} />
-      <Button variant="contained" size="large" color="primary">
-        새로운 비밀번호 발송
-      </Button>
+
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: "#fff",
+          mb: 4,
+        }}
+      >
+        <Typography variant="h6">비밀번호 초기화</Typography>
+        <Box height={12} />
+        <Typography variant="body1">본인 인증</Typography>
+        <Box height={8} />
+        <Divider />
+        <Box height={32} />
+        <TextField fullWidth variant="standard" label="이메일" />
+        <Box height={16} />
+        <Button fullWidth variant="contained" size="large" color="primary">
+          인증번호 발송
+        </Button>
+
+        <Box height={56} />
+
+        <Typography variant="body1">새로운 비밀번호 발송</Typography>
+        <Box height={8} />
+        <Divider />
+        <Box height={32} />
+        <TextField fullWidth variant="standard" label="인증번호 확인" />
+        <Box height={16} />
+        <Button fullWidth variant="contained" size="large" color="primary">
+          새로운 비밀번호 발송
+        </Button>
+      </Paper>
     </MobileWrapper>
   );
 }
