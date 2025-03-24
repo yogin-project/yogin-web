@@ -36,6 +36,11 @@ function SignIn() {
   const [passwordError, setPasswordError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const id =
+    formData.userType === "기업"
+      ? "사업자번호 ( - 없이 입력하세요 )"
+      : "이메일";
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -55,16 +60,19 @@ function SignIn() {
     }
   };
 
+  // 로그인 api 동작
   const handleSignIn = () => {
+    const { userType, ...requestData } = formData;
+
     if (!formData.email || !formData.password) {
       alert("이메일과 비밀번호를 입력해주세요.");
       return;
     }
 
-    signIn(
-      {
-        body: formData,
-      },
+    const mutationFn = formData.userType === "기업" ? signInCorp : signIn;
+
+    mutationFn(
+      { body: requestData },
       {
         onSuccess: (response) => {
           const token = response?.data?.token;
@@ -78,10 +86,11 @@ function SignIn() {
           }
         },
         onError: (error) => {
-          if (error?.details.errorCode === "BAD_PASSWORD") {
+          console.error("로그인 실패:", error);
+          if (error?.details?.errorCode === "BAD_PASSWORD") {
             setPasswordError(true);
             setErrorMessage("비밀번호가 틀렸습니다. 다시 시도해주세요.");
-          } else if (error?.details.errorCode === "NO_EXISTS_USER") {
+          } else if (error?.details?.errorCode === "NO_EXISTS_USER") {
             setPasswordError(true);
             setErrorMessage("등록되지 않은 이메일 정보입니다.");
           } else {
@@ -132,7 +141,7 @@ function SignIn() {
         <TextField
           name="email"
           variant="standard"
-          label="이메일"
+          label={id}
           fullWidth
           onChange={handleInputChange}
           sx={{ mb: 2 }}
@@ -164,10 +173,10 @@ function SignIn() {
           fullWidth
           variant="contained"
           onClick={handleSignIn}
-          disabled={isPending}
+          disabled={isPending || isCorpPending}
           sx={{ py: 1.5 }}
         >
-          {isPending ? "로그인 중..." : "로그인"}
+          {isPending || isCorpPending ? "로그인 중..." : "로그인"}
         </Button>
 
         <Box height={16} />
