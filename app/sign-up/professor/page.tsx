@@ -105,7 +105,7 @@ function SignUpProfessor() {
       {
         onSuccess: () => {
           alert("회원가입이 완료되었습니다!");
-          // router.push("/login");
+          router.push("/");
         },
         onError: (error) => {
           console.error("회원가입 실패:", error);

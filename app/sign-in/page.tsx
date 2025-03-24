@@ -14,17 +14,25 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { ChevronRight } from "@mui/icons-material";
 import { useRouteSignInPage } from "./index.hooks";
 import { useSignInMutation } from "../hooks/apis/useSignIn";
 import { useSignInCorpMutation } from "../hooks/apis/useSignInCorp";
+import { useRouter } from "next/navigation";
+import { isLoginAtom } from "../store/authAtom";
+import { useSetAtom } from "jotai";
 
 function SignIn() {
   const handleRouting = useRouteSignInPage();
+  const setIsLogin = useSetAtom(isLoginAtom);
   const { mutate: signIn, isPending } = useSignInMutation();
   const { mutate: signInCorp, isPending: isCorpPending } =
     useSignInCorpMutation();
+  const router = useRouter();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -92,7 +100,11 @@ function SignIn() {
             } else {
               sessionStorage.setItem("authToken", token);
             }
-            alert("로그인 성공!");
+            setOpenSnackbar(true);
+            setTimeout(() => {
+              setIsLogin(true);
+              router.push("/");
+            }, 1000); // 메시지 잠깐 보여주고 이동
           }
         },
         onError: (error) => {
@@ -212,6 +224,16 @@ function SignIn() {
       <Button fullWidth onClick={() => handleRouting("sign-up")}>
         회원가입
       </Button>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={2000}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          로그인 성공!
+        </Alert>
+      </Snackbar>
     </MobileWrapper>
   );
 }

@@ -9,15 +9,21 @@ import { useRouteInHeader } from "./index.hooks";
 import Image from "next/image";
 import { isAuthenticated } from "@/app/utils";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { isLoginAtom } from "@/app/store/authAtom";
+import { useAtomValue, useSetAtom } from "jotai";
 
 function HeaderDesktop() {
   const { t } = useTranslation();
   const handleRouteHeader = useRouteInHeader();
 
-  const [isLogin, setIsLogin] = useState(false);
+  const isLogin = useAtomValue(isLoginAtom);
+  const setIsLogin = useSetAtom(isLoginAtom);
 
   useEffect(() => {
-    setIsLogin(isAuthenticated());
+    // 앱 시작 시 localStorage/sessionStorage 확인 → 로그인 상태 세팅
+    if (isAuthenticated()) {
+      setIsLogin(true);
+    }
   }, []);
 
   return (
