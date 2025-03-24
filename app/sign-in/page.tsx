@@ -62,14 +62,24 @@ function SignIn() {
 
   // 로그인 api 동작
   const handleSignIn = () => {
-    const { userType, ...requestData } = formData;
-
     if (!formData.email || !formData.password) {
       alert("이메일과 비밀번호를 입력해주세요.");
       return;
     }
 
     const mutationFn = formData.userType === "기업" ? signInCorp : signIn;
+
+    // userType에 따라 request body 키 조정
+    const requestData =
+      formData.userType === "기업"
+        ? {
+            businessNo: formData.email, // email 대신 businessNo로 보냄
+            password: formData.password,
+          }
+        : {
+            email: formData.email,
+            password: formData.password,
+          };
 
     mutationFn(
       { body: requestData },
@@ -90,7 +100,10 @@ function SignIn() {
           if (error?.details?.errorCode === "BAD_PASSWORD") {
             setPasswordError(true);
             setErrorMessage("비밀번호가 틀렸습니다. 다시 시도해주세요.");
-          } else if (error?.details?.errorCode === "NO_EXISTS_USER") {
+          } else if (
+            error?.details?.errorCode === "NO_EXISTS_USER" ||
+            error?.details?.errorCode === "NOT_CORPORATE_USER"
+          ) {
             setPasswordError(true);
             setErrorMessage("등록되지 않은 이메일 정보입니다.");
           } else {
