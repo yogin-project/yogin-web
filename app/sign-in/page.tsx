@@ -18,10 +18,13 @@ import {
 import { ChevronRight } from "@mui/icons-material";
 import { useRouteSignInPage } from "./index.hooks";
 import { useSignInMutation } from "../hooks/apis/useSignIn";
+import { useSignInCorpMutation } from "../hooks/apis/useSignInCorp";
 
 function SignIn() {
   const handleRouting = useRouteSignInPage();
   const { mutate: signIn, isPending } = useSignInMutation();
+  const { mutate: signInCorp, isPending: isCorpPending } =
+    useSignInCorpMutation();
 
   const [formData, setFormData] = useState({
     email: "",
