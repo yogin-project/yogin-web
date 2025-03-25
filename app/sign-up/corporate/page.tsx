@@ -20,9 +20,10 @@ import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
 function SignUpCorporate() {
   const router = useRouter();
   const { mutate, isPending } = useSignUpMutation();
-  const { handleCheckEmail } = useCheckMailHandler();
 
-  // 회원가입 폼 상태
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const { handleCheckEmail } = useCheckMailHandler(setIsEmailChecked);
+
   const [formData, setFormData] = useState({
     type: "CORPORATE",
     email: "",
@@ -53,6 +54,10 @@ function SignUpCorporate() {
     // 비밀번호, 비밀번호 확인 필드 변경 시 에러 초기화
     if (name === "password" || name === "confirmPassword") {
       setPasswordError(false);
+    }
+
+    if (name === "email") {
+      setIsEmailChecked(false); // 이메일 변경 시 중복 확인 상태 초기화
     }
   };
 
@@ -103,7 +108,8 @@ function SignUpCorporate() {
     formData.corpName &&
     formData.businessNo &&
     formData.location &&
-    formData.address;
+    formData.address &&
+    isEmailChecked;
 
   return (
     <MobileWrapper>
@@ -125,9 +131,9 @@ function SignUpCorporate() {
           onSubmit={handleSignUp}
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
-          {/* ✅ 계정정보 */}
           <Typography variant="body1">계정정보</Typography>
           <Divider />
+
           <Stack flexDirection={"row"} gap={2} mt={2}>
             <TextField
               name="businessNo"
@@ -145,6 +151,7 @@ function SignUpCorporate() {
               검증 확인
             </Button>
           </Stack>
+
           <Stack flexDirection={"row"} gap={2} mt={2}>
             <TextField
               name="email"
@@ -162,6 +169,7 @@ function SignUpCorporate() {
               중복 확인
             </Button>
           </Stack>
+
           <TextField
             name="password"
             variant="standard"
@@ -192,12 +200,11 @@ function SignUpCorporate() {
           <TextField
             name="phoneNumber"
             variant="standard"
-            label="휴대폰 번호 ( - 없이 입력하세요) "
+            label="휴대폰 번호 ( - 없이 입력하세요)"
             fullWidth
             onChange={handleInputChange}
           />
 
-          {/* ✅ 기업정보 */}
           <Typography variant="body1" mt={2}>
             기업정보
           </Typography>
@@ -210,7 +217,6 @@ function SignUpCorporate() {
             onChange={handleInputChange}
           />
 
-          {/* ✅ 소재지 */}
           <Typography variant="body1" mt={4}>
             소재지
           </Typography>
@@ -225,13 +231,11 @@ function SignUpCorporate() {
             }
           />
 
-          {/* ✅ 약관 동의 */}
           <AgreementSection
             agreements={agreements}
             onAgreementChange={handleAgreementChange}
           />
 
-          {/* ✅ 회원가입 버튼 */}
           <Stack spacing={1}>
             <Button
               type="submit"
