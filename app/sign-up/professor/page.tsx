@@ -244,7 +244,6 @@ function SignUpProfessor() {
             <MenuItem value="" disabled>
               직책 선택
             </MenuItem>
-            <MenuItem value="PROFESSOR">교수</MenuItem>
             <MenuItem value="STUDENT">학생</MenuItem>
             <MenuItem value="BUSINESS">사업자</MenuItem>
           </Select>

@@ -60,7 +60,14 @@ function HeaderDesktop() {
               cursor: "pointer",
             }}
           >
-            <Typography>{t("policy_funding")}</Typography>
+            <Typography>대출찾기 (정책자금)</Typography>
+          </Box>
+          <Box
+            sx={{
+              cursor: "pointer",
+            }}
+          >
+            <Typography>R&D 매칭</Typography>
           </Box>
         </Stack>
         <Stack direction={"row"} gap={2} alignItems={"center"}>
