@@ -36,7 +36,6 @@ function AddressSearch({
 
   return (
     <>
-      <Box height={8} />
       <Select
         variant="standard"
         displayEmpty
@@ -64,17 +63,12 @@ function AddressSearch({
             readOnly: true, // 직접 입력 방지
           }}
         />
-        <Button
-          variant="contained"
-          size="large"
-          sx={{ maxWidth: 120 }}
-          onClick={handleAddressSearch}
-        >
+        <Button variant="contained" size="small" onClick={handleAddressSearch}>
           주소 찾기
         </Button>
       </Stack>
-      <Box height={8} />
       <TextField variant="standard" label="상세 주소 입력" sx={{ flex: 1 }} />
+      <Box height={8} />
 
       {/* 주소 검색 모달 */}
       <Dialog
