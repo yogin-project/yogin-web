@@ -15,10 +15,12 @@ import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
 import AddressSearch from "@/app/components/AddSearch";
 import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
+import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
 
 function SignUpCorporate() {
   const router = useRouter();
   const { mutate, isPending } = useSignUpMutation();
+  const { handleCheckEmail } = useCheckMailHandler();
 
   // 회원가입 폼 상태
   const [formData, setFormData] = useState({
@@ -155,7 +157,7 @@ function SignUpCorporate() {
             <Button
               variant="contained"
               size="small"
-              // onClick={} TODO: 사업자 번호 검증 로직 넣어야함
+              onClick={() => handleCheckEmail(formData.email)}
             >
               중복 확인
             </Button>
