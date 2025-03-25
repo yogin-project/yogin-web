@@ -16,6 +16,13 @@ import { useRouter } from "next/navigation";
 import AddressSearch from "@/app/components/AddSearch";
 import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
 import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
+import {
+  handleAgreementChangeFactory,
+  handleInputChangeFactory,
+  initialAgreements,
+  initialFormData,
+  isSignupEnabled,
+} from "./index.utils";
 
 function SignUpCorporate() {
   const router = useRouter();
@@ -24,47 +31,21 @@ function SignUpCorporate() {
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const { handleCheckEmail } = useCheckMailHandler(setIsEmailChecked);
 
-  const [formData, setFormData] = useState({
-    type: "CORPORATE",
-    email: "",
-    password: "",
-    confirmPassword: "", // API에 포함되지 않음
-    phoneNumber: "",
-    name: "",
-    corpName: "",
-    businessNo: "",
-    location: "",
-    address: "",
-    isAllowedST: "1",
-    isAllowedPT: "1",
-  });
+  const [formData, setFormData] = useState(initialFormData);
 
-  const [agreements, setAgreements] = useState({
-    personalInfo: false,
-    terms: false,
-  });
+  const [agreements, setAgreements] = useState(initialAgreements);
 
   const [passwordError, setPasswordError] = useState(false); // 비밀번호 불일치 상태
 
   // 입력 필드 값 변경 핸들러
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // 비밀번호, 비밀번호 확인 필드 변경 시 에러 초기화
-    if (name === "password" || name === "confirmPassword") {
-      setPasswordError(false);
-    }
-
-    if (name === "email") {
-      setIsEmailChecked(false); // 이메일 변경 시 중복 확인 상태 초기화
-    }
-  };
+  const handleInputChange = handleInputChangeFactory(
+    setFormData,
+    setPasswordError,
+    setIsEmailChecked
+  );
 
   // 약관 동의 변경 핸들러
-  const handleAgreementChange = (updatedAgreements: any) => {
-    setAgreements(updatedAgreements);
-  };
+  const handleAgreementChange = handleAgreementChangeFactory(setAgreements);
 
   // 회원가입 요청
   const handleSignUp = (e: React.FormEvent) => {
@@ -97,19 +78,11 @@ function SignUpCorporate() {
   };
 
   // 회원가입 버튼 활성화 여부
-  const isSignupEnabled =
-    agreements.personalInfo &&
-    agreements.terms &&
-    formData.email &&
-    formData.password &&
-    formData.confirmPassword &&
-    formData.phoneNumber &&
-    formData.name &&
-    formData.corpName &&
-    formData.businessNo &&
-    formData.location &&
-    formData.address &&
-    isEmailChecked;
+  const signupEnabled = isSignupEnabled({
+    agreements,
+    formData,
+    isEmailChecked,
+  });
 
   return (
     <MobileWrapper>
@@ -241,7 +214,7 @@ function SignUpCorporate() {
               type="submit"
               variant="contained"
               fullWidth
-              disabled={!isSignupEnabled || isPending}
+              disabled={!signupEnabled || isPending}
             >
               {isPending ? "가입 중..." : "회원가입"}
             </Button>
