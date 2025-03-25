@@ -23,8 +23,8 @@ function SignUp() {
 
   const signupOptions: { key: MemberType; label: string }[] = [
     { key: "corporate", label: t("corporate") },
-    { key: "professor", label: t("professor") },
-    { key: "banker", label: t("banker") },
+    { key: "professor", label: "R&D (석/박사)" },
+    { key: "banker", label: "은행 (지점장)" },
   ];
 
   return (

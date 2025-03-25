@@ -11,6 +11,7 @@ import {
   Select,
   MenuItem,
   IconButton,
+  Paper,
 } from "@mui/material";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -130,159 +131,175 @@ function SignUpBank() {
 
   return (
     <MobileWrapper>
-      <Typography variant="h6" mb={1}>
-        은행 회원가입
-      </Typography>
-
-      <Box
-        component="form"
-        onSubmit={handleSignUp}
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: "#fff",
+          mb: 4,
+        }}
       >
-        {/* ✅ 계정정보 */}
-        <Typography variant="body1">계정정보</Typography>
-        <Divider />
-        <TextField
-          name="name"
-          variant="standard"
-          label="이름"
-          fullWidth
-          onChange={handleInputChange}
-        />
-        <TextField
-          name="email"
-          variant="standard"
-          label="이메일"
-          fullWidth
-          onChange={handleInputChange}
-        />
-        <TextField
-          name="password"
-          variant="standard"
-          label="비밀번호"
-          type="password"
-          fullWidth
-          onChange={handleInputChange}
-          error={passwordError}
-          helperText={passwordError ? "비밀번호가 일치하지 않습니다." : ""}
-        />
-        <TextField
-          name="confirmPassword"
-          variant="standard"
-          label="비밀번호 확인"
-          type="password"
-          fullWidth
-          onChange={handleInputChange}
-          error={passwordError}
-          helperText={passwordError ? "비밀번호가 일치하지 않습니다." : ""}
-        />
-        <TextField
-          name="phoneNumber"
-          variant="standard"
-          label="휴대폰 번호"
-          fullWidth
-          onChange={handleInputChange}
-        />
-
-        {/* ✅ 은행 정보 */}
-        <Typography variant="body1" mt={2}>
-          은행 정보
+        <Typography variant="h6" mb={1}>
+          은행 회원가입
         </Typography>
-        <Divider />
-        <Select
-          name="branch"
-          variant="standard"
-          displayEmpty
-          fullWidth
-          value={formData.branch}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, branch: e.target.value }))
-          }
+
+        <Box
+          component="form"
+          onSubmit={handleSignUp}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
-          <MenuItem value="" disabled>
-            지점 선택
-          </MenuItem>
-          {bankList.map((bank) => (
-            <MenuItem key={bank} value={bank}>
-              {bank}
-            </MenuItem>
-          ))}
-        </Select>
-
-        {/* ✅ 소재지 */}
-        <Typography variant="body1" mt={2}>
-          소재지
-        </Typography>
-        <AddressSearch
-          selectedLocation={formData.location}
-          setSelectedLocation={(location) =>
-            setFormData((prev) => ({ ...prev, location }))
-          }
-          address={formData.address}
-          setAddress={handleAddressChange}
-        />
-
-        {/* ✅ 증빙사진 (파일 업로드) */}
-        <Typography variant="body2" mt={2}>
-          증빙서류 (명함)
-        </Typography>
-        <Box width="100%" display="flex" justifyContent="center" mt={1}>
-          <label
-            htmlFor="file-upload"
-            style={{ cursor: "pointer", width: "100%" }}
-          >
-            <Image
-              src="/images/common/select-file.png"
-              height={172}
-              width={408}
-              style={{ minWidth: "100%", height: "auto" }}
-              alt=""
+          {/* ✅ 계정정보 */}
+          <Typography variant="body1">계정정보</Typography>
+          <Divider />
+          <Stack flexDirection={"row"} gap={2} mt={2}>
+            <TextField
+              name="email"
+              variant="standard"
+              label="이메일"
+              fullWidth
+              sx={{ flex: 1 }}
+              onChange={handleInputChange}
             />
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            hidden
-            onChange={handleFileUpload}
-          />
-        </Box>
-        {uploadedFiles.length > 0 && (
-          <Box mt={2}>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <InsertDriveFileIcon color="primary" />
-              <Typography variant="body2">{uploadedFiles[0].name}</Typography>
-              <IconButton onClick={handleFileDelete}>
-                <DeleteIcon />
-              </IconButton>
-            </Stack>
-          </Box>
-        )}
-
-        {/* ✅ 약관 동의 */}
-        <AgreementSection
-          agreements={agreements}
-          onAgreementChange={handleAgreementChange}
-        />
-
-        {/* ✅ 회원가입 버튼 */}
-        <Stack spacing={1}>
-          <Button
-            type="submit"
-            variant="contained"
+            <Button variant="contained" size="small">
+              중복 확인
+            </Button>
+          </Stack>
+          <TextField
+            name="password"
+            variant="standard"
+            label="비밀번호"
+            type="password"
             fullWidth
-            disabled={!isSignupEnabled || isPending}
+            onChange={handleInputChange}
+            error={passwordError}
+            helperText={passwordError ? "비밀번호가 일치하지 않습니다." : ""}
+          />
+          <TextField
+            name="confirmPassword"
+            variant="standard"
+            label="비밀번호 확인"
+            type="password"
+            fullWidth
+            onChange={handleInputChange}
+            error={passwordError}
+            helperText={passwordError ? "비밀번호가 일치하지 않습니다." : ""}
+          />
+          <TextField
+            name="name"
+            variant="standard"
+            label="이름"
+            fullWidth
+            onChange={handleInputChange}
+          />
+          <TextField
+            name="phoneNumber"
+            variant="standard"
+            label="휴대폰 번호"
+            fullWidth
+            onChange={handleInputChange}
+          />
+
+          {/* ✅ 은행 정보 */}
+          <Typography variant="body1" mt={2}>
+            은행 정보
+          </Typography>
+          <Divider />
+          <Select
+            name="branch"
+            variant="standard"
+            displayEmpty
+            fullWidth
+            value={formData.branch}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, branch: e.target.value }))
+            }
           >
-            {isPending ? "가입 중..." : "회원가입"}
-          </Button>
-          <Button variant="outlined" fullWidth onClick={() => router.back()}>
-            이전으로
-          </Button>
-        </Stack>
-      </Box>
+            <MenuItem value="" disabled>
+              지점 선택
+            </MenuItem>
+            {bankList.map((bank) => (
+              <MenuItem key={bank} value={bank}>
+                {bank}
+              </MenuItem>
+            ))}
+          </Select>
+
+          {/* ✅ 소재지 */}
+          <Typography variant="body1" mt={2}>
+            소재지
+          </Typography>
+          <AddressSearch
+            selectedLocation={formData.location}
+            setSelectedLocation={(location) =>
+              setFormData((prev) => ({ ...prev, location }))
+            }
+            address={formData.address}
+            setAddress={handleAddressChange}
+          />
+
+          {/* ✅ 증빙사진 (파일 업로드) */}
+          <Typography variant="body2" mt={2}>
+            증빙서류 (명함)
+          </Typography>
+          <Box width="100%" display="flex" justifyContent="center" mt={1}>
+            <label
+              htmlFor="file-upload"
+              style={{ cursor: "pointer", width: "100%" }}
+            >
+              <Image
+                src="/images/common/select-file.png"
+                height={172}
+                width={408}
+                style={{ minWidth: "100%", height: "auto" }}
+                alt=""
+              />
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              hidden
+              onChange={handleFileUpload}
+            />
+          </Box>
+          {uploadedFiles.length > 0 && (
+            <Box mt={2}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <InsertDriveFileIcon color="primary" />
+                <Typography variant="body2">{uploadedFiles[0].name}</Typography>
+                <IconButton onClick={handleFileDelete}>
+                  <DeleteIcon />
+                </IconButton>
+              </Stack>
+            </Box>
+          )}
+
+          {/* ✅ 약관 동의 */}
+          <AgreementSection
+            agreements={agreements}
+            onAgreementChange={handleAgreementChange}
+          />
+
+          {/* ✅ 회원가입 버튼 */}
+          <Stack spacing={1}>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={!isSignupEnabled || isPending}
+            >
+              {isPending ? "가입 중..." : "회원가입"}
+            </Button>
+            <Button variant="outlined" fullWidth onClick={() => router.back()}>
+              이전으로
+            </Button>
+          </Stack>
+        </Box>
+      </Paper>
     </MobileWrapper>
   );
 }
