@@ -7,9 +7,16 @@ import {
   ListItemButton,
   ListItemText,
   Toolbar,
+  Typography,
+  IconButton,
+  AppBar,
+  useMediaQuery,
+  Theme,
 } from "@mui/material";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useTheme } from "@mui/material/styles";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { useAtom } from "jotai";
 import { profileAtom } from "../store/profileAtom";
 
@@ -38,53 +45,113 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const [profile] = useAtom(profileAtom);
-  const role = profile?.role || "INDIVIDUAL";
+  const theme = useTheme();
+  const isMobile = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down("md")
+  );
 
+  const role = profile?.role || "INDIVIDUAL";
   const routes = useMemo(() => routeMap[role] || [], [role]);
 
-  // 리디렉션: /dashboard 접속 시 첫 탭으로 이동
   useEffect(() => {
     if (pathname === "/dashboard" && routes[0]) {
       router.replace(routes[0].path);
     }
   }, [pathname, routes, router]);
 
+  const drawerContent = (
+    <Box>
+      <Toolbar>
+        <Typography variant="h6">메뉴</Typography>
+      </Toolbar>
+      <List>
+        {routes.map((route) => (
+          <ListItemButton
+            key={route.path}
+            selected={pathname === route.path}
+            onClick={() => {
+              router.push(route.path);
+              if (isMobile) setMobileOpen(false); // 모바일 Drawer 닫기
+            }}
+          >
+            <ListItemText primary={route.label} />
+          </ListItemButton>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
     <Box sx={{ display: "flex" }}>
-      {/* Sidebar */}
-      <Drawer
-        variant="permanent"
+      {/* AppBar for mobile */}
+      {isMobile && (
+        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={() => setMobileOpen(true)}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              대시보드
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      )}
+
+      {/* Sidebar - mobile vs desktop */}
+      <Box
+        component="nav"
+        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+        aria-label="sidebar menu"
+      >
+        {/* 모바일 Drawer */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: "block", md: "none" },
+            "& .MuiDrawer-paper": { width: drawerWidth },
+          }}
+        >
+          {drawerContent}
+        </Drawer>
+
+        {/* 데스크탑 Drawer */}
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: "none", md: "block" },
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          open
+        >
+          {drawerContent}
+        </Drawer>
+      </Box>
+
+      {/* Main content */}
+      <Box
+        component="main"
         sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
+          flexGrow: 1,
+          p: 3,
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+          mt: isMobile ? 8 : 0, // 모바일에서는 AppBar 공간 확보
         }}
       >
-        <Toolbar />
-        <Box sx={{ overflow: "auto" }}>
-          <List>
-            {routes.map((route) => (
-              <ListItemButton
-                key={route.path}
-                selected={pathname === route.path}
-                onClick={() => router.push(route.path)}
-              >
-                <ListItemText primary={route.label} />
-              </ListItemButton>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
-
-      {/* Main Content */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar />
         {children}
       </Box>
     </Box>
