@@ -10,7 +10,7 @@ import {
   Stack,
   Paper,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
 import AddressSearch from "@/app/components/AddSearch";
@@ -22,7 +22,10 @@ import {
   initialAgreements,
   initialFormData,
   isSignupEnabled,
+  useCheckBusinessNoHandler,
 } from "./index.utils";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
 
 function SignUpCorporate() {
   const router = useRouter();
@@ -30,6 +33,18 @@ function SignUpCorporate() {
 
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const { handleCheckEmail } = useCheckMailHandler(setIsEmailChecked);
+
+  const [businessStartDate, setBusinessStartDate] = useState<null | Dayjs>(null);
+  const handleChangeDate = (date: null | Dayjs) => {
+    if(!date) return;
+    setBusinessStartDate(date);
+  }
+  const [ownerName, setOwnerName] = useState("");
+  const handleChangeOwnerName = (e: ChangeEvent<HTMLInputElement>) => {
+    setOwnerName(e.target.value);
+  }
+  const [isBusinessNoChecked, setIsBusinessNoChecked] = useState(false);
+  const { handleCheckBusinessNo } = useCheckBusinessNoHandler(setIsBusinessNoChecked);
 
   const [formData, setFormData] = useState(initialFormData);
 
@@ -112,16 +127,35 @@ function SignUpCorporate() {
               name="businessNo"
               variant="standard"
               label="사업자 번호"
+              placeholder="- 없이 입력해주세요"
               fullWidth
               sx={{ flex: 1 }}
               onChange={handleInputChange}
+              disabled={isBusinessNoChecked}
             />
+          </Stack>
+
+          <Stack flexDirection={"row"} gap={2} mt={2}>
+            <TextField
+              name="ownerName"
+              variant="standard"
+              label="대표자명"
+              fullWidth
+              sx={{ flex: 1 }}
+              onChange={handleChangeOwnerName}
+              disabled={isBusinessNoChecked}
+            />
+          </Stack>
+
+          <Stack flexDirection={"row"} gap={2} mt={2}>
+            <DatePicker label="개업일자" value={businessStartDate} onChange={handleChangeDate} maxDate={dayjs()} disabled={isBusinessNoChecked} />
             <Button
               variant="contained"
-              size="small"
-              // onClick={} TODO: 사업자 번호 검증 로직 넣어야함
+              size="large"
+              disabled={formData.businessNo === '' || ownerName === '' || businessStartDate === null || isBusinessNoChecked}
+              onClick={(e) => handleCheckBusinessNo(formData.businessNo, ownerName, businessStartDate)}
             >
-              검증 확인
+              사업자번호 검증
             </Button>
           </Stack>
 
