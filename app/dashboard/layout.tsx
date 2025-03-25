@@ -23,16 +23,20 @@ import { profileAtom } from "../store/profileAtom";
 const drawerWidth = 240;
 
 const routeMap = {
-  INDIVIDUAL: [
+  CORPORATE: [
     { label: "가입 관리", path: "/dashboard/member-list" },
     { label: "회원 정보", path: "/dashboard/member-info" },
     { label: "알림", path: "/dashboard/notifications" },
     { label: "자금 신청 현황", path: "/dashboard/fund-status" },
     { label: "매니징 신청", path: "/dashboard/managing" },
   ],
-  CORPORATE: [
+  MANAGER: [
     { label: "가입 관리", path: "/dashboard/member-list" },
     { label: "회원 정보", path: "/dashboard/member-info" },
+  ],
+  PROFESSOR: [
+    { label: "전체 신청내역", path: "/dashboard/admin-list" },
+    { label: "통계 요약", path: "/dashboard/analytics" },
   ],
   ADMIN: [
     { label: "전체 신청내역", path: "/dashboard/admin-list" },
@@ -54,8 +58,10 @@ export default function DashboardLayout({
     theme.breakpoints.down("md")
   );
 
-  const role = profile?.role || "INDIVIDUAL";
+  const role = profile?.role || "CORPORATE";
   const routes = useMemo(() => routeMap[role] || [], [role]);
+
+  console.log("profile: ", profile?.type);
 
   useEffect(() => {
     if (pathname === "/dashboard" && routes[0]) {
