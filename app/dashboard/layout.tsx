@@ -29,6 +29,7 @@ const routeMap = {
     { label: "알림", path: "/dashboard/notifications" },
     { label: "자금 신청 현황", path: "/dashboard/fund-status" },
     { label: "매니징 신청", path: "/dashboard/managing" },
+    { label: "재무 진단 요약" },
   ],
   MANAGER: [
     { label: "가입 관리", path: "/dashboard/member-list" },
