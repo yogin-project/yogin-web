@@ -1,4 +1,3 @@
-// app/dashboard/finance-summary/page.tsx
 "use client";
 
 import {
@@ -10,7 +9,7 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // 각 항목에 대한 라벨과 계산 함수 매핑
 const financialMetrics = [
@@ -86,6 +85,72 @@ export default function FinanceSummaryPage() {
     setResults(values);
   };
 
+  function getGrade(value: number): string {
+    if (value >= 80) return "양호";
+    if (value >= 50) return "보통";
+    return "낮음";
+  }
+
+  function DonutChart({ value, color }: { value: number; color: string }) {
+    const [animatedValue, setAnimatedValue] = useState(0);
+
+    useEffect(() => {
+      let start = 0;
+      const end = Math.min(value, 100);
+      const duration = 1000;
+      const stepTime = 10;
+      const steps = duration / stepTime;
+      const increment = (end - start) / steps;
+
+      const animate = () => {
+        setAnimatedValue((prev) => {
+          const next = prev + increment;
+          if (next >= end) return end;
+          requestAnimationFrame(animate);
+          return next;
+        });
+      };
+
+      setAnimatedValue(0);
+      requestAnimationFrame(animate);
+    }, [value]);
+
+    return (
+      <Box sx={{ position: "relative", display: "inline-flex" }}>
+        <CircularProgress
+          variant="determinate"
+          value={100}
+          size={80}
+          thickness={5}
+          sx={{ color: "#e0e0e0", position: "absolute" }}
+        />
+        <CircularProgress
+          variant="determinate"
+          value={animatedValue}
+          size={80}
+          thickness={5}
+          sx={{ color }}
+        />
+        <Box
+          sx={{
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            position: "absolute",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography variant="caption" component="div">
+            {`${value.toFixed(1)}%`}
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -99,13 +164,7 @@ export default function FinanceSummaryPage() {
               <Typography variant="subtitle1" gutterBottom>
                 {item.label}
               </Typography>
-              <CircularProgress
-                variant="determinate"
-                value={results[index] || 0}
-                size={80}
-                thickness={5}
-                sx={{ color: item.color }}
-              />
+              <DonutChart value={results[index] || 0} color={item.color} />
               <Typography variant="body2" mt={1}>
                 {results[index]?.toFixed(2) || "-"}%
               </Typography>
