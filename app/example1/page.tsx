@@ -194,7 +194,7 @@ export default function Example1() {
           <Grid2 size={4}>
             <TextField
               fullWidth
-              label="매출액 (2022)"
+              label="2022년 매출액 (억)"
               name="sales2022"
               onChange={handleChange}
             />
@@ -202,7 +202,7 @@ export default function Example1() {
           <Grid2 size={4}>
             <TextField
               fullWidth
-              label="매출액 (2023)"
+              label="2023년 매출액 (억)"
               name="sales2023"
               onChange={handleChange}
             />
@@ -210,7 +210,7 @@ export default function Example1() {
           <Grid2 size={4}>
             <TextField
               fullWidth
-              label="매출액 (2024)"
+              label="2024년 매출액 (억)"
               name="sales2024"
               onChange={handleChange}
             />
@@ -245,7 +245,7 @@ export default function Example1() {
                 <Grid2 size={5}>
                   <TextField
                     fullWidth
-                    label="금액 (억 단위)"
+                    label="금액 (억)"
                     value={debt.amount}
                     onChange={(e) =>
                       handleDebtChange(index, "amount", e.target.value)
