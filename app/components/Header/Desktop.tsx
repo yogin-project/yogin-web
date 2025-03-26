@@ -60,6 +60,14 @@ function HeaderDesktop() {
               cursor: "pointer",
             }}
           >
+            <Typography>신청하기 (기업용)</Typography>
+          </Box>
+
+          <Box
+            sx={{
+              cursor: "pointer",
+            }}
+          >
             <Typography>대출찾기 (정책자금)</Typography>
           </Box>
           <Box
