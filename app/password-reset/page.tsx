@@ -69,7 +69,7 @@ function PasswordReset() {
 
   const [verifyCode, setVerifyCode] = useState('');
   const [verifyCodeError, setVerifyCodeError] = useState('');
-  const [verifySuccess, setVerifySuccess] = useState(true);
+  const [verifySuccess, setVerifySuccess] = useState(false);
   const handleChangeVerifyCode = (e: ChangeEvent<HTMLInputElement>) => {
     if(e.target.value.length > 6) {
       return;
