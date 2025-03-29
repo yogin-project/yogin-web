@@ -177,15 +177,44 @@ export default function DashboardLayout({
       <Dialog
         open={openLogoutDialog}
         onClose={() => setOpenLogoutDialog(false)}
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            p: 2,
+            minWidth: 320,
+          },
+        }}
       >
-        <DialogTitle>로그아웃 확인</DialogTitle>
+        <DialogTitle>
+          <Typography variant="h6" fontWeight={700} textAlign="center">
+            로그아웃 하시겠어요?
+          </Typography>
+        </DialogTitle>
         <DialogContent>
-          <Typography>정말 로그아웃 하시겠습니까?</Typography>
+          <Typography
+            variant="body2"
+            textAlign="center"
+            color="text.secondary"
+            mt={1}
+          >
+            다시 로그인하지 않으면 <br /> 서비스를 이용하실 수 없습니다.
+          </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenLogoutDialog(false)}>취소</Button>
-          <Button onClick={handleLogout} color="primary" variant="contained">
-            확인
+        <DialogActions sx={{ justifyContent: "center", gap: 1.5, pb: 2 }}>
+          <Button
+            onClick={() => setOpenLogoutDialog(false)}
+            variant="outlined"
+            sx={{ minWidth: 100 }}
+          >
+            취소
+          </Button>
+          <Button
+            onClick={handleLogout}
+            variant="contained"
+            color="error"
+            sx={{ minWidth: 100 }}
+          >
+            로그아웃
           </Button>
         </DialogActions>
       </Dialog>
