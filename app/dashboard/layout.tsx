@@ -12,6 +12,11 @@ import {
   AppBar,
   useMediaQuery,
   Theme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
@@ -19,6 +24,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAtom } from "jotai";
 import { profileAtom } from "../store/profileAtom";
+import { isLoginAtom } from "../store/authAtom";
 
 const drawerWidth = 240;
 
@@ -54,6 +60,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [profile] = useAtom(profileAtom);
+  const [, setIsLogin] = useAtom(isLoginAtom);
   const theme = useTheme();
   const isMobile = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down("md")
@@ -62,13 +69,20 @@ export default function DashboardLayout({
   const role = profile?.role || "CORPORATE";
   const routes = useMemo(() => routeMap[role] || [], [role]);
 
-  console.log("profile: ", profile?.type);
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
 
   useEffect(() => {
     if (pathname === "/dashboard" && routes[0]) {
       router.replace(routes[0].path);
     }
   }, [pathname, routes, router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
+    setIsLogin(false);
+    router.push("/");
+  };
 
   const drawerContent = (
     <Box>
@@ -82,19 +96,21 @@ export default function DashboardLayout({
             selected={pathname === route.path}
             onClick={() => {
               router.push(route.path);
-              if (isMobile) setMobileOpen(false); // 모바일 Drawer 닫기
+              if (isMobile) setMobileOpen(false);
             }}
           >
             <ListItemText primary={route.label} />
           </ListItemButton>
         ))}
+        <ListItemButton onClick={() => setOpenLogoutDialog(true)}>
+          <ListItemText primary="로그아웃" />
+        </ListItemButton>
       </List>
     </Box>
   );
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* AppBar for mobile */}
       {isMobile && (
         <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Toolbar>
@@ -113,13 +129,11 @@ export default function DashboardLayout({
         </AppBar>
       )}
 
-      {/* Sidebar - mobile vs desktop */}
       <Box
         component="nav"
         sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
         aria-label="sidebar menu"
       >
-        {/* 모바일 Drawer */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
@@ -133,7 +147,6 @@ export default function DashboardLayout({
           {drawerContent}
         </Drawer>
 
-        {/* 데스크탑 Drawer */}
         <Drawer
           variant="permanent"
           sx={{
@@ -149,18 +162,33 @@ export default function DashboardLayout({
         </Drawer>
       </Box>
 
-      {/* Main content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
           width: { md: `calc(100% - ${drawerWidth}px)` },
-          mt: isMobile ? 8 : 0, // 모바일에서는 AppBar 공간 확보
+          mt: isMobile ? 8 : 0,
         }}
       >
         {children}
       </Box>
+
+      <Dialog
+        open={openLogoutDialog}
+        onClose={() => setOpenLogoutDialog(false)}
+      >
+        <DialogTitle>로그아웃 확인</DialogTitle>
+        <DialogContent>
+          <Typography>정말 로그아웃 하시겠습니까?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenLogoutDialog(false)}>취소</Button>
+          <Button onClick={handleLogout} color="primary" variant="contained">
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
