@@ -98,9 +98,22 @@ function SignUpBank() {
 
     const { confirmPassword, ...requestData } = formData;
 
+    const form = new FormData();
+
+    Object.entries(requestData).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        // 파일이면 File 객체로 추가
+        if (key === "file" && value instanceof File) {
+          form.append(key, value);
+        } else {
+          form.append(key, value);
+        }
+      }
+    });
+
     mutate(
       {
-        body: requestData,
+        body: form,
       },
       {
         onSuccess: () => {

@@ -1,4 +1,3 @@
-// libs/apiClient.ts
 export const apiClient = async ({
   method = "GET",
   path,
@@ -16,21 +15,18 @@ export const apiClient = async ({
     const authToken =
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
 
-    console.log("authToken: ", authToken);
+    const isFormData = body instanceof FormData;
 
     const requestOptions: RequestInit = {
       method,
       headers: {
-        ...headers,
-        "Content-Type": "application/json",
         ...(authToken && { Authorization: `Bearer ${authToken}` }),
+        ...(!isFormData && { "Content-Type": "application/json" }),
+        ...headers,
       },
       credentials: "include",
+      body: isFormData ? body : JSON.stringify(body),
     };
-
-    if (method !== "GET") {
-      requestOptions.body = JSON.stringify(body);
-    }
 
     const response = await fetch(url, requestOptions);
 
