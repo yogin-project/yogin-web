@@ -1,8 +1,15 @@
 "use client";
 
 import { BREAKPOINTS } from "@/app/libs/theme";
-import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonBase,
+  Stack,
+  Typography,
+} from "@mui/material";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { headerToFixed } from "./index.styles";
 import { useRouteInHeader } from "./index.hooks";
@@ -11,13 +18,21 @@ import { isAuthenticated } from "@/app/utils";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { isLoginAtom } from "@/app/store/authAtom";
 import { useAtomValue, useSetAtom } from "jotai";
+import { profileAtom } from "@/app/store/profileAtom";
+import { handleCorporateSubmit } from "./index.utils";
+import { useRouter } from "next/navigation";
 
 function HeaderDesktop() {
   const { t } = useTranslation();
+  const router = useRouter();
   const handleRouteHeader = useRouteInHeader();
+
+  const profileInfo = useAtomValue(profileAtom);
 
   const isLogin = useAtomValue(isLoginAtom);
   const setIsLogin = useSetAtom(isLoginAtom);
+
+  console.log("profileInfo: ", profileInfo?.type);
 
   useEffect(() => {
     // 앱 시작 시 localStorage/sessionStorage 확인 → 로그인 상태 세팅
@@ -55,13 +70,11 @@ function HeaderDesktop() {
             alt=""
           />
 
-          <Box
-            sx={{
-              cursor: "pointer",
-            }}
+          <ButtonBase
+            onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
           >
             <Typography>신청하기 (기업용)</Typography>
-          </Box>
+          </ButtonBase>
 
           <Box
             sx={{
