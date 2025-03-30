@@ -8,7 +8,7 @@ import {
 import { apiClient } from "./apiClient";
 
 type ApiOptions = {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   path: string;
   queryKey?: string;
   queryOption?: any;

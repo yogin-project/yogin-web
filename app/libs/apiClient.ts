@@ -5,7 +5,7 @@ export const apiClient = async ({
   headers = {},
   body = {},
 }: {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   path: string;
   headers?: any;
   body?: any;
