@@ -12,8 +12,13 @@ export const apiClient = async ({
   try {
     const url = `/api/${path}`;
 
-    const authToken =
-      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    // ✅ SSR 안전 처리
+    let authToken: string | null = null;
+    if (typeof window !== "undefined") {
+      authToken =
+        localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken");
+    }
 
     const isFormData = body instanceof FormData;
 
@@ -25,8 +30,12 @@ export const apiClient = async ({
         ...headers,
       },
       credentials: "include",
-      body: isFormData ? body : JSON.stringify(body),
     };
+
+    // ✅ GET이나 HEAD가 아닐 때만 body 추가
+    if (method !== "GET" && method !== "HEAD") {
+      requestOptions.body = isFormData ? body : JSON.stringify(body);
+    }
 
     const response = await fetch(url, requestOptions);
 
