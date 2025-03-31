@@ -10,8 +10,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useFinancialSummary } from "@/app/hooks/apis/useFinancialSummary";
 
-// 각 항목에 대한 라벨과 계산 함수 매핑
 const financialMetrics = [
   {
     label: "성장성",
@@ -39,7 +39,7 @@ const financialMetrics = [
     color: "#F44336",
     description: "총자산회전율 = 매출액 / 총자산(평균)",
     calculate: (revenue: number, averageAssets: number) =>
-      revenue / averageAssets,
+      (revenue / averageAssets) * 100,
   },
 ];
 
@@ -53,8 +53,27 @@ export default function FinanceSummaryPage() {
     totalAssets: "",
     averageAssets: "",
   });
+  const [results, setResults] = useState<number[]>([0, 0, 0, 0]);
+  const { get, post, put } = useFinancialSummary();
 
-  const [results, setResults] = useState<number[]>([]);
+  useEffect(() => {
+    if (get.data) {
+      const {
+        growthPercentage,
+        profitPercentage,
+        financialHealthPercentage,
+        debtRepaymentAbilityPercentage,
+      } = get.data;
+
+      // 예시: 초기값 설정
+      setResults([
+        Number(growthPercentage),
+        Number(profitPercentage),
+        Number(financialHealthPercentage),
+        Number(debtRepaymentAbilityPercentage),
+      ]);
+    }
+  }, [get.data]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -85,11 +104,29 @@ export default function FinanceSummaryPage() {
     setResults(values);
   };
 
-  function getGrade(value: number): string {
-    if (value >= 80) return "양호";
-    if (value >= 50) return "보통";
-    return "낮음";
-  }
+  const handleSave = () => {
+    post.mutate({
+      body: {
+        growthPercentage: results[0].toFixed(2),
+        profitPercentage: results[1].toFixed(2),
+        financialHealthPercentage: results[2].toFixed(2),
+        debtRepaymentAbilityPercentage: "0", // 없음
+        activityPercentage: results[3].toFixed(2),
+      },
+    });
+  };
+
+  const handleUpdate = () => {
+    put.mutate({
+      body: {
+        growthPercentage: results[0].toFixed(2),
+        profitPercentage: results[1].toFixed(2),
+        financialHealthPercentage: results[2].toFixed(2),
+        debtRepaymentAbilityPercentage: "0", // 없음
+        activityPercentage: results[3].toFixed(2),
+      },
+    });
+  };
 
   function DonutChart({ value, color }: { value: number; color: string }) {
     const [animatedValue, setAnimatedValue] = useState(0);
@@ -178,74 +215,28 @@ export default function FinanceSummaryPage() {
           입력값 (모든 항목 숫자만 입력)
         </Typography>
         <Grid2 container spacing={2} minWidth="100%">
-          <Grid2 size={12}>
-            <TextField
-              label="당기말 총자산"
-              name="currentTotalAssets"
-              fullWidth
-              value={inputs.currentTotalAssets}
-              onChange={handleInputChange}
-            />
-          </Grid2>
-          <Grid2 size={12}>
-            <TextField
-              label="전기말 총자산"
-              name="previousTotalAssets"
-              fullWidth
-              value={inputs.previousTotalAssets}
-              onChange={handleInputChange}
-            />
-          </Grid2>
-          <Grid2 size={12}>
-            <TextField
-              label="영업이익"
-              name="operatingProfit"
-              fullWidth
-              value={inputs.operatingProfit}
-              onChange={handleInputChange}
-            />
-          </Grid2>
-          <Grid2 size={12}>
-            <TextField
-              label="매출액"
-              name="revenue"
-              fullWidth
-              value={inputs.revenue}
-              onChange={handleInputChange}
-            />
-          </Grid2>
-          <Grid2 size={12}>
-            <TextField
-              label="자기자본"
-              name="equity"
-              fullWidth
-              value={inputs.equity}
-              onChange={handleInputChange}
-            />
-          </Grid2>
-          <Grid2 size={12}>
-            <TextField
-              label="총자본"
-              name="totalAssets"
-              fullWidth
-              value={inputs.totalAssets}
-              onChange={handleInputChange}
-            />
-          </Grid2>
-          <Grid2 size={12}>
-            <TextField
-              label="총자산(평균)"
-              name="averageAssets"
-              fullWidth
-              value={inputs.averageAssets}
-              onChange={handleInputChange}
-            />
-          </Grid2>
+          {Object.entries(inputs).map(([key, value]) => (
+            <Grid2 size={12} key={key}>
+              <TextField
+                label={key}
+                name={key}
+                fullWidth
+                value={value}
+                onChange={handleInputChange}
+              />
+            </Grid2>
+          ))}
         </Grid2>
 
-        <Box mt={3}>
+        <Box mt={3} display="flex" gap={2}>
           <Button variant="contained" onClick={handleCalculate}>
             진단 결과 계산하기
+          </Button>
+          <Button variant="outlined" color="success" onClick={handleSave}>
+            저장
+          </Button>
+          <Button variant="outlined" color="primary" onClick={handleUpdate}>
+            수정
           </Button>
         </Box>
       </Box>

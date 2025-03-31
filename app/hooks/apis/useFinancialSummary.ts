@@ -1,7 +1,6 @@
-// hooks/apis/useFinancialSummary.ts
-
 import { useApiManager } from "@/app/libs/apiManager";
 
+// ✅ useFinancialSummary.ts
 export const useFinancialSummary = () => {
   const get = useApiManager({
     method: "GET",
@@ -19,9 +18,5 @@ export const useFinancialSummary = () => {
     path: "company/financial-summary",
   }).setUseMutation;
 
-  return {
-    get, // 사용: const { data } = useFinancialSummary().get;
-    post, // 사용: useFinancialSummary().post.mutate({ body: ... })
-    put, // 사용: useFinancialSummary().put.mutate({ body: ... })
-  };
+  return { get, post, put };
 };
