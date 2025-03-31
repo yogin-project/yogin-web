@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
 
 export default function CompanyRNDForm() {
   const [form, setForm] = useState({
@@ -26,7 +27,8 @@ export default function CompanyRNDForm() {
     sales: "",
     exportStatus: "",
     homepage: "",
-    rAndDHistory: [""], // 배열로 변경
+    rAndDHistory: [""],
+    rAndDItem: "",
     rAndDFunding: "",
     rAndDDescription: "",
     files: {
@@ -35,6 +37,8 @@ export default function CompanyRNDForm() {
     },
     agreeToTerms: false,
   });
+
+  const { mutate, isPending } = useApplicationTemp();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -60,13 +64,51 @@ export default function CompanyRNDForm() {
     setForm({ ...form, rAndDHistory: updated });
   };
 
-  const handleSubmit = () => {
-    console.log("제출된 데이터:", form);
-    // 실제 제출 로직 구현
-  };
-
   const handleAgreementChange = (e) => {
     setForm({ ...form, agreeToTerms: e.target.checked });
+  };
+
+  const handleSubmit = () => {
+    const formData = new FormData();
+
+    const data = {
+      type: "RND",
+      businessCategory: form.businessType,
+      lastYearRevenue: {
+        year: "2024",
+        revenue: form.sales.replace(/,/g, ""),
+      },
+      lastYearExport: {
+        year: "2024",
+        export: form.exportStatus.replace(/,/g, ""),
+      },
+      homepage: form.homepage,
+      history: form.rAndDHistory.filter(Boolean).join("\n"),
+      item: form.rAndDItem,
+      requiredBudget: form.rAndDFunding.replace(/,/g, ""),
+      itemSummary: form.rAndDDescription,
+      isFinancialInstituteInfoShareAgreed: form.agreeToTerms,
+    };
+
+    formData.append("data", JSON.stringify(data));
+
+    if (form.files.businessLicense) {
+      formData.append("businessRegistrationCert", form.files.businessLicense);
+    }
+    if (form.files.patent) {
+      formData.append("patentCert", form.files.patent);
+    }
+
+    mutate(
+      { body: formData },
+      {
+        onSuccess: () => alert("제출 완료!"),
+        onError: (e) => {
+          console.error(e);
+          alert("제출 실패");
+        },
+      }
+    );
   };
 
   return (
@@ -141,7 +183,6 @@ export default function CompanyRNDForm() {
             />
           </Grid2>
 
-          {/* ✅ R&D 이력 다중 입력 */}
           <Grid2 size={12}>
             <Typography variant="h6" gutterBottom>
               R&D 이력
@@ -189,7 +230,7 @@ export default function CompanyRNDForm() {
             <TextField
               fullWidth
               label="R&D 아이템 설명 (20자 이내)"
-              name="rAndDFunding"
+              name="rAndDItem"
               onChange={handleChange}
             />
           </Grid2>
@@ -211,6 +252,7 @@ export default function CompanyRNDForm() {
               onChange={handleChange}
             />
           </Grid2>
+
           <Grid2 size={12}>
             <Typography>사업자등록증 사본 업로드</Typography>
             <Input
@@ -223,11 +265,7 @@ export default function CompanyRNDForm() {
             <Typography>특허 관련 파일 업로드</Typography>
             <Input type="file" name="patent" onChange={handleFileChange} />
           </Grid2>
-          <Grid2 size={12} mt={2}>
-            <Button fullWidth variant="contained" onClick={handleSubmit}>
-              제출
-            </Button>
-          </Grid2>
+
           <Grid2 size={12}>
             <FormControlLabel
               control={
@@ -240,9 +278,15 @@ export default function CompanyRNDForm() {
               label="교수 정보공개 동의 (R&D 서비스는 유료이며, 연구를 담당하는 위원에게 지급됩니다.)"
             />
           </Grid2>
+
           <Grid2 size={6}>
-            <Button variant="contained" fullWidth>
-              저장
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleSubmit}
+              disabled={isPending}
+            >
+              {isPending ? "제출 중..." : "저장"}
             </Button>
           </Grid2>
           <Grid2 size={6}>
