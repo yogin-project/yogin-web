@@ -111,64 +111,49 @@ export default function Loan() {
   };
 
   const handleSave = () => {
-    const payload = new FormData();
+    const formData = new FormData();
 
-    payload.append("type", "FUND");
-    payload.append("ownerLocation", form.ceoLocation);
-    payload.append("isOwnerLocationOwned", String(form.selfOwned));
-    payload.append("isCorpLocationOwned", String(form.selfOwned));
-    payload.append("foundDate", form.establishmentDate);
-    payload.append("businessRegistrationNo", form.businessNumber);
-    payload.append("businessCategory", form.businessType);
-    payload.append("isPatentOwned", String(form.patent === "유"));
-    payload.append(
-      "isFinancialInstituteInfoShareAgreed",
-      String(form.agreeToTerms)
-    );
-
-    payload.append(
-      "threeYearRevenue",
-      JSON.stringify([
+    const data = {
+      type: "FUND",
+      ownerLocation: form.ceoLocation,
+      isOwnerLocationOwned: form.selfOwned,
+      isCorpLocationOwned: form.selfOwned,
+      foundDate: form.establishmentDate,
+      businessRegistrationNo: form.businessNumber,
+      businessCategory: form.businessType,
+      isPatentOwned: form.patent === "유",
+      isFinancialInstituteInfoShareAgreed: form.agreeToTerms,
+      threeYearRevenue: [
         { year: "2022", revenue: form.sales2022.replace(/,/g, "") },
         { year: "2023", revenue: form.sales2023.replace(/,/g, "") },
         { year: "2024", revenue: form.sales2024.replace(/,/g, "") },
-      ])
-    );
+      ],
+      debtStatus: form.debts.map((debt) => ({
+        bankName: debt.bank,
+        debtAmount: debt.amount.replace(/,/g, ""),
+      })),
+      fundRequirements: Object.entries(form.loanOptions)
+        .filter(([_, v]) => v)
+        .map(([k]) =>
+          k === "operationFunds"
+            ? "OPERATE"
+            : k === "facilityFunds"
+            ? "FACILITY"
+            : k === "creditLoan"
+            ? "CREDIT_LOAN"
+            : "SECURED_LOAN"
+        ),
+    };
 
-    payload.append(
-      "debtStatus",
-      JSON.stringify(
-        form.debts.map((debt) => ({
-          bankName: debt.bank,
-          debtAmount: debt.amount.replace(/,/g, ""),
-        }))
-      )
-    );
-
-    payload.append(
-      "fundRequirements",
-      JSON.stringify(
-        Object.entries(form.loanOptions)
-          .filter(([_, v]) => v)
-          .map(([k]) =>
-            k === "operationFunds"
-              ? "OPERATE"
-              : k === "facilityFunds"
-              ? "FACILITY"
-              : k === "creditLoan"
-              ? "CREDIT_LOAN"
-              : "SECURED_LOAN"
-          )
-      )
-    );
+    formData.append("data", JSON.stringify(data));
 
     if (form.files.businessLicense)
-      payload.append("businessRegistrationCert", form.files.businessLicense);
+      formData.append("businessRegistrationCert", form.files.businessLicense);
     if (form.files.financialStatement)
-      payload.append("financialReports", form.files.financialStatement);
+      formData.append("financialReports", form.files.financialStatement);
 
     mutate(
-      { body: payload },
+      { body: formData },
       {
         onSuccess: () => alert("저장 완료!"),
         onError: (e) => {
