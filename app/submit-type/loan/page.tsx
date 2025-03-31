@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
 
 const bankList = [
   "기업은행",
@@ -47,12 +48,12 @@ const bankList = [
 export default function Loan() {
   const [form, setForm] = useState({
     companyName: "",
-    businessNumber: "",
-    companyLocation: "",
     ceoName: "",
     ceoLocation: "",
+    companyLocation: "",
     establishmentDate: "",
     selfOwned: false,
+    businessNumber: "",
     businessType: "",
     patent: "",
     sales2022: "",
@@ -71,6 +72,8 @@ export default function Loan() {
     },
     agreeToTerms: false,
   });
+
+  const { mutate, isPending } = useApplicationTemp();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -107,12 +110,82 @@ export default function Loan() {
     setForm({ ...form, debts: updatedDebts });
   };
 
+  const handleSave = () => {
+    const payload = new FormData();
+
+    payload.append("type", "FUND");
+    payload.append("ownerLocation", form.ceoLocation);
+    payload.append("isOwnerLocationOwned", String(form.selfOwned));
+    payload.append("isCorpLocationOwned", String(form.selfOwned));
+    payload.append("foundDate", form.establishmentDate);
+    payload.append("businessRegistrationNo", form.businessNumber);
+    payload.append("businessCategory", form.businessType);
+    payload.append("isPatentOwned", String(form.patent === "유"));
+    payload.append(
+      "isFinancialInstituteInfoShareAgreed",
+      String(form.agreeToTerms)
+    );
+
+    payload.append(
+      "threeYearRevenue",
+      JSON.stringify([
+        { year: "2022", revenue: form.sales2022.replace(/,/g, "") },
+        { year: "2023", revenue: form.sales2023.replace(/,/g, "") },
+        { year: "2024", revenue: form.sales2024.replace(/,/g, "") },
+      ])
+    );
+
+    payload.append(
+      "debtStatus",
+      JSON.stringify(
+        form.debts.map((debt) => ({
+          bankName: debt.bank,
+          debtAmount: debt.amount.replace(/,/g, ""),
+        }))
+      )
+    );
+
+    payload.append(
+      "fundRequirements",
+      JSON.stringify(
+        Object.entries(form.loanOptions)
+          .filter(([_, v]) => v)
+          .map(([k]) =>
+            k === "operationFunds"
+              ? "OPERATE"
+              : k === "facilityFunds"
+              ? "FACILITY"
+              : k === "creditLoan"
+              ? "CREDIT_LOAN"
+              : "SECURED_LOAN"
+          )
+      )
+    );
+
+    if (form.files.businessLicense)
+      payload.append("businessRegistrationCert", form.files.businessLicense);
+    if (form.files.financialStatement)
+      payload.append("financialReports", form.files.financialStatement);
+
+    mutate(
+      { body: payload },
+      {
+        onSuccess: () => alert("저장 완료!"),
+        onError: (e) => {
+          console.error(e);
+          alert("저장 실패");
+        },
+      }
+    );
+  };
+
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ padding: 3, marginTop: 3, mb: 12 }}>
         <Typography variant="h5" align="center" gutterBottom>
           SUMMARY
         </Typography>
+
         <Grid2 container spacing={2}>
           <Grid2 size={6}>
             <TextField
@@ -183,18 +256,29 @@ export default function Loan() {
               <MenuItem value="무">무</MenuItem>
             </TextField>
           </Grid2>
+
           <Grid2 size={12}>
             <FormControlLabel
               control={
-                <Checkbox name="selfOwned" onChange={handleCheckboxChange} />
+                <Checkbox
+                  name="selfOwned"
+                  checked={form.selfOwned}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      selfOwned: e.target.checked,
+                    }))
+                  }
+                />
               }
-              label="자가 여부"
+              label="소재지 자가 여부"
             />
           </Grid2>
+
           <Grid2 size={4}>
             <TextField
               fullWidth
-              label="2022년 매출액 (억)"
+              label="2022년 매출액 (원)"
               name="sales2022"
               onChange={handleChange}
             />
@@ -202,7 +286,7 @@ export default function Loan() {
           <Grid2 size={4}>
             <TextField
               fullWidth
-              label="2023년 매출액 (억)"
+              label="2023년 매출액 (원)"
               name="sales2023"
               onChange={handleChange}
             />
@@ -210,11 +294,12 @@ export default function Loan() {
           <Grid2 size={4}>
             <TextField
               fullWidth
-              label="2024년 매출액 (억)"
+              label="2024년 매출액 (원)"
               name="sales2024"
               onChange={handleChange}
             />
           </Grid2>
+
           <Grid2 size={12} mt={4}>
             <Typography variant="h6">부채 현황</Typography>
             {form.debts.map((debt, index) => (
@@ -223,7 +308,7 @@ export default function Loan() {
                 spacing={1}
                 key={index}
                 alignItems="center"
-                mt={2}
+                mt={1}
               >
                 <Grid2 size={5}>
                   <TextField
@@ -245,7 +330,7 @@ export default function Loan() {
                 <Grid2 size={5}>
                   <TextField
                     fullWidth
-                    label="금액 (억)"
+                    label="금액 (원)"
                     value={debt.amount}
                     onChange={(e) =>
                       handleDebtChange(index, "amount", e.target.value)
@@ -259,7 +344,7 @@ export default function Loan() {
                 </Grid2>
               </Grid2>
             ))}
-            <Grid2 size={12} mt={2}>
+            <Grid2 size={12} mt={1}>
               <Button
                 onClick={addDebt}
                 variant="outlined"
@@ -269,14 +354,14 @@ export default function Loan() {
               </Button>
             </Grid2>
           </Grid2>
+
           <Grid2 size={12}>
             <Typography variant="h6">요구사항</Typography>
-          </Grid2>
-          <Grid2 size={12}>
             <FormControlLabel
               control={
                 <Checkbox
                   name="operationFunds"
+                  checked={form.loanOptions.operationFunds}
                   onChange={handleCheckboxChange}
                 />
               }
@@ -286,6 +371,7 @@ export default function Loan() {
               control={
                 <Checkbox
                   name="facilityFunds"
+                  checked={form.loanOptions.facilityFunds}
                   onChange={handleCheckboxChange}
                 />
               }
@@ -293,21 +379,28 @@ export default function Loan() {
             />
             <FormControlLabel
               control={
-                <Checkbox name="creditLoan" onChange={handleCheckboxChange} />
+                <Checkbox
+                  name="creditLoan"
+                  checked={form.loanOptions.creditLoan}
+                  onChange={handleCheckboxChange}
+                />
               }
               label="신용대출"
             />
             <FormControlLabel
               control={
-                <Checkbox name="mortgageLoan" onChange={handleCheckboxChange} />
+                <Checkbox
+                  name="mortgageLoan"
+                  checked={form.loanOptions.mortgageLoan}
+                  onChange={handleCheckboxChange}
+                />
               }
               label="담보대출"
             />
           </Grid2>
+
           <Grid2 size={12}>
             <Typography variant="h6">파일 업로드</Typography>
-          </Grid2>
-          <Grid2 size={12}>
             <Typography>사업자등록증 사본 업로드</Typography>
             <Input
               type="file"
@@ -323,6 +416,7 @@ export default function Loan() {
               onChange={handleFileChange}
             />
           </Grid2>
+
           <Grid2 size={12}>
             <FormControlLabel
               control={
@@ -335,8 +429,9 @@ export default function Loan() {
               label="금융기관 정보공개 동의"
             />
           </Grid2>
+
           <Grid2 size={6}>
-            <Button variant="contained" fullWidth>
+            <Button variant="contained" fullWidth onClick={handleSave}>
               저장
             </Button>
           </Grid2>
