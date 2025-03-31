@@ -12,13 +12,15 @@ import {
 } from "@mui/material";
 import { useIsMobile } from "../hooks/useIsMobileSize";
 import { fullVhWithoutHeader } from "../utils";
+import { useRouter } from "next/navigation";
 
-function SignUp() {
+function SubmitType() {
   const isMobile = useIsMobile();
+  const router = useRouter();
 
   const typeOptions = [
-    { key: "professor", label: "R&D 신청" },
-    { key: "banker", label: "대출신청" },
+    { key: "rnd", label: "R&D 신청" },
+    { key: "loan", label: "대출신청" },
   ];
 
   return (
@@ -57,7 +59,7 @@ function SignUp() {
                   fullWidth
                   variant="outlined"
                   size="large"
-                  //   onClick={() => handleRouteSignUp(key)}
+                  onClick={() => router.push(`/submit-type/${key}`)}
                 >
                   {label}
                 </Button>
@@ -70,4 +72,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SubmitType;
