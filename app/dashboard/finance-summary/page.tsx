@@ -123,7 +123,8 @@ export default function FinanceSummaryPage() {
         growthPercentage: results[0].toFixed(2),
         profitPercentage: results[1].toFixed(2),
         financialHealthPercentage: results[2].toFixed(2),
-        activityPercentage: "0",
+        debtRepaymentAbilityPercentage: "0",
+
         activityPercentage: results[3].toFixed(2),
       },
     };
@@ -199,6 +200,16 @@ export default function FinanceSummaryPage() {
     );
   }
 
+  const inputLabels: Record<string, string> = {
+    currentTotalAssets: "당기말 총자산",
+    previousTotalAssets: "전기말 총자산",
+    operatingProfit: "영업이익",
+    revenue: "매출액",
+    equity: "자기자본",
+    totalAssets: "총자본",
+    averageAssets: "총자산(평균)",
+  };
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -229,7 +240,7 @@ export default function FinanceSummaryPage() {
           {Object.entries(inputs).map(([key, value]) => (
             <Grid2 size={12} key={key}>
               <TextField
-                label={key}
+                label={inputLabels[key] || key}
                 name={key}
                 fullWidth
                 value={value}
