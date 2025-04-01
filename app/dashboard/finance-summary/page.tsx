@@ -249,7 +249,7 @@ export default function FinanceSummaryPage() {
           ))}
         </Grid2>
 
-        <Box mt={3} display="flex" gap={2}>
+        <Box mt={3} display="flex" justifyContent={"center"} gap={2}>
           <Button variant="contained" onClick={handleCalculate}>
             진단 결과 계산하기
           </Button>
