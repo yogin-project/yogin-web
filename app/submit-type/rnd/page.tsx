@@ -83,7 +83,10 @@ export default function CompanyRNDForm() {
         export: form.exportStatus.replace(/,/g, ""),
       },
       homepage: form.homepage,
-      history: form.rAndDHistory.filter(Boolean).join("\n"),
+      history: form.rAndDHistory.filter(Boolean).map((content, index) => ({
+        sequence: String(index + 1),
+        content,
+      })),
       item: form.rAndDItem,
       requiredBudget: form.rAndDFunding.replace(/,/g, ""),
       itemSummary: form.rAndDDescription,
