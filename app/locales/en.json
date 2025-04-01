@@ -7,5 +7,6 @@
   "select_signup_type": "회원 가입 유형을 선택해주세요",
   "corporate": "기업",
   "banker": "은행사",
-  "professor": "교수"
+  "professor": "교수",
+  "subscribe": "구독하기"
 }
