@@ -39,7 +39,7 @@ const financialMetrics = [
     color: "#F44336",
     description: "총자산회전율 = 매출액 / 총자산(평균)",
     calculate: (revenue: number, averageAssets: number) =>
-      (revenue / averageAssets) * 100,
+      revenue / averageAssets,
   },
 ];
 
@@ -53,25 +53,34 @@ export default function FinanceSummaryPage() {
     totalAssets: "",
     averageAssets: "",
   });
+
   const [results, setResults] = useState<number[]>([0, 0, 0, 0]);
+  const [hasSaved, setHasSaved] = useState(false);
+
   const { get, post, put } = useFinancialSummary();
 
   useEffect(() => {
-    if (get.data) {
+    const summary = get.data?.data;
+
+    if (Array.isArray(summary) && summary.length > 0) {
+      const data = summary[0];
       const {
         growthPercentage,
         profitPercentage,
         financialHealthPercentage,
-        debtRepaymentAbilityPercentage,
-      } = get.data;
+        activityPercentage,
+      } = data;
 
-      // 예시: 초기값 설정
+      setHasSaved(true);
       setResults([
         Number(growthPercentage),
         Number(profitPercentage),
         Number(financialHealthPercentage),
-        Number(debtRepaymentAbilityPercentage),
+        Number(activityPercentage),
       ]);
+    } else {
+      setHasSaved(false);
+      setResults([0, 0, 0, 0]);
     }
   }, [get.data]);
 
@@ -104,26 +113,28 @@ export default function FinanceSummaryPage() {
     setResults(values);
   };
 
-  const handleSave = () => {
-    post.mutate({
-      body: {
-        growthPercentage: results[0].toFixed(2),
-        profitPercentage: results[1].toFixed(2),
-        financialHealthPercentage: results[2].toFixed(2),
-        debtRepaymentAbilityPercentage: "0", // 없음
-        activityPercentage: results[3].toFixed(2),
-      },
-    });
+  const refetchSummary = () => {
+    get.refetch();
   };
 
-  const handleUpdate = () => {
-    put.mutate({
+  const handleSaveOrUpdate = () => {
+    const payload = {
       body: {
         growthPercentage: results[0].toFixed(2),
         profitPercentage: results[1].toFixed(2),
         financialHealthPercentage: results[2].toFixed(2),
-        debtRepaymentAbilityPercentage: "0", // 없음
+        activityPercentage: "0",
         activityPercentage: results[3].toFixed(2),
+      },
+    };
+
+    const shouldPost =
+      !Array.isArray(get.data?.data) || get.data?.data.length === 0;
+    const action = shouldPost ? post : put;
+    action.mutate(payload, {
+      onSuccess: () => {
+        refetchSummary();
+        alert("저장되었습니다.");
       },
     });
   };
@@ -232,11 +243,12 @@ export default function FinanceSummaryPage() {
           <Button variant="contained" onClick={handleCalculate}>
             진단 결과 계산하기
           </Button>
-          <Button variant="outlined" color="success" onClick={handleSave}>
+          <Button
+            variant="outlined"
+            color="success"
+            onClick={handleSaveOrUpdate}
+          >
             저장
-          </Button>
-          <Button variant="outlined" color="primary" onClick={handleUpdate}>
-            수정
           </Button>
         </Box>
       </Box>
