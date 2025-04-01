@@ -8,7 +8,7 @@ import {
 import { apiClient } from "./apiClient";
 
 type ApiOptions = {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   path: string;
   queryKey?: string;
   queryOption?: any;
@@ -55,7 +55,7 @@ export const useApiManager = ({
     };
   };
 
-  // ✅ useMutation (POST, PUT, DELETE 요청)
+  // ✅ useMutation (POST, PUT, DELETE, PATCH 요청)
   const setUseMutation: UseMutationResult<ApiResponse, unknown, any> =
     useMutation({
       mutationFn: (props: any) =>
