@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useFinancialSummary } from "@/app/hooks/apis/useFinancialSummary";
+import { useIsMobile } from "@/app/hooks/useIsMobileSize";
 
 const financialMetrics = [
   {
@@ -58,6 +59,7 @@ export default function FinanceSummaryPage() {
   const [hasSaved, setHasSaved] = useState(false);
 
   const { get, post, put } = useFinancialSummary();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const summary = get.data?.data;
@@ -218,15 +220,12 @@ export default function FinanceSummaryPage() {
 
       <Grid2 container spacing={4} minWidth="100%">
         {financialMetrics.map((item, index) => (
-          <Grid2 size={12} key={item.label}>
+          <Grid2 size={isMobile ? 12 : 6} key={item.label}>
             <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
               <Typography variant="subtitle1" gutterBottom>
                 {item.label}
               </Typography>
               <DonutChart value={results[index] || 0} color={item.color} />
-              <Typography variant="body2" mt={1}>
-                {results[index]?.toFixed(2) || "-"}%
-              </Typography>
             </Paper>
           </Grid2>
         ))}
@@ -234,7 +233,7 @@ export default function FinanceSummaryPage() {
 
       <Box mt={5}>
         <Typography variant="subtitle1" gutterBottom>
-          입력값 (모든 항목 숫자만 입력)
+          모든 항목에 숫자(억 단위)만 입력하세요
         </Typography>
         <Grid2 container spacing={2} minWidth="100%">
           {Object.entries(inputs).map(([key, value]) => (
