@@ -1,11 +1,13 @@
-import { BREAKPOINTS } from "@/app/libs/theme";
-import { Stack, Divider, Typography } from "@mui/material";
-import Link from "next/link";
-import React from "react";
+import { Divider, Stack, Typography } from '@mui/material';
+
+import { BREAKPOINTS } from '@/app/libs/theme';
+import Link from 'next/link';
+import React from 'react';
 
 function Mobile() {
   return (
     <Stack
+      component="footer"
       maxWidth={BREAKPOINTS.mobile}
       width="100%"
       margin="0 auto"
@@ -15,7 +17,7 @@ function Mobile() {
       spacing={2}
     >
       {/* Navigation Links */}
-      <Stack direction="column" spacing={2} justifyContent={"flex-start"}>
+      <Stack direction="column" spacing={2} justifyContent={'flex-start'}>
         <Link href="#" underline="none" color="inherit">
           회사소개
         </Link>
@@ -30,7 +32,7 @@ function Mobile() {
         </Link>
       </Stack>
 
-      <Divider sx={{ width: "100%", maxWidth: BREAKPOINTS.mobile }} />
+      <Divider sx={{ width: '100%', maxWidth: BREAKPOINTS.mobile }} />
 
       {/* Company Info */}
       <Stack spacing={1}>

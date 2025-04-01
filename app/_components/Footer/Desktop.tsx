@@ -1,35 +1,37 @@
-import { BREAKPOINTS } from "@/app/libs/theme";
-import { Stack, Divider, Typography } from "@mui/material";
-import Link from "next/link";
-import React from "react";
+import { Divider, Stack, Typography } from '@mui/material';
+
+import { BREAKPOINTS } from '@/app/libs/theme';
+import Link from 'next/link';
+import React from 'react';
 
 function Desktop() {
   return (
     <Stack
+      component="footer"
       maxWidth={BREAKPOINTS.desktop}
       width="100%"
       margin="0 auto"
-      marginTop={23}
+      padding={3}
       justifyContent="center"
       spacing={2}
     >
       {/* Navigation Links */}
-      <Stack direction="row" spacing={3} justifyContent={"flex-start"}>
-        <Link href="#" underline="none" color="inherit">
+      <Stack direction="row" spacing={3} justifyContent={'flex-start'}>
+        <Link href="#" color="inherit">
           회사소개
         </Link>
-        <Link href="#" underline="none" color="inherit">
+        <Link href="#" color="inherit">
           제휴제안
         </Link>
-        <Link href="#" underline="none" color="inherit">
+        <Link href="#" color="inherit">
           이용약관
         </Link>
-        <Link href="#" underline="none" color="inherit">
+        <Link href="#" color="inherit">
           개인정보취급방침
         </Link>
       </Stack>
 
-      <Divider sx={{ width: "100%", maxWidth: BREAKPOINTS.desktop }} />
+      <Divider sx={{ width: '100%', maxWidth: BREAKPOINTS.desktop }} />
 
       {/* Company Info */}
       <Stack spacing={1}>
