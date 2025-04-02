@@ -30,22 +30,23 @@ const drawerWidth = 240;
 
 const routeMap = {
   CORPORATE: [
-    { label: "가입 관리", path: "/dashboard/member-list" },
     { label: "회원 정보", path: "/dashboard/member-info" },
-    { label: "알림", path: "/dashboard/notifications" },
+    { label: "비밀번호 변경", path: "/dashboard/password-change" },
     { label: "자금 신청 현황", path: "/dashboard/fund-status" },
-    { label: "매니징 신청", path: "/dashboard/managing" },
+    { label: "매니징 신청", path: "/dashboard/submit-managing" },
     { label: "재무 진단 요약", path: "/dashboard/finance-summary" },
   ],
   MANAGER: [
-    { label: "가입 관리", path: "/dashboard/member-list" },
     { label: "회원 정보", path: "/dashboard/member-info" },
+    { label: "비밀번호 변경", path: "/dashboard/password-change" },
   ],
   PROFESSOR: [
     { label: "전체 신청내역", path: "/dashboard/admin-list" },
+    { label: "비밀번호 변경", path: "/dashboard/password-change" },
     { label: "통계 요약", path: "/dashboard/analytics" },
   ],
   ADMIN: [
+    { label: "가입 관리", path: "/dashboard/member-list" },
     { label: "전체 신청내역", path: "/dashboard/admin-list" },
     { label: "통계 요약", path: "/dashboard/analytics" },
   ],

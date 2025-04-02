@@ -4,12 +4,13 @@ import {
   Box,
   Typography,
   Paper,
-  Avatar,
   Grid,
   TextField,
+  Button,
+  Input,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { profileAtom } from "@/app/store/profileAtom";
 import { useAtomValue } from "jotai";
 import { useTheme } from "@mui/material/styles";
@@ -19,20 +20,58 @@ export default function MemberInfo() {
   const profile = useAtomValue(profileAtom);
   const { mutate: patchUser } = usePatchUser();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [form, setForm] = useState({
+    email: profile?.email || "",
+    phoneNumber: profile?.phoneNumber || "",
+    branchName: profile?.branchName || "",
+    region: profile?.region || "",
+    verificationPhoto: null as File | null,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setForm((prev) => ({ ...prev, verificationPhoto: file }));
+  };
+
+  const handleSubmit = () => {
+    if (!profile) return;
+
+    const isCorporate = profile.type === "CORPORATE";
+    const payload: any = {
+      type: profile.type.toLowerCase(),
+      email: form.email,
+      phoneNumber: form.phoneNumber,
+    };
+
+    if (!isCorporate) {
+      payload.branchName = form.branchName;
+      payload.region = form.region;
+      if (form.verificationPhoto) {
+        payload.verificationPhoto = form.verificationPhoto;
+      }
+    }
+
+    patchUser({ body: payload });
+  };
+
   if (!profile) return null;
 
   const {
-    email,
     name,
-    phoneNumber,
     location,
     type,
     branchName,
     organization,
     region,
     verificationPhoto,
-    notification,
-    state,
   } = profile;
 
   const getUserTypeLabel = (type: string) => {
@@ -73,40 +112,56 @@ export default function MemberInfo() {
           )}
           <Grid item xs={12}>
             <Box display="flex" flexDirection="column" gap={2}>
-              <TextField label="이름" fullWidth value={name} />
-              <TextField label="이메일" fullWidth value={email} />
-              <TextField label="소재지" fullWidth value={location} />
-              <TextField label="전화번호" fullWidth value={phoneNumber} />
+              <TextField label="이름" fullWidth value={name} disabled />
+              <TextField
+                label="이메일"
+                name="email"
+                fullWidth
+                value={form.email}
+                onChange={handleChange}
+              />
+              <TextField label="소재지" fullWidth value={location} disabled />
+              <TextField
+                label="전화번호"
+                name="phoneNumber"
+                fullWidth
+                value={form.phoneNumber}
+                onChange={handleChange}
+              />
               <TextField
                 label="회원유형"
                 fullWidth
                 value={getUserTypeLabel(type)}
+                disabled
               />
-              {type === "manager" && branchName && (
-                <TextField label="지점명" fullWidth value={branchName} />
+              {type === "MANAGER" && (
+                <TextField
+                  label="지점명"
+                  name="branchName"
+                  fullWidth
+                  value={form.branchName}
+                  onChange={handleChange}
+                />
               )}
-              {type === "professor" && organization && (
-                <TextField label="소속" fullWidth value={organization} />
+              {(type === "MANAGER" || type === "PROFESSOR") && (
+                <TextField
+                  label="지역"
+                  name="region"
+                  fullWidth
+                  value={form.region}
+                  onChange={handleChange}
+                />
               )}
-              {(type === "manager" || type === "professor") && region && (
-                <TextField label="지역" fullWidth value={region} />
+              {(type === "MANAGER" || type === "PROFESSOR") && (
+                <Input
+                  type="file"
+                  name="verificationPhoto"
+                  onChange={handleFileChange}
+                />
               )}
-              <TextField
-                label="알림 수신 여부"
-                fullWidth
-                value={notification ? "예" : "아니오"}
-              />
-              <TextField
-                label="승인 상태"
-                fullWidth
-                value={
-                  state === "APPROVED"
-                    ? "승인됨"
-                    : state === "PENDING"
-                    ? "승인 대기중"
-                    : "거절됨"
-                }
-              />
+              <Button variant="contained" onClick={handleSubmit}>
+                회원정보 변경
+              </Button>
             </Box>
           </Grid>
         </Grid>

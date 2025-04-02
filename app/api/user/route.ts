@@ -21,7 +21,7 @@ export async function PATCH(req: Request) {
       // 일반 JSON 방식
       body = await req.json();
 
-      const response = await fetch(`${API_URL}/v1/user`, {
+      const response = await fetch(`${API_URL}/user`, {
         method: "PATCH",
         headers: {
           Authorization: req.headers.get("authorization") ?? "",
