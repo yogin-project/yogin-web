@@ -1,20 +1,31 @@
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard.woff')
+    format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --background-rgb: 255, 255, 255;
+  --foreground-rgb: 23, 23, 23;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --background-rgb: 10, 10, 10;
+    --foreground-rgb: 237, 237, 237;
   }
 }
 
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
-  padding-top: 80px;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -40,4 +51,83 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+@keyframes arrow {
+  0% {
+    bottom: 16px;
+  }
+  100% {
+    bottom: 30px;
+  }
+}
+
+@keyframes blobGradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(
+    135deg,
+    #000000 0%,
+    #1b50e0 25%,
+    #2962ff 50%,
+    #1b50e0 75%,
+    #000000 100%
+  );
+  background-size: 400% 400%;
+  animation: blobGradient 15s ease-in-out infinite;
+}
+.animated-gradient-text {
+  color: linear-gradient(
+    135deg,
+    #000000 0%,
+    #1b50e0 25%,
+    #2962ff 50%,
+    #1b50e0 75%,
+    #000000 100%
+  );
+  animation: blobGradient 15s ease-in-out infinite;
+}
+
+.fade-section {
+  opacity: 0;
+  transform: translateY(80px);
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out,
+    filter 0.2s ease-in-out;
+  filter: blur(10px);
+}
+
+.fade-section.show {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0px);
+}
+
+.fade-text {
+  color: inherit;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-in-out 0.5s, color 0.8s ease-in-out 0.5s,
+    transform 0.8s ease-in-out 0.5s;
+}
+
+.fade-text.show {
+  color: var(--mui-palette-primary-main);
+  opacity: 1;
+  transform: translateY(0);
 }
