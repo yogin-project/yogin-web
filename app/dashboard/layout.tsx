@@ -66,7 +66,7 @@ export default function DashboardLayout({
     theme.breakpoints.down("md")
   );
 
-  const role = profile?.role || "CORPORATE";
+  const role = profile?.type || "CORPORATE";
   const routes = useMemo(() => routeMap[role] || [], [role]);
 
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);

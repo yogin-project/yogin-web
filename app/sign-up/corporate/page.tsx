@@ -34,17 +34,21 @@ function SignUpCorporate() {
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const { handleCheckEmail } = useCheckMailHandler(setIsEmailChecked);
 
-  const [businessStartDate, setBusinessStartDate] = useState<null | Dayjs>(null);
+  const [businessStartDate, setBusinessStartDate] = useState<null | Dayjs>(
+    null
+  );
   const handleChangeDate = (date: null | Dayjs) => {
-    if(!date) return;
+    if (!date) return;
     setBusinessStartDate(date);
-  }
+  };
   const [ownerName, setOwnerName] = useState("");
   const handleChangeOwnerName = (e: ChangeEvent<HTMLInputElement>) => {
     setOwnerName(e.target.value);
-  }
+  };
   const [isBusinessNoChecked, setIsBusinessNoChecked] = useState(false);
-  const { handleCheckBusinessNo } = useCheckBusinessNoHandler(setIsBusinessNoChecked);
+  const { handleCheckBusinessNo } = useCheckBusinessNoHandler(
+    setIsBusinessNoChecked
+  );
 
   const [formData, setFormData] = useState(initialFormData);
 
@@ -77,6 +81,9 @@ function SignUpCorporate() {
 
     mutate(
       {
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: requestData,
       },
       {
@@ -91,6 +98,8 @@ function SignUpCorporate() {
       }
     );
   };
+
+  console.log("formData: ", formData);
 
   // 회원가입 버튼 활성화 여부
   const signupEnabled = isSignupEnabled({
@@ -148,12 +157,29 @@ function SignUpCorporate() {
           </Stack>
 
           <Stack flexDirection={"row"} gap={2} mt={2}>
-            <DatePicker label="개업일자" value={businessStartDate} onChange={handleChangeDate} maxDate={dayjs()} disabled={isBusinessNoChecked} />
+            <DatePicker
+              label="개업일자"
+              value={businessStartDate}
+              onChange={handleChangeDate}
+              maxDate={dayjs()}
+              disabled={isBusinessNoChecked}
+            />
             <Button
               variant="contained"
               size="large"
-              disabled={formData.businessNo === '' || ownerName === '' || businessStartDate === null || isBusinessNoChecked}
-              onClick={(e) => handleCheckBusinessNo(formData.businessNo, ownerName, businessStartDate)}
+              disabled={
+                formData.businessNo === "" ||
+                ownerName === "" ||
+                businessStartDate === null ||
+                isBusinessNoChecked
+              }
+              onClick={(e) =>
+                handleCheckBusinessNo(
+                  formData.businessNo,
+                  ownerName,
+                  businessStartDate
+                )
+              }
             >
               사업자번호 검증
             </Button>

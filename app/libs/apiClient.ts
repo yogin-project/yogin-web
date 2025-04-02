@@ -1,4 +1,3 @@
-// libs/apiClient.ts
 export const apiClient = async ({
   method = "GET",
   path,
@@ -13,23 +12,29 @@ export const apiClient = async ({
   try {
     const url = `/api/${path}`;
 
-    const authToken =
-      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    // ✅ SSR 안전 처리
+    let authToken: string | null = null;
+    if (typeof window !== "undefined") {
+      authToken =
+        localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken");
+    }
 
-    console.log("authToken: ", authToken);
+    const isFormData = body instanceof FormData;
 
     const requestOptions: RequestInit = {
       method,
       headers: {
-        ...headers,
-        "Content-Type": "application/json",
         ...(authToken && { Authorization: `Bearer ${authToken}` }),
+        ...(!isFormData && { "Content-Type": "application/json" }),
+        ...headers,
       },
       credentials: "include",
     };
 
-    if (method !== "GET") {
-      requestOptions.body = JSON.stringify(body);
+    // ✅ GET이나 HEAD가 아닐 때만 body 추가
+    if (method !== "GET" && method !== "HEAD") {
+      requestOptions.body = isFormData ? body : JSON.stringify(body);
     }
 
     const response = await fetch(url, requestOptions);
