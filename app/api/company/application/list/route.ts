@@ -4,7 +4,9 @@ export async function GET(req: Request) {
   try {
     const API_URL = process.env.API_URL;
 
-    const response = await fetch(`${API_URL}/company/application/list`, {
+    const { searchParams } = new URL(req.url);
+
+    const response = await fetch(`${API_URL}/company/application/list?${searchParams.toString()}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
