@@ -47,6 +47,7 @@ const routeMap = {
   ],
   ADMIN: [
     { label: "가입 관리", path: "/dashboard/member-list" },
+    { label: "회원 목록 조회", path: "/dashboard/user-list" },
     { label: "전체 신청내역", path: "/dashboard/admin-list" },
     { label: "통계 요약", path: "/dashboard/analytics" },
   ],
