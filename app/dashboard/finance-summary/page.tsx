@@ -4,10 +4,11 @@ import {
   Box,
   Typography,
   Paper,
-  Grid2,
+  Grid,
   TextField,
   Button,
   CircularProgress,
+  Container,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useFinancialSummary } from "@/app/hooks/apis/useFinancialSummary";
@@ -126,7 +127,6 @@ export default function FinanceSummaryPage() {
         profitPercentage: results[1].toFixed(2),
         financialHealthPercentage: results[2].toFixed(2),
         debtRepaymentAbilityPercentage: "0",
-
         activityPercentage: results[3].toFixed(2),
       },
     };
@@ -213,43 +213,46 @@ export default function FinanceSummaryPage() {
   };
 
   return (
-    <Box>
-      <Typography variant="h6" gutterBottom>
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Typography variant="h5" gutterBottom textAlign="center">
         재무 진단 요약
       </Typography>
 
-      <Grid2 container spacing={4} minWidth="100%">
+      <Grid container spacing={4}>
         {financialMetrics.map((item, index) => (
-          <Grid2 size={isMobile ? 12 : 6} key={item.label}>
+          <Grid item xs={12} sm={6} key={item.label}>
             <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
               <Typography variant="subtitle1" gutterBottom>
                 {item.label}
               </Typography>
               <DonutChart value={results[index] || 0} color={item.color} />
             </Paper>
-          </Grid2>
+          </Grid>
         ))}
-      </Grid2>
+      </Grid>
 
       <Box mt={5}>
-        <Typography variant="subtitle1" gutterBottom>
+        <Typography variant="subtitle1" gutterBottom textAlign="center">
           모든 항목에 숫자(억 단위)만 입력하세요
         </Typography>
-        <Grid2 container spacing={2} minWidth="100%">
-          {Object.entries(inputs).map(([key, value]) => (
-            <Grid2 size={12} key={key}>
-              <TextField
-                label={inputLabels[key] || key}
-                name={key}
-                fullWidth
-                value={value}
-                onChange={handleInputChange}
-              />
-            </Grid2>
-          ))}
-        </Grid2>
 
-        <Box mt={3} display="flex" justifyContent={"center"} gap={2}>
+        <Grid container spacing={2}>
+          {Object.entries(inputs).map(([key, value]) => (
+            <Grid item xs={12} sm={6} key={key}>
+              <Box maxWidth={400} mx="auto">
+                <TextField
+                  label={inputLabels[key] || key}
+                  name={key}
+                  fullWidth
+                  value={value}
+                  onChange={handleInputChange}
+                />
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+
+        <Box mt={4} display="flex" justifyContent="center" gap={2}>
           <Button variant="contained" onClick={handleCalculate}>
             진단 결과 계산하기
           </Button>
@@ -262,6 +265,6 @@ export default function FinanceSummaryPage() {
           </Button>
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 }
