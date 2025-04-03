@@ -32,7 +32,7 @@ const routeMap = {
   CORPORATE: [
     { label: "회원 정보", path: "/dashboard/member-info" },
     { label: "비밀번호 변경", path: "/dashboard/password-change" },
-    { label: "자금 신청 현황", path: "/dashboard/fund-status" },
+    { label: "자금 신청 현황", path: "/dashboard/submit-list" },
     { label: "매니징 신청", path: "/dashboard/submit-managing" },
     { label: "재무 진단 요약", path: "/dashboard/finance-summary" },
   ],
