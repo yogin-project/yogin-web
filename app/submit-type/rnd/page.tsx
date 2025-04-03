@@ -1,36 +1,57 @@
-"use client";
+'use client';
 
-import { useState } from "react";
 import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Checkbox,
   Container,
+  FormControlLabel,
+  FormLabel,
+  Grid2,
+  IconButton,
+  Input,
+  InputAdornment,
+  Paper,
+  Stack,
   TextField,
   Typography,
-  Paper,
-  Input,
-  Button,
-  IconButton,
-  Grid2,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
+  styled,
+} from '@mui/material';
+
+import AddIcon from '@mui/icons-material/Add';
+import { ChevronRightRounded } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useApplicationTemp } from '@/app/hooks/apis/useApplicationTemp';
+import { useState } from 'react';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 export default function CompanyRNDForm() {
   const [form, setForm] = useState({
-    companyName: "",
-    ceoName: "",
-    contact: "",
-    location: "",
-    businessType: "",
-    sales: "",
-    exportStatus: "",
-    homepage: "",
-    rAndDHistory: [""],
-    rAndDItem: "",
-    rAndDFunding: "",
-    rAndDDescription: "",
+    companyName: '',
+    ceoName: '',
+    contact: '',
+    location: '',
+    businessType: '',
+    sales: '',
+    exportStatus: '',
+    homepage: '',
+    rAndDHistory: [''],
+    rAndDItem: '',
+    rAndDFunding: '',
+    rAndDDescription: '',
     files: {
       businessLicense: null,
       patent: null,
@@ -56,7 +77,7 @@ export default function CompanyRNDForm() {
   };
 
   const addRAndDHistory = () => {
-    setForm({ ...form, rAndDHistory: [...form.rAndDHistory, ""] });
+    setForm({ ...form, rAndDHistory: [...form.rAndDHistory, ''] });
   };
 
   const removeRAndDHistory = (index) => {
@@ -72,15 +93,15 @@ export default function CompanyRNDForm() {
     const formData = new FormData();
 
     const data = {
-      type: "RND",
+      type: 'RND',
       businessCategory: form.businessType,
       lastYearRevenue: {
-        year: "2024",
-        revenue: form.sales.replace(/,/g, ""),
+        year: '2024',
+        revenue: form.sales.replace(/,/g, ''),
       },
       lastYearExport: {
-        year: "2024",
-        export: form.exportStatus.replace(/,/g, ""),
+        year: '2024',
+        export: form.exportStatus.replace(/,/g, ''),
       },
       homepage: form.homepage,
       history: form.rAndDHistory.filter(Boolean).map((content, index) => ({
@@ -88,27 +109,27 @@ export default function CompanyRNDForm() {
         content,
       })),
       item: form.rAndDItem,
-      requiredBudget: form.rAndDFunding.replace(/,/g, ""),
+      requiredBudget: form.rAndDFunding.replace(/,/g, ''),
       itemSummary: form.rAndDDescription,
       isFinancialInstituteInfoShareAgreed: form.agreeToTerms,
     };
 
-    formData.append("data", JSON.stringify(data));
+    formData.append('data', JSON.stringify(data));
 
     if (form.files.businessLicense) {
-      formData.append("businessRegistrationCert", form.files.businessLicense);
+      formData.append('businessRegistrationCert', form.files.businessLicense);
     }
     if (form.files.patent) {
-      formData.append("patentCert", form.files.patent);
+      formData.append('patentCert', form.files.patent);
     }
 
     mutate(
       { body: formData },
       {
-        onSuccess: () => alert("제출 완료!"),
+        onSuccess: () => alert('제출 완료!'),
         onError: (e) => {
           console.error(e);
-          alert("제출 실패");
+          alert('제출 실패');
         },
       }
     );
@@ -116,160 +137,733 @@ export default function CompanyRNDForm() {
 
   return (
     <Container maxWidth="md">
-      <Paper elevation={3} sx={{ padding: 4, marginTop: 4 }}>
-        <Typography variant="h5" gutterBottom align="center">
-          기업 정보 및 R&D 정보 입력
-        </Typography>
-        <Grid2 container spacing={2}>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="기업명"
-              name="companyName"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="대표명"
-              name="ceoName"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="연락처"
-              name="contact"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="소재지"
-              name="location"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="업태"
-              name="businessType"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="홈페이지"
-              name="homepage"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="매출액 (억)"
-              name="sales"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="수출액 (억)"
-              name="exportStatus"
-              onChange={handleChange}
-            />
-          </Grid2>
+      <Paper elevation={1} sx={{ my: 3 }}>
+        <Stack gap={6} px={3} py={6}>
+          <Typography variant="h4" align="center" gutterBottom>
+            기업 정보 및 R&D 정보 입력
+          </Typography>
 
-          <Grid2 size={12}>
-            <Typography variant="h6" gutterBottom>
-              R&D 이력
-            </Typography>
-            {form.rAndDHistory.map((item, index) => (
-              <Grid2
-                container
-                spacing={1}
-                key={index}
-                alignItems="center"
-                sx={{ mb: 1 }}
-              >
-                <Grid2 size={11}>
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={2}
-                    label={`R&D 이력 ${index + 1}`}
-                    value={item}
-                    onChange={(e) =>
-                      handleRAndDHistoryChange(index, e.target.value)
-                    }
-                  />
-                </Grid2>
-                <Grid2 size={1}>
-                  <IconButton
-                    onClick={() => removeRAndDHistory(index)}
-                    disabled={form.rAndDHistory.length === 1}
+          <Card variant="outlined">
+            <CardContent>
+              <Stack gap={3}>
+                <Typography variant="h6">
+                  <ChevronRightRounded sx={{ verticalAlign: 'sub' }} /> 기업
+                  정보
+                </Typography>
+                <Stack
+                  display="grid"
+                  rowGap={0.5}
+                  columnGap={1}
+                  gridColumn={2}
+                  gridTemplateColumns="1fr 1fr"
+                  gridAutoRows="2.5rem"
+                  sx={{
+                    '& label': {
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      p: 1,
+                      bgcolor: 'action.hover',
+                      fontWeight: 600,
+                    },
+                    '& .MuiInputBase-root': {
+                      height: '100%',
+                      px: 1,
+                    },
+                  }}
+                >
+                  <Stack
+                    sx={{ gridColumnStart: 1 }}
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
                   >
-                    <DeleteIcon />
-                  </IconButton>
-                </Grid2>
-              </Grid2>
-            ))}
-            <Button
-              onClick={addRAndDHistory}
-              startIcon={<AddIcon />}
-              variant="outlined"
-            >
-              R&D 이력 추가
-            </Button>
-          </Grid2>
+                    <FormLabel
+                      htmlFor="companyName"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      기업체명
+                    </FormLabel>
+                    <TextField
+                      id="companyName"
+                      autoComplete="off"
+                      fullWidth
+                      name="companyName"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                    />
+                  </Stack>
 
-          <Grid2 size={12}>
-            <TextField
-              fullWidth
-              label="R&D 아이템 설명 (20자 이내)"
-              name="rAndDItem"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              fullWidth
-              label="개발 필요 자금 (억)"
-              name="rAndDFunding"
-              onChange={handleChange}
-            />
-          </Grid2>
-          <Grid2 size={12}>
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              label="R&D ITEM 내용 정리"
-              name="rAndDDescription"
-              onChange={handleChange}
-            />
-          </Grid2>
+                  <Stack
+                    sx={{ gridColumnStart: 2 }}
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      htmlFor="ceoName"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      대표자명
+                    </FormLabel>
+                    <TextField
+                      id="ceoName"
+                      autoComplete="off"
+                      fullWidth
+                      name="ceoName"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                    />
+                  </Stack>
 
-          <Grid2 size={12}>
-            <Typography>사업자등록증 사본 업로드</Typography>
-            <Input
-              type="file"
-              name="businessLicense"
-              onChange={handleFileChange}
-            />
-          </Grid2>
-          <Grid2 size={12}>
-            <Typography>특허 관련 파일 업로드</Typography>
-            <Input type="file" name="patent" onChange={handleFileChange} />
-          </Grid2>
+                  <Stack
+                    sx={{ gridColumnStart: 1 }}
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      htmlFor="contact"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      연락처
+                    </FormLabel>
+                    <TextField
+                      id="contact"
+                      autoComplete="off"
+                      fullWidth
+                      name="contact"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                    />
+                  </Stack>
+                  <Stack
+                    sx={{ gridColumnStart: 2 }}
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      htmlFor="location"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      소재지
+                    </FormLabel>
+                    <TextField
+                      id="location"
+                      autoComplete="off"
+                      fullWidth
+                      name="location"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                    />
+                  </Stack>
 
-          <Grid2 size={12}>
+                  <Stack
+                    sx={{ gridColumnStart: 1 }}
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      htmlFor="businessType"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      업태
+                    </FormLabel>
+                    <TextField
+                      id="businessType"
+                      autoComplete="off"
+                      fullWidth
+                      name="businessType"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                    />
+                  </Stack>
+                  <Stack
+                    sx={{ gridColumnStart: 2 }}
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      htmlFor="homepage"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      홈페이지
+                    </FormLabel>
+                    <TextField
+                      id="homepage"
+                      autoComplete="off"
+                      fullWidth
+                      name="homepage"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                    />
+                  </Stack>
+
+                  <Stack
+                    sx={{ gridColumnStart: 1 }}
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      htmlFor="sales"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      매출액 (억)
+                    </FormLabel>
+                    <TextField
+                      id="sales"
+                      autoComplete="off"
+                      fullWidth
+                      name="sales"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">억</InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </Stack>
+
+                  <Stack
+                    sx={{ gridColumnStart: 2 }}
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      htmlFor="exportStatus"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      수출액 (억)
+                    </FormLabel>
+                    <TextField
+                      id="exportStatus"
+                      autoComplete="off"
+                      fullWidth
+                      name="exportStatus"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">억</InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </Stack>
+                </Stack>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          <Card variant="outlined">
+            <CardContent>
+              <Stack gap={3}>
+                <Typography variant="h6">
+                  <ChevronRightRounded sx={{ verticalAlign: 'sub' }} /> R&D 이력
+                </Typography>
+                <Stack gap={0.5}>
+                  {form.rAndDHistory.map((item, index) => (
+                    <Stack
+                      key={index}
+                      display="grid"
+                      rowGap={0.5}
+                      columnGap={1}
+                      gridColumn={3}
+                      gridTemplateColumns="3fr auto"
+                      sx={{
+                        '& label': {
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          p: 1,
+                          bgcolor: 'action.hover',
+                          fontWeight: 600,
+                        },
+                        '& .MuiInputBase-root': {
+                          height: '100%',
+                          px: 1,
+                        },
+                      }}
+                    >
+                      <Stack
+                        sx={{ gridColumnStart: 1 }}
+                        display="grid"
+                        rowGap={0.5}
+                        gridColumn={3}
+                        gridTemplateColumns="auto 1fr"
+                      >
+                        <FormLabel
+                          htmlFor={`rAndDHistory-${index}`}
+                          sx={{
+                            gridColumnStart: 1,
+                            borderTopWidth: 1,
+                            borderTopStyle: 'solid',
+                            borderTopColor: 'action.hover',
+                            borderBottomWidth: 1,
+                            borderBottomStyle: 'solid',
+                            borderBottomColor: 'action.hover',
+                            borderRightWidth: 1,
+                            borderRightStyle: 'solid',
+                            borderRightColor: 'action.hover',
+                          }}
+                        >
+                          {index + 1}
+                        </FormLabel>
+                        <TextField
+                          id={`rAndDHistory-${index}`}
+                          fullWidth
+                          multiline
+                          minRows={2}
+                          value={item}
+                          onChange={(e) =>
+                            handleRAndDHistoryChange(index, e.target.value)
+                          }
+                          sx={{
+                            '.MuiInputBase-root': {
+                              borderRadius: '2px !important',
+                            },
+                          }}
+                        />
+                      </Stack>
+
+                      <Stack
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        sx={{ gridColumnStart: 3 }}
+                      >
+                        <IconButton
+                          onClick={() => removeRAndDHistory(index)}
+                          disabled={form.rAndDHistory.length === 1}
+                          sx={{ width: 'fit-content' }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Stack>
+                    </Stack>
+                  ))}
+                </Stack>
+              </Stack>
+            </CardContent>
+            <CardActions>
+              <Button
+                onClick={addRAndDHistory}
+                startIcon={<AddIcon />}
+                variant="text"
+                size="large"
+              >
+                R&D 이력 추가
+              </Button>
+            </CardActions>
+          </Card>
+
+          <Card variant="outlined">
+            <CardContent>
+              <Stack gap={3}>
+                <Typography variant="h6">
+                  <ChevronRightRounded sx={{ verticalAlign: 'sub' }} /> 아이템
+                  상세
+                </Typography>
+                <Stack gap={0.5}>
+                  <Stack
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                    sx={{
+                      '& label': {
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        p: 1,
+                        bgcolor: 'action.hover',
+                        fontWeight: 600,
+                      },
+                      '& .MuiInputBase-root': {
+                        height: '100%',
+                        px: 1,
+                      },
+                    }}
+                  >
+                    <FormLabel
+                      htmlFor="rAndDItem"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      아이템 요약
+                    </FormLabel>
+                    <TextField
+                      id="rAndDItem"
+                      autoComplete="off"
+                      fullWidth
+                      name="rAndDItem"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              20자 이내
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </Stack>
+
+                  <Stack
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    gridAutoRows="2.5rem"
+                    sx={{
+                      '& label': {
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        p: 1,
+                        bgcolor: 'action.hover',
+                        fontWeight: 600,
+                      },
+                      '& .MuiInputBase-root': {
+                        height: '100%',
+                        px: 1,
+                      },
+                    }}
+                  >
+                    <FormLabel
+                      htmlFor="rAndDFunding"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      개발 필요 자금 (억)
+                    </FormLabel>
+                    <TextField
+                      id="rAndDFunding"
+                      autoComplete="off"
+                      fullWidth
+                      name="rAndDFunding"
+                      hiddenLabel
+                      onChange={handleChange}
+                      variant="standard"
+                      sx={{ gridColumnStart: 2 }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">억</InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </Stack>
+
+                  <Stack
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={2}
+                    gridTemplateColumns="1fr 2fr"
+                    sx={{
+                      '& label': {
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        p: 1,
+                        bgcolor: 'action.hover',
+                        fontWeight: 600,
+                      },
+                      '& .MuiInputBase-root': {
+                        height: '100%',
+                        px: 1,
+                      },
+                    }}
+                  >
+                    <FormLabel
+                      htmlFor="rAndDDescription"
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                      }}
+                    >
+                      아이템 내용 정리
+                    </FormLabel>
+                    <TextField
+                      id="rAndDDescription"
+                      autoComplete="off"
+                      fullWidth
+                      multiline
+                      minRows={4}
+                      name="rAndDDescription"
+                      hiddenLabel
+                      onChange={handleChange}
+                      sx={{
+                        gridColumnStart: 2,
+                        '.MuiInputBase-root': {
+                          borderRadius: '2px !important',
+                        },
+                      }}
+                    />
+                  </Stack>
+                </Stack>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          <Card variant="outlined">
+            <CardContent>
+              <Stack gap={3}>
+                <Typography variant="h6">
+                  <ChevronRightRounded sx={{ verticalAlign: 'sub' }} /> 필수
+                  제출 자료
+                </Typography>
+                <Stack gap={0.5}>
+                  <Stack
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={3}
+                    gridTemplateColumns="auto 1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                        borderRightWidth: 1,
+                        borderRightStyle: 'solid',
+                        borderRightColor: 'action.hover',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        p: 1,
+                        bgcolor: 'action.hover',
+                        fontWeight: 600,
+                      }}
+                    >
+                      1
+                    </FormLabel>
+                    <FormLabel
+                      sx={{
+                        gridColumnStart: 2,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        p: 1,
+                        bgcolor: 'action.hover',
+                        fontWeight: 600,
+                      }}
+                    >
+                      사업자등록증 사본
+                    </FormLabel>
+                    <Button
+                      component="label"
+                      role={undefined}
+                      variant="outlined"
+                      tabIndex={-1}
+                    >
+                      파일 선택
+                      <VisuallyHiddenInput
+                        type="file"
+                        name="businessLicense"
+                        onChange={handleFileChange}
+                      />
+                    </Button>
+                  </Stack>
+                  <Stack
+                    display="grid"
+                    rowGap={0.5}
+                    gridColumn={3}
+                    gridTemplateColumns="auto 1fr 2fr"
+                    gridAutoRows="2.5rem"
+                  >
+                    <FormLabel
+                      sx={{
+                        gridColumnStart: 1,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                        borderRightWidth: 1,
+                        borderRightStyle: 'solid',
+                        borderRightColor: 'action.hover',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        p: 1,
+                        bgcolor: 'action.hover',
+                        fontWeight: 600,
+                      }}
+                    >
+                      1
+                    </FormLabel>
+                    <FormLabel
+                      sx={{
+                        gridColumnStart: 2,
+                        borderTopWidth: 1,
+                        borderTopStyle: 'solid',
+                        borderTopColor: 'action.hover',
+                        borderBottomWidth: 1,
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'action.hover',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        p: 1,
+                        bgcolor: 'action.hover',
+                        fontWeight: 600,
+                      }}
+                    >
+                      특허 관련 파일
+                    </FormLabel>
+                    <Button
+                      component="label"
+                      role={undefined}
+                      variant="outlined"
+                      tabIndex={-1}
+                    >
+                      파일 선택
+                      <VisuallyHiddenInput
+                        type="file"
+                        name="patent"
+                        onChange={handleFileChange}
+                      />
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          <Stack>
             <FormControlLabel
               control={
                 <Checkbox
@@ -280,24 +874,22 @@ export default function CompanyRNDForm() {
               }
               label="교수 정보공개 동의 (R&D 서비스는 유료이며, 연구를 담당하는 위원에게 지급됩니다.)"
             />
-          </Grid2>
+          </Stack>
 
-          <Grid2 size={6}>
+          <Stack gap={1} flexDirection="row">
             <Button
-              variant="contained"
+              variant="outlined"
               fullWidth
               onClick={handleSubmit}
               disabled={isPending}
             >
-              {isPending ? "제출 중..." : "저장"}
+              {isPending ? '제출 중...' : '저장'}
             </Button>
-          </Grid2>
-          <Grid2 size={6}>
             <Button variant="contained" color="primary" fullWidth>
               신청
             </Button>
-          </Grid2>
-        </Grid2>
+          </Stack>
+        </Stack>
       </Paper>
     </Container>
   );
