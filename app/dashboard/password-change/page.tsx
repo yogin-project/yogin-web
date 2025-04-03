@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Box, Typography, Paper, Grid, TextField, Button } from "@mui/material";
+import { useChangePassword } from "@/app/hooks/apis/useChangePassword";
+import { useRouter } from "next/navigation";
 
 export default function PasswordChange() {
   const [form, setForm] = useState({
@@ -10,20 +12,42 @@ export default function PasswordChange() {
     confirmNewPassword: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const {mutate} = useChangePassword();
+  const router = useRouter();
   const handleSubmit = () => {
     if (form.newPassword !== form.confirmNewPassword) {
       alert("새 비밀번호가 일치하지 않습니다.");
       return;
     }
 
-    // 비밀번호 변경 API 호출 로직 삽입 예정
-    console.log("비밀번호 변경 요청:", form);
-    alert("비밀번호가 변경되었습니다.");
+    mutate(
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          originPwd: form.currentPassword,
+          newPwd: form.newPassword
+        },
+      },
+      {
+        onSuccess: () => {
+          alert("비밀번호가 변경되었습니다.");
+          // 로그아웃 로직 필요
+          router.replace("/sign-in");
+        },
+        onError: (error) => {
+          console.error("비밀번호 변경 실패:", error);
+          alert("비밀번호 변경에 실패했습니다. 다시 시도해주세요.")
+        }
+      }
+    )
+    
   };
 
   return (
