@@ -1,21 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
   Paper,
   Divider,
   Stack,
-  Avatar,
   Chip,
+  Dialog,
+  DialogContent,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useSearchParams } from "next/navigation";
 
 function UserDetailPage() {
   const searchParams = useSearchParams();
   const rawUser = searchParams.get("user");
   const user = rawUser ? JSON.parse(decodeURIComponent(rawUser)) : null;
+
+  const [open, setOpen] = useState(false);
 
   if (!user) return <Typography>유저 정보를 불러올 수 없습니다.</Typography>;
 
@@ -27,6 +32,51 @@ function UserDetailPage() {
       hour: "2-digit",
       minute: "2-digit",
     });
+
+  const handleImageClick = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const renderVerifyImage = () => (
+    <>
+      <Box mt={2}>
+        <Typography gutterBottom>
+          <b>증빙자료:</b>
+        </Typography>
+        <img
+          src={user.verifyData}
+          alt="증빙자료"
+          onClick={handleImageClick}
+          style={{
+            maxWidth: "100%",
+            borderRadius: 8,
+            border: "1px solid #eee",
+            cursor: "pointer",
+          }}
+        />
+      </Box>
+
+      <Dialog open={open} onClose={handleClose} maxWidth="md">
+        <DialogContent sx={{ position: "relative" }}>
+          <IconButton
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              backgroundColor: "rgba(255,255,255,0.7)",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <img
+            src={user.verifyData}
+            alt="확대 이미지"
+            style={{ width: "100%", borderRadius: 8 }}
+          />
+        </DialogContent>
+      </Dialog>
+    </>
+  );
 
   return (
     <Box maxWidth="700px" mx="auto" mt={6} px={3}>
@@ -102,22 +152,7 @@ function UserDetailPage() {
                   <b>승인일:</b> {formatDate(user.adminApprovedAt)}
                 </Typography>
               )}
-              {user.verifyData && (
-                <Box mt={2}>
-                  <Typography gutterBottom>
-                    <b>증빙자료:</b>
-                  </Typography>
-                  <img
-                    src={user.verifyData}
-                    alt="증빙자료"
-                    style={{
-                      maxWidth: "100%",
-                      borderRadius: 8,
-                      border: "1px solid #eee",
-                    }}
-                  />
-                </Box>
-              )}
+              {user.verifyData && renderVerifyImage()}
             </>
           )}
 
@@ -139,22 +174,7 @@ function UserDetailPage() {
                   <b>승인일:</b> {formatDate(user.adminApprovedAt)}
                 </Typography>
               )}
-              {user.verifyData && (
-                <Box mt={2}>
-                  <Typography gutterBottom>
-                    <b>증빙자료:</b>
-                  </Typography>
-                  <img
-                    src={user.verifyData}
-                    alt="증빙자료"
-                    style={{
-                      maxWidth: "100%",
-                      borderRadius: 8,
-                      border: "1px solid #eee",
-                    }}
-                  />
-                </Box>
-              )}
+              {user.verifyData && renderVerifyImage()}
             </>
           )}
         </Stack>
