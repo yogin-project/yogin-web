@@ -17,7 +17,9 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Button,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useAdminList } from "@/app/hooks/apis/useAdminList";
 
 const userTypes = [
@@ -38,6 +40,7 @@ const sortOptions = [
 ];
 
 function UserList() {
+  const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [type, setType] = useState("PROFESSOR");
@@ -85,6 +88,15 @@ function UserList() {
   const handleSortChange = (e: SelectChangeEvent) => {
     setSort(e.target.value);
     setPage(0);
+  };
+
+  //   const handleViewDetail = (user: any) => {
+  //     router.push(`/admin/users/${user.id}`);
+  //   };
+  const handleViewDetail = (user: any) => {
+    router.push(
+      `/admin/users/${user.id}?user=${encodeURIComponent(JSON.stringify(user))}`
+    );
   };
 
   return (
@@ -141,6 +153,7 @@ function UserList() {
                 <TableCell>전화번호</TableCell>
                 <TableCell>지역</TableCell>
                 <TableCell>상태</TableCell>
+                <TableCell>액션</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -151,12 +164,17 @@ function UserList() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.phoneNumber}</TableCell>
                   <TableCell>{user.location || "-"}</TableCell>
-                  <TableCell>{user.state}</TableCell>
+                  <TableCell>{user.state || "-"}</TableCell>
+                  <TableCell>
+                    <Button size="small" onClick={() => handleViewDetail(user)}>
+                      상세 보기
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
               {users.length === 0 && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
+                  <TableCell colSpan={7} align="center">
                     등록된 사용자가 없습니다.
                   </TableCell>
                 </TableRow>
