@@ -1,8 +1,16 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, Paper, Divider, Stack } from "@mui/material";
-import { useParams, useSearchParams } from "next/navigation";
+import {
+  Box,
+  Typography,
+  Paper,
+  Divider,
+  Stack,
+  Avatar,
+  Chip,
+} from "@mui/material";
+import { useSearchParams } from "next/navigation";
 
 function UserDetailPage() {
   const searchParams = useSearchParams();
@@ -11,46 +19,65 @@ function UserDetailPage() {
 
   if (!user) return <Typography>유저 정보를 불러올 수 없습니다.</Typography>;
 
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
   return (
-    <Box maxWidth="600px" mx="auto" mt={4}>
-      <Typography variant="h6" gutterBottom>
+    <Box maxWidth="700px" mx="auto" mt={6} px={3}>
+      <Typography variant="h4" gutterBottom fontWeight={600} textAlign="center">
         회원 상세 정보
       </Typography>
-      <Paper sx={{ p: 3 }} elevation={3}>
-        <Stack spacing={2}>
-          <Typography>
-            <b>ID:</b> {user.id}
-          </Typography>
-          <Typography>
-            <b>이메일:</b> {user.email}
-          </Typography>
-          <Typography>
-            <b>이름:</b> {user.name}
-          </Typography>
-          <Typography>
-            <b>전화번호:</b> {user.phoneNumber}
-          </Typography>
-          <Typography>
-            <b>회원 타입:</b> {user.type}
-          </Typography>
-          <Typography>
-            <b>소재지:</b> {user.location}
-          </Typography>
-          <Typography>
-            <b>상세 주소:</b> {user.address}
-          </Typography>
-          <Typography>
-            <b>가입일:</b> {user.createdAt}
-          </Typography>
-          {user.updatedAt && (
-            <Typography>
-              <b>수정일:</b> {user.updatedAt}
-            </Typography>
-          )}
+      <Paper elevation={4} sx={{ p: 4, borderRadius: 4 }}>
+        <Stack spacing={3}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h6">기본 정보</Typography>
+            <Chip label={user.type} color="primary" variant="outlined" />
+          </Box>
           <Divider />
+          <Stack spacing={1}>
+            <Typography>
+              <b>ID:</b> {user.id}
+            </Typography>
+            <Typography>
+              <b>이메일:</b> {user.email}
+            </Typography>
+            <Typography>
+              <b>이름:</b> {user.name}
+            </Typography>
+            <Typography>
+              <b>전화번호:</b> {user.phoneNumber}
+            </Typography>
+            <Typography>
+              <b>소재지:</b> {user.location}
+            </Typography>
+            <Typography>
+              <b>상세 주소:</b> {user.address}
+            </Typography>
+            <Typography>
+              <b>가입일:</b> {formatDate(user.createdAt)}
+            </Typography>
+            {user.updatedAt && (
+              <Typography>
+                <b>수정일:</b> {formatDate(user.updatedAt)}
+              </Typography>
+            )}
+          </Stack>
+
+          <Divider sx={{ my: 2 }} />
 
           {user.type === "CORPORATE" && (
             <>
+              <Typography variant="h6">기업 정보</Typography>
               <Typography>
                 <b>회사명:</b> {user.corpName}
               </Typography>
@@ -62,6 +89,7 @@ function UserDetailPage() {
 
           {user.type === "MANAGER" && (
             <>
+              <Typography variant="h6">지점장 정보</Typography>
               <Typography>
                 <b>지점명:</b> {user.branchName}
               </Typography>
@@ -71,18 +99,22 @@ function UserDetailPage() {
               </Typography>
               {user.adminApprovedAt && (
                 <Typography>
-                  <b>승인일:</b> {user.adminApprovedAt}
+                  <b>승인일:</b> {formatDate(user.adminApprovedAt)}
                 </Typography>
               )}
-              {user.verifiyData && (
-                <Box>
-                  <Typography>
+              {user.verifyData && (
+                <Box mt={2}>
+                  <Typography gutterBottom>
                     <b>증빙자료:</b>
                   </Typography>
                   <img
-                    src={user.verifiyData}
+                    src={user.verifyData}
                     alt="증빙자료"
-                    style={{ maxWidth: "100%", borderRadius: 8, marginTop: 8 }}
+                    style={{
+                      maxWidth: "100%",
+                      borderRadius: 8,
+                      border: "1px solid #eee",
+                    }}
                   />
                 </Box>
               )}
@@ -91,6 +123,7 @@ function UserDetailPage() {
 
           {user.type === "PROFESSOR" && (
             <>
+              <Typography variant="h6">교수 정보</Typography>
               <Typography>
                 <b>소속:</b> {user.organization}
               </Typography>
@@ -103,18 +136,22 @@ function UserDetailPage() {
               </Typography>
               {user.adminApprovedAt && (
                 <Typography>
-                  <b>승인일:</b> {user.adminApprovedAt}
+                  <b>승인일:</b> {formatDate(user.adminApprovedAt)}
                 </Typography>
               )}
-              {user.verifiyData && (
-                <Box>
-                  <Typography>
+              {user.verifyData && (
+                <Box mt={2}>
+                  <Typography gutterBottom>
                     <b>증빙자료:</b>
                   </Typography>
                   <img
-                    src={user.verifiyData}
+                    src={user.verifyData}
                     alt="증빙자료"
-                    style={{ maxWidth: "100%", borderRadius: 8, marginTop: 8 }}
+                    style={{
+                      maxWidth: "100%",
+                      borderRadius: 8,
+                      border: "1px solid #eee",
+                    }}
                   />
                 </Box>
               )}
