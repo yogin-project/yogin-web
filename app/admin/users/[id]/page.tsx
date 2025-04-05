@@ -13,6 +13,8 @@ import {
   IconButton,
   Button,
   TextField,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSearchParams } from "next/navigation";
@@ -21,12 +23,18 @@ import { useAdminApprove } from "@/app/hooks/apis/useAdminApprove";
 function UserDetailPage() {
   const searchParams = useSearchParams();
   const rawUser = searchParams.get("user");
-  const user = rawUser ? JSON.parse(decodeURIComponent(rawUser)) : null;
+  const parsedUser = rawUser ? JSON.parse(decodeURIComponent(rawUser)) : null;
+  const [user, setUser] = useState(parsedUser);
 
   const { mutate, isPending } = useAdminApprove();
 
   const [open, setOpen] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   if (!user) return <Typography>유저 정보를 불러올 수 없습니다.</Typography>;
 
@@ -43,22 +51,45 @@ function UserDetailPage() {
   const handleClose = () => setOpen(false);
 
   const handleApprove = () => {
-    mutate({
-      body: {
-        userId: user.id,
-        isApprove: true,
+    mutate(
+      {
+        body: {
+          userId: user.id,
+          isApprove: true,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          setUser((prev) => ({ ...prev, adminApproval: 1 }));
+          setSnackbar({
+            open: true,
+            message: "승인이 완료되었습니다.",
+            severity: "success",
+          });
+        },
+      }
+    );
   };
 
   const handleReject = () => {
-    mutate({
-      body: {
-        userId: user.id,
-        isApprove: false,
-        message: rejectReason,
+    mutate(
+      {
+        body: {
+          userId: user.id,
+          isApprove: false,
+          message: rejectReason,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          setSnackbar({
+            open: true,
+            message: "거절 처리되었습니다.",
+            severity: "info",
+          });
+        },
+      }
+    );
   };
 
   const renderVerifyImage = () => (
@@ -235,6 +266,20 @@ function UserDetailPage() {
           )}
         </Stack>
       </Paper>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity={snackbar.severity as any}
+          onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
