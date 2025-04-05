@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useAdminList } from "@/app/hooks/apis/useAdminList";
+import { locations } from "@/app/utils";
 
 const userTypes = [
   { value: "CORPORATE", label: "기업" },
@@ -46,6 +47,7 @@ function UserList() {
   const [type, setType] = useState("PROFESSOR");
   const [state, setState] = useState("PENDING");
   const [sort, setSort] = useState("ASC");
+  const [location, setLocation] = useState("전체");
 
   const queryParams: Record<string, any> = {
     type,
@@ -57,6 +59,10 @@ function UserList() {
 
   if (type !== "CORPORATE") {
     queryParams.state = state;
+  }
+
+  if (location !== "전체") {
+    queryParams.location = location;
   }
 
   const { data, isLoading } = useAdminList(queryParams);
@@ -90,6 +96,11 @@ function UserList() {
     setPage(0);
   };
 
+  const handleLocationChange = (e: SelectChangeEvent) => {
+    setLocation(e.target.value);
+    setPage(0);
+  };
+
   const handleViewDetail = (user: any) => {
     router.push(
       `/admin/users/${user.id}?user=${encodeURIComponent(JSON.stringify(user))}`
@@ -102,7 +113,7 @@ function UserList() {
         회원 목록 조회
       </Typography>
 
-      <Box display="flex" gap={2} mb={2}>
+      <Box display="flex" gap={2} mb={2} flexWrap="wrap">
         <FormControl sx={{ minWidth: 120 }} size="small">
           <InputLabel>회원 타입</InputLabel>
           <Select value={type} label="회원 타입" onChange={handleTypeChange}>
@@ -137,6 +148,18 @@ function UserList() {
             ))}
           </Select>
         </FormControl>
+
+        <FormControl sx={{ minWidth: 120 }} size="small">
+          <InputLabel>지역</InputLabel>
+          <Select value={location} label="지역" onChange={handleLocationChange}>
+            <MenuItem value="전체">전체</MenuItem>
+            {locations.map((loc) => (
+              <MenuItem key={loc} value={loc}>
+                {loc}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
 
       <Paper>
@@ -150,7 +173,6 @@ function UserList() {
                 <TableCell>전화번호</TableCell>
                 <TableCell>지역</TableCell>
                 {type !== "CORPORATE" && <TableCell>상태</TableCell>}
-
                 <TableCell>회원 정보</TableCell>
               </TableRow>
             </TableHead>
@@ -165,7 +187,6 @@ function UserList() {
                   {type !== "CORPORATE" && (
                     <TableCell>{user.state || "-"}</TableCell>
                   )}
-
                   <TableCell>
                     <Button size="small" onClick={() => handleViewDetail(user)}>
                       상세 보기
