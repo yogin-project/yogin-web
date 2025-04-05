@@ -14,11 +14,14 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSearchParams } from "next/navigation";
+import { useAdminApprove } from "@/app/hooks/apis/useAdminApprove";
 
 function UserDetailPage() {
   const searchParams = useSearchParams();
   const rawUser = searchParams.get("user");
   const user = rawUser ? JSON.parse(decodeURIComponent(rawUser)) : null;
+
+  const { mutate, isPending } = useAdminApprove();
 
   const [open, setOpen] = useState(false);
 

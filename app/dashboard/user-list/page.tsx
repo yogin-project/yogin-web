@@ -90,9 +90,6 @@ function UserList() {
     setPage(0);
   };
 
-  //   const handleViewDetail = (user: any) => {
-  //     router.push(`/admin/users/${user.id}`);
-  //   };
   const handleViewDetail = (user: any) => {
     router.push(
       `/admin/users/${user.id}?user=${encodeURIComponent(JSON.stringify(user))}`
@@ -152,8 +149,9 @@ function UserList() {
                 <TableCell>이름</TableCell>
                 <TableCell>전화번호</TableCell>
                 <TableCell>지역</TableCell>
-                <TableCell>상태</TableCell>
-                <TableCell>액션</TableCell>
+                {type !== "CORPORATE" && <TableCell>상태</TableCell>}
+
+                <TableCell>회원 정보</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -164,7 +162,10 @@ function UserList() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.phoneNumber}</TableCell>
                   <TableCell>{user.location || "-"}</TableCell>
-                  <TableCell>{user.state || "-"}</TableCell>
+                  {type !== "CORPORATE" && (
+                    <TableCell>{user.state || "-"}</TableCell>
+                  )}
+
                   <TableCell>
                     <Button size="small" onClick={() => handleViewDetail(user)}>
                       상세 보기
