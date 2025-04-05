@@ -1,24 +1,40 @@
-'use client';
+"use client";
 
-import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonBase,
+  Stack,
+  Typography,
+} from "@mui/material";
+import React, { useEffect } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
 
-import { BREAKPOINTS } from '@/app/libs/theme';
-import Image from 'next/image';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { isAuthenticated } from '@/app/utils';
-import { isLoginAtom } from '@/app/store/authAtom';
-import { useRouteInHeader } from './index.hooks';
-import useScrollDirection from '@/app/hooks/useScrollDirection';
-import { useTranslation } from 'react-i18next';
+import { BREAKPOINTS } from "@/app/libs/theme";
+import Image from "next/image";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { isAuthenticated } from "@/app/utils";
+import { isLoginAtom } from "@/app/store/authAtom";
+import { useRouteInHeader } from "./index.hooks";
+import useScrollDirection from "@/app/hooks/useScrollDirection";
+import { useTranslation } from "react-i18next";
+import {
+  handleCorporateSubmit,
+  handleRendSearch,
+  handleRNDSearch,
+} from "./index.utils";
+import { profileAtom } from "@/app/store/profileAtom";
+import { useRouter } from "next/navigation";
 
 const HeaderDesktop = () => {
   const { t } = useTranslation();
+  const router = useRouter();
   const handleRouteHeader = useRouteInHeader();
+  const profileInfo = useAtomValue(profileAtom);
 
   const direction = useScrollDirection(80);
-  const isVisible = direction !== 'down';
+  const isVisible = direction !== "down";
 
   const isLogin = useAtomValue(isLoginAtom);
   const setIsLogin = useSetAtom(isLoginAtom);
@@ -40,16 +56,16 @@ const HeaderDesktop = () => {
       justifyContent="center"
       px={3}
       sx={{
-        position: 'fixed',
+        position: "fixed",
         top: 80,
         zIndex: 1000,
-        webkitBackdropFilter: 'blur(15px)',
-        backdropFilter: 'blur(15px)',
-        '@media (prefers-color-scheme: dark)': {
-          backgroundColor: 'rgba(var(--background), 0.2)',
+        webkitBackdropFilter: "blur(15px)",
+        backdropFilter: "blur(15px)",
+        "@media (prefers-color-scheme: dark)": {
+          backgroundColor: "rgba(var(--background), 0.2)",
         },
-        transform: isVisible ? 'translateY(0)' : 'translateY(-80px)',
-        transition: 'transform 0.3s ease-in-out',
+        transform: isVisible ? "translateY(0)" : "translateY(-80px)",
+        transition: "transform 0.3s ease-in-out",
       }}
     >
       <Stack
@@ -57,19 +73,19 @@ const HeaderDesktop = () => {
         height={80}
         width="100%"
         margin="0 auto"
-        direction={'row'}
-        justifyContent={'space-between'}
-        alignItems={'center'}
+        direction={"row"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
       >
-        <Stack direction={'row'} gap={4}>
-          <Stack direction={'row'} gap={2} alignItems="center">
+        <Stack direction={"row"} gap={4}>
+          <Stack direction={"row"} gap={2} alignItems="center">
             <Image
-              onClick={() => handleRouteHeader('')}
-              src={'/images/common/logo.png'}
+              onClick={() => handleRouteHeader("")}
+              src={"/images/common/logo.png"}
               width={85}
               height={23}
               style={{
-                cursor: 'pointer',
+                cursor: "pointer",
               }}
               alt=""
             />
@@ -80,70 +96,72 @@ const HeaderDesktop = () => {
               lineHeight={1}
               color="primary.dark"
               sx={{
-                cursor: 'default',
+                cursor: "default",
               }}
             >
               요긴하게 이용하세요
             </Typography>
           </Stack>
 
-          <Box
-            sx={{
-              cursor: 'pointer',
-            }}
+          <ButtonBase
+            onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
           >
             <Typography>신청하기 (기업용)</Typography>
-          </Box>
+          </ButtonBase>
 
-          <Box
+          <ButtonBase
+            onClick={() => handleRendSearch(profileInfo?.type, router)}
             sx={{
-              cursor: 'pointer',
+              cursor: "pointer",
             }}
           >
             <Typography>대출찾기 (정책자금)</Typography>
-          </Box>
-          <Box
+          </ButtonBase>
+          <ButtonBase
+            onClick={() => handleRNDSearch(profileInfo?.type, router)}
             sx={{
-              cursor: 'pointer',
+              cursor: "pointer",
             }}
           >
             <Typography>R&D 매칭</Typography>
-          </Box>
+          </ButtonBase>
         </Stack>
-        <Stack direction={'row'} gap={1} alignItems={'center'}>
+        <Stack direction={"row"} gap={1} alignItems={"center"}>
           {isLogin ? (
             <>
               <NotificationsIcon
                 sx={{
-                  cursor: 'pointer',
+                  cursor: "pointer",
                   width: 28,
                   height: 28,
                 }}
               />
-              <Avatar
-                sx={{
-                  cursor: 'pointer',
-                  width: 32,
-                  height: 32,
-                }}
-              />
+              <ButtonBase onClick={() => router.push("/dashboard")}>
+                <Avatar
+                  sx={{
+                    cursor: "pointer",
+                    width: 32,
+                    height: 32,
+                  }}
+                />
+              </ButtonBase>
             </>
           ) : (
             <>
               <Button
                 size="small"
                 color="primary"
-                onClick={() => handleRouteHeader('sign-in')}
+                onClick={() => handleRouteHeader("sign-in")}
               >
-                {t('login')}
+                {t("login")}
               </Button>
               <Button
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={() => handleRouteHeader('sign-up')}
+                onClick={() => handleRouteHeader("sign-up")}
               >
-                {t('sign_up')}
+                {t("sign_up")}
               </Button>
             </>
           )}
