@@ -11,6 +11,8 @@ import {
   Dialog,
   DialogContent,
   IconButton,
+  Button,
+  TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSearchParams } from "next/navigation";
@@ -24,6 +26,7 @@ function UserDetailPage() {
   const { mutate, isPending } = useAdminApprove();
 
   const [open, setOpen] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
 
   if (!user) return <Typography>유저 정보를 불러올 수 없습니다.</Typography>;
 
@@ -38,6 +41,25 @@ function UserDetailPage() {
 
   const handleImageClick = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleApprove = () => {
+    mutate({
+      body: {
+        userId: user.id,
+        isApprove: true,
+      },
+    });
+  };
+
+  const handleReject = () => {
+    mutate({
+      body: {
+        userId: user.id,
+        isApprove: false,
+        message: rejectReason,
+      },
+    });
+  };
 
   const renderVerifyImage = () => (
     <>
@@ -179,6 +201,37 @@ function UserDetailPage() {
               )}
               {user.verifyData && renderVerifyImage()}
             </>
+          )}
+
+          {user.type !== "CORPORATE" && (
+            <Box display="flex" flexDirection="column" gap={2} mt={4}>
+              <Typography variant="h6">가입 승인 처리</Typography>
+              <Box display="flex" gap={2}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={isPending}
+                  onClick={handleApprove}
+                >
+                  승인
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  disabled={isPending || !rejectReason}
+                  onClick={handleReject}
+                >
+                  반려
+                </Button>
+              </Box>
+              <TextField
+                label="거절 사유 (반려 시 필수)"
+                multiline
+                minRows={2}
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+              />
+            </Box>
           )}
         </Stack>
       </Paper>
