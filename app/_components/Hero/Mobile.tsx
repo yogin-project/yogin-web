@@ -44,14 +44,6 @@ function Mobile() {
             inset: 0,
             width: '100%',
             height: '100%',
-            // background: `radial-gradient(
-            //   circle,
-            //   rgba(255, 255, 255, 0.3) 0%,
-            //   rgba(255, 255, 255, 0.4) 40%,
-            //   rgba(255, 255, 255, 0.6) 70%,
-            //   rgba(255, 255, 255, 0.7) 100%
-            // )`,
-            // '@media (prefers-color-scheme: dark)': {
             background: `radial-gradient(
                 circle,
                 rgba(0, 0, 0, 0.3) 0%,
@@ -59,7 +51,6 @@ function Mobile() {
                 rgba(0, 0, 0, 0.6) 70%,
                 rgba(0, 0, 0, 0.7) 100%
               )`,
-            // },
           }}
         />
 
@@ -73,7 +64,7 @@ function Mobile() {
             textAlign: 'center',
           }}
         >
-          <Typography variant="h1">
+          <Typography variant="h2">
             아직도
             <br />
             <strong>비싼 수수료</strong>를 지불하면서
@@ -81,13 +72,13 @@ function Mobile() {
             대출받으세요?
           </Typography>
 
-          <Typography variant="h5">
+          <Typography variant="h6">
             기업 여신은 기업의 재무제표를 가지고 결정됩니다.
             <br />
             브로커의 능력이 아닙니다.
           </Typography>
 
-          <Typography variant="h5" marginTop={-3}>
+          <Typography variant="h6" marginTop={-3}>
             요긴에서 수수료 없이 무료로 진행하세요.
           </Typography>
 
