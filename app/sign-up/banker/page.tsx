@@ -20,7 +20,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
-import { bankList } from "@/app/utils";
+import { bankList, isValidPassword } from "@/app/utils";
 import AddressSearch from "@/app/components/AddSearch";
 import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
 
@@ -89,6 +89,12 @@ function SignUpBank() {
   // 회원가입 요청
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isValidPassword(formData.password)) {
+      setPasswordError(true);
+      alert("비밀번호는 영문자를 포함한 8자리 이상이어야 합니다.");
+      return;
+    }
 
     // 비밀번호 확인 체크
     if (formData.password !== formData.confirmPassword) {

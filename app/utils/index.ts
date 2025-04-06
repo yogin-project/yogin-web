@@ -83,3 +83,9 @@ export const isAuthenticated = (): boolean => {
     localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
   return !!token; // `authToken`이 존재하면 true, 없으면 false
 };
+
+// 비밀번호 영문 8자리 이상
+export const isValidPassword = (password: string): boolean => {
+  const regex = /^(?=.*[A-Za-z]).{8,}$/;
+  return regex.test(password);
+};

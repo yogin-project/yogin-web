@@ -4,6 +4,7 @@ import React, { ChangeEvent, useState } from "react";
 import { Box, Typography, Paper, Grid, TextField, Button } from "@mui/material";
 import { useChangePassword } from "@/app/hooks/apis/useChangePassword";
 import { useRouter } from "next/navigation";
+import { isValidPassword } from "@/app/utils";
 
 export default function PasswordChange() {
   const [form, setForm] = useState({
@@ -17,9 +18,14 @@ export default function PasswordChange() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const {mutate} = useChangePassword();
+  const { mutate } = useChangePassword();
   const router = useRouter();
   const handleSubmit = () => {
+    if (!isValidPassword(form.newPassword)) {
+      alert("비밀번호는 영문자를 포함한 8자리 이상이어야 합니다.");
+      return;
+    }
+
     if (form.newPassword !== form.confirmNewPassword) {
       alert("새 비밀번호가 일치하지 않습니다.");
       return;
@@ -32,7 +38,7 @@ export default function PasswordChange() {
         },
         body: {
           originPwd: form.currentPassword,
-          newPwd: form.newPassword
+          newPwd: form.newPassword,
         },
       },
       {
@@ -43,11 +49,10 @@ export default function PasswordChange() {
         },
         onError: (error) => {
           console.error("비밀번호 변경 실패:", error);
-          alert("비밀번호 변경에 실패했습니다. 다시 시도해주세요.")
-        }
+          alert("비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
+        },
       }
-    )
-    
+    );
   };
 
   return (

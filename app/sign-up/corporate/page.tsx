@@ -26,6 +26,7 @@ import {
 } from "./index.utils";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
+import { isValidPassword } from "@/app/utils";
 
 function SignUpCorporate() {
   const router = useRouter();
@@ -69,6 +70,12 @@ function SignUpCorporate() {
   // 회원가입 요청
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isValidPassword(formData.password)) {
+      setPasswordError(true);
+      alert("비밀번호는 영문자를 포함한 8자리 이상이어야 합니다.");
+      return;
+    }
 
     // 비밀번호 확인 체크
     if (formData.password !== formData.confirmPassword) {
