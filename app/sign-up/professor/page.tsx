@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import AddressSearch from "@/app/components/AddSearch";
 import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
 import { isValidPassword } from "@/app/utils";
+import SuccessModal from "../_components/SuccessModal";
 
 function SignUpProfessor() {
   const router = useRouter();
@@ -53,6 +54,7 @@ function SignUpProfessor() {
 
   const [passwordError, setPasswordError] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [openModal, setOpenModal] = useState(true);
 
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);
@@ -125,8 +127,7 @@ function SignUpProfessor() {
       },
       {
         onSuccess: () => {
-          alert("회원가입이 완료되었습니다!");
-          router.push("/");
+          setOpenModal(true);
         },
         onError: (error) => {
           console.error("회원가입 실패:", error);
@@ -338,6 +339,11 @@ function SignUpProfessor() {
           </Stack>
         </Box>
       </Paper>
+      <SuccessModal
+        open={openModal}
+        onClose={() => router.push("/")}
+        message={`회원가입 신청이 정상적으로 접수되었습니다.\n관리자의 승인 절차가 완료된 후 서비스 이용이 가능하며,\n승인 결과는 등록하신 이메일로 안내드릴 예정입니다.`}
+      />
     </MobileWrapper>
   );
 }
