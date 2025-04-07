@@ -16,18 +16,26 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { profileAtom } from "@/app/store/profileAtom";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useTheme } from "@mui/material/styles";
 import { usePatchUser } from "@/app/hooks/apis/usePatchUser";
+import { useDeleteUser } from "@/app/hooks/apis/useDeleteUser";
+import { useRouter } from "next/navigation";
+import { isLoginAtom } from "@/app/store/authAtom";
 
 export default function MemberInfo() {
   const profile = useAtomValue(profileAtom);
   const { mutate: patchUser } = usePatchUser();
+  const { mutate: deleteUser } = useDeleteUser();
+  const router = useRouter();
+  const [, setIsLogin] = useAtom(isLoginAtom);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [withdrawOpen, setWithdrawOpen] = useState(false);
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [emailError, setEmailError] = useState(false);
 
   const [form, setForm] = useState({
     email: profile?.email || "",
@@ -38,9 +46,26 @@ export default function MemberInfo() {
   });
 
   const handleWithdraw = () => {
-    console.log("탈퇴 처리 실행됨");
-    setWithdrawOpen(false);
-    // TODO: 탈퇴 API 연동 및 로그아웃 처리
+    if (confirmEmail !== form.email) {
+      setEmailError(true);
+      return;
+    }
+
+    deleteUser(
+      { body: { email: form.email } },
+      {
+        onSuccess: () => {
+          alert("회원 탈퇴가 완료되었습니다.");
+          localStorage.removeItem("authToken");
+          sessionStorage.removeItem("authToken");
+          setIsLogin(false);
+          router.push("/");
+        },
+        onError: () => {
+          alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
+        },
+      }
+    );
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,11 +218,19 @@ export default function MemberInfo() {
       <Dialog open={withdrawOpen} onClose={() => setWithdrawOpen(false)}>
         <DialogTitle>회원 탈퇴</DialogTitle>
         <DialogContent>
-          <Typography>
+          <Typography gutterBottom>
             정말로 회원 탈퇴를 진행하시겠습니까?
             <br />
             탈퇴 시 모든 정보가 삭제되며 복구할 수 없습니다.
           </Typography>
+          <TextField
+            fullWidth
+            label="이메일을 입력해 탈퇴를 확인해주세요."
+            value={confirmEmail}
+            onChange={(e) => setConfirmEmail(e.target.value)}
+            error={emailError}
+            helperText={emailError ? "이메일이 일치하지 않습니다." : ""}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setWithdrawOpen(false)}>취소</Button>
