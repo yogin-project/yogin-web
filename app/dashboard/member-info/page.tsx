@@ -9,6 +9,10 @@ import {
   Button,
   Input,
   useMediaQuery,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import React, { useState } from "react";
 import { profileAtom } from "@/app/store/profileAtom";
@@ -23,6 +27,8 @@ export default function MemberInfo() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
+
   const [form, setForm] = useState({
     email: profile?.email || "",
     phoneNumber: profile?.phoneNumber || "",
@@ -30,6 +36,12 @@ export default function MemberInfo() {
     region: profile?.region || "",
     verificationPhoto: null as File | null,
   });
+
+  const handleWithdraw = () => {
+    console.log("탈퇴 처리 실행됨");
+    setWithdrawOpen(false);
+    // TODO: 탈퇴 API 연동 및 로그아웃 처리
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -162,10 +174,38 @@ export default function MemberInfo() {
               <Button variant="contained" onClick={handleSubmit}>
                 회원정보 변경
               </Button>
+              {/* 회원 탈퇴 버튼 (눈에 띄지 않게) */}
+              <Box textAlign="right">
+                <Button
+                  size="small"
+                  variant="text"
+                  color="error"
+                  onClick={() => setWithdrawOpen(true)}
+                >
+                  회원 탈퇴
+                </Button>
+              </Box>
             </Box>
           </Grid>
         </Grid>
       </Paper>
+      {/* 탈퇴 확인 모달 */}
+      <Dialog open={withdrawOpen} onClose={() => setWithdrawOpen(false)}>
+        <DialogTitle>회원 탈퇴</DialogTitle>
+        <DialogContent>
+          <Typography>
+            정말로 회원 탈퇴를 진행하시겠습니까?
+            <br />
+            탈퇴 시 모든 정보가 삭제되며 복구할 수 없습니다.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setWithdrawOpen(false)}>취소</Button>
+          <Button onClick={handleWithdraw} color="error" variant="contained">
+            탈퇴하기
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

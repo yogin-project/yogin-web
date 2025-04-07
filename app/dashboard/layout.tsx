@@ -35,6 +35,7 @@ const routeMap = {
     { label: "자금 신청 현황", path: "/dashboard/submit-list" },
     { label: "매니징 신청", path: "/dashboard/submit-managing" },
     { label: "재무 진단 요약", path: "/dashboard/finance-summary" },
+    { label: "매니지먼트 신청 목록 조회", path: "/dashboard/management-list" },
   ],
   MANAGER: [
     { label: "회원 정보", path: "/dashboard/member-info" },

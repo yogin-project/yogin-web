@@ -23,7 +23,9 @@ import { useSignInMutation } from "../hooks/apis/useSignIn";
 import { useSignInCorpMutation } from "../hooks/apis/useSignInCorp";
 import { useRouter } from "next/navigation";
 import { isLoginAtom } from "../store/authAtom";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
+import { useProfileMutation } from "../hooks/apis/useProfile";
+import { profileAtom } from "../store/profileAtom";
 
 function SignIn() {
   const handleRouting = useRouteSignInPage();
@@ -33,6 +35,8 @@ function SignIn() {
     useSignInCorpMutation();
   const router = useRouter();
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [profile, setProfile] = useAtom(profileAtom);
+  const { data, isLoading, refetch } = useProfileMutation(!profile);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -100,11 +104,14 @@ function SignIn() {
             } else {
               sessionStorage.setItem("authToken", token);
             }
+            refetch();
+
             setOpenSnackbar(true);
             setTimeout(() => {
+              setProfile(data.data);
               setIsLogin(true);
               router.push("/");
-            }, 1000); // 메시지 잠깐 보여주고 이동
+            }, 1500); // 메시지 잠깐 보여주고 이동
           }
         },
         onError: (error) => {
