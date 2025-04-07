@@ -105,8 +105,6 @@ function SignUpCorporate() {
     );
   };
 
-  console.log("formData: ", formData);
-
   // 회원가입 버튼 활성화 여부
   const signupEnabled = isSignupEnabled({
     agreements,
