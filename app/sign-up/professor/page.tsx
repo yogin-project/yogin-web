@@ -197,7 +197,11 @@ function SignUpProfessor() {
             fullWidth
             onChange={handleInputChange}
             error={passwordError}
-            helperText={passwordError ? "비밀번호가 일치하지 않습니다." : ""}
+            helperText={
+              passwordError
+                ? "비밀번호가 일치하지 않습니다."
+                : "비밀번호는 영문자 포함 8자리 이상 입력해주세요."
+            }
           />
           <TextField
             name="confirmPassword"
@@ -207,7 +211,11 @@ function SignUpProfessor() {
             fullWidth
             onChange={handleInputChange}
             error={passwordError}
-            helperText={passwordError ? "비밀번호가 일치하지 않습니다." : ""}
+            helperText={
+              passwordError
+                ? "비밀번호가 일치하지 않습니다."
+                : "비밀번호를 한 번 더 입력해주세요."
+            }
           />
           <TextField
             name="name"

@@ -80,6 +80,7 @@ export default function PasswordChange() {
               fullWidth
               value={form.newPassword}
               onChange={handleChange}
+              helperText={"비밀번호는 영문자 포함 8자리 이상 입력해주세요."}
             />
           </Grid>
           <Grid item xs={12}>

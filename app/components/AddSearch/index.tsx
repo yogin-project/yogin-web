@@ -20,6 +20,7 @@ function AddressSearch({
   setAddress,
 }) {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [detailedAddress, setDetailedAddress] = useState("");
 
   const handleLocationChange = (event) => {
     setSelectedLocation(event.target.value);
@@ -30,8 +31,16 @@ function AddressSearch({
   };
 
   const handleAddressSelect = (data) => {
-    setAddress(data.address); // 선택된 주소 저장
-    setIsAddressModalOpen(false); // 모달 닫기
+    const baseAddress = data.address;
+    setAddress(`${baseAddress} ${detailedAddress}`.trim());
+    setIsAddressModalOpen(false);
+  };
+
+  const handleDetailedAddressChange = (e) => {
+    const newDetail = e.target.value;
+    setDetailedAddress(newDetail);
+    const base = address.split(" ").slice(0, 5).join(" "); // 기존 주소에서 상세주소 제외
+    setAddress(`${base} ${newDetail}`.trim());
   };
 
   return (
@@ -67,7 +76,13 @@ function AddressSearch({
           주소 찾기
         </Button>
       </Stack>
-      <TextField variant="standard" label="상세 주소 입력" sx={{ flex: 1 }} />
+      <TextField
+        variant="standard"
+        label="상세 주소 입력"
+        sx={{ flex: 1 }}
+        value={detailedAddress}
+        onChange={handleDetailedAddressChange}
+      />
       <Box height={8} />
 
       {/* 주소 검색 모달 */}
