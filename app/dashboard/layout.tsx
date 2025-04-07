@@ -44,7 +44,6 @@ const routeMap = {
   PROFESSOR: [
     { label: "회원 정보", path: "/dashboard/member-info" },
     { label: "비밀번호 변경", path: "/dashboard/password-change" },
-    { label: "통계 요약", path: "/dashboard/analytics" },
   ],
   ADMIN: [
     { label: "회원 목록 조회", path: "/dashboard/user-list" },
