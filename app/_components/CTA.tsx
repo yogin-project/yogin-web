@@ -1,9 +1,9 @@
 'use client';
 
+import { ArrowForward, MoneyOffRounded } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import { ArrowForward } from '@mui/icons-material';
 import useInView from '../hooks/useInView';
 import { useIsMobile } from '../hooks/useIsMobileSize';
 import { useScrollInfo } from '../provider/ScrollProvider';
@@ -66,6 +66,7 @@ function CTA() {
           size="large"
           color="primary"
           disableElevation
+          startIcon={<MoneyOffRounded />}
           endIcon={<ArrowForward />}
           sx={{
             gridColumnStart: 2,

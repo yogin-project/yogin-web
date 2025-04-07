@@ -1,31 +1,25 @@
-"use client";
+'use client';
 
-import {
-  Avatar,
-  Box,
-  Button,
-  ButtonBase,
-  Stack,
-  Typography,
-} from "@mui/material";
-import React, { useEffect } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
-
-import { BREAKPOINTS } from "@/app/libs/theme";
-import Image from "next/image";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { isAuthenticated } from "@/app/utils";
-import { isLoginAtom } from "@/app/store/authAtom";
-import { useRouteInHeader } from "./index.hooks";
-import useScrollDirection from "@/app/hooks/useScrollDirection";
-import { useTranslation } from "react-i18next";
+import { Avatar, Button, ButtonBase, Stack, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
 import {
   handleCorporateSubmit,
-  handleRendSearch,
   handleRNDSearch,
-} from "./index.utils";
-import { profileAtom } from "@/app/store/profileAtom";
-import { useRouter } from "next/navigation";
+  handleRendSearch,
+} from './index.utils';
+import { useAtomValue, useSetAtom } from 'jotai';
+
+import { BREAKPOINTS } from '@/app/libs/theme';
+import Image from 'next/image';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { isAuthenticated } from '@/app/utils';
+import { isLoginAtom } from '@/app/store/authAtom';
+import { profileAtom } from '@/app/store/profileAtom';
+import { useIsMobile } from '@/app/hooks/useIsMobileSize';
+import { useRouteInHeader } from './index.hooks';
+import { useRouter } from 'next/navigation';
+import useScrollDirection from '@/app/hooks/useScrollDirection';
+import { useTranslation } from 'react-i18next';
 
 const HeaderDesktop = () => {
   const { t } = useTranslation();
@@ -33,8 +27,9 @@ const HeaderDesktop = () => {
   const handleRouteHeader = useRouteInHeader();
   const profileInfo = useAtomValue(profileAtom);
 
+  const isMobile = useIsMobile();
   const direction = useScrollDirection(80);
-  const isVisible = direction !== "down";
+  const isVisible = direction !== 'down';
 
   const isLogin = useAtomValue(isLoginAtom);
   const setIsLogin = useSetAtom(isLoginAtom);
@@ -56,16 +51,16 @@ const HeaderDesktop = () => {
       justifyContent="center"
       px={3}
       sx={{
-        position: "fixed",
+        position: 'fixed',
         top: 80,
         zIndex: 1000,
-        webkitBackdropFilter: "blur(15px)",
-        backdropFilter: "blur(15px)",
-        "@media (prefers-color-scheme: dark)": {
-          backgroundColor: "rgba(var(--background), 0.2)",
+        webkitBackdropFilter: 'blur(15px)',
+        backdropFilter: 'blur(15px)',
+        '@media (prefers-color-scheme: dark)': {
+          backgroundColor: 'rgba(var(--background), 0.2)',
         },
-        transform: isVisible ? "translateY(0)" : "translateY(-80px)",
-        transition: "transform 0.3s ease-in-out",
+        transform: isVisible ? 'translateY(0)' : 'translateY(-80px)',
+        transition: 'transform 0.3s ease-in-out',
       }}
     >
       <Stack
@@ -73,73 +68,157 @@ const HeaderDesktop = () => {
         height={80}
         width="100%"
         margin="0 auto"
-        direction={"row"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
+        direction={'row'}
+        justifyContent={'space-between'}
+        alignItems={'center'}
       >
-        <Stack direction={"row"} gap={4}>
-          <Stack direction={"row"} gap={2} alignItems="center">
-            <Image
-              onClick={() => handleRouteHeader("")}
-              src={"/images/common/logo.png"}
-              width={85}
-              height={23}
-              style={{
-                cursor: "pointer",
-              }}
-              alt=""
-            />
+        <Stack
+          direction={'row'}
+          sx={{
+            gap: 4,
+            [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
+              gap: 2,
+            },
+          }}
+        >
+          <Stack
+            sx={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
+            <Stack
+              component="figure"
+              position="relative"
+              minWidth={90.5}
+              minHeight={30}
+              width="100%"
+              height="100%"
+              sx={{ cursor: 'pointer' }}
+            >
+              <Stack
+                component={Image}
+                onClick={() => handleRouteHeader('')}
+                src="/images/common/logo-full_landscape.png"
+                fill
+                objectFit="contain"
+                alt=""
+                sx={{
+                  '@media (prefers-color-scheme: dark)': {
+                    display: 'none',
+                  },
+                }}
+              />
+              <Stack
+                component={Image}
+                onClick={() => handleRouteHeader('')}
+                src="/images/common/logo-full_landscape_dark.png"
+                fill
+                objectFit="contain"
+                alt=""
+                sx={{
+                  '@media (prefers-color-scheme: light)': {
+                    display: 'none',
+                  },
+                }}
+              />
+            </Stack>
             <Typography
+              onClick={() => handleRouteHeader('')}
               fontSize="0.9rem"
-              fontWeight={800}
+              fontWeight={700}
               letterSpacing={-0.25}
               lineHeight={1}
-              color="primary.dark"
+              whiteSpace="nowrap"
+              color="tertiary.light"
               sx={{
-                cursor: "default",
+                cursor: 'pointer',
+                [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
+                  display: 'none',
+                },
               }}
             >
               요긴하게 이용하세요
             </Typography>
           </Stack>
-
           <ButtonBase
             onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
+            sx={{ verticalAlign: 'baseline' }}
           >
-            <Typography>신청하기 (기업용)</Typography>
+            <Typography whiteSpace="nowrap">신청하기</Typography>
+            <Typography
+              component="span"
+              color="primary.main"
+              fontSize="0.75rem"
+              fontWeight={600}
+              whiteSpace="nowrap"
+              lineHeight={1}
+              sx={{
+                marginLeft: '0.5rem',
+                [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
+                  marginLeft: 0,
+                  position: 'absolute',
+                  top: 'calc(50% + 0.9rem)',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                },
+              }}
+            >
+              기업용
+            </Typography>
           </ButtonBase>
-
           <ButtonBase
             onClick={() => handleRendSearch(profileInfo?.type, router)}
             sx={{
-              cursor: "pointer",
+              cursor: 'pointer',
             }}
           >
-            <Typography>대출찾기 (정책자금)</Typography>
+            <Typography whiteSpace="nowrap">대출찾기</Typography>
+            <Typography
+              component="span"
+              color="primary.main"
+              fontSize="0.75rem"
+              fontWeight={600}
+              whiteSpace="nowrap"
+              lineHeight={1}
+              sx={{
+                marginLeft: '0.5rem',
+                [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
+                  marginLeft: 0,
+                  position: 'absolute',
+                  top: 'calc(50% + 0.9rem)',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                },
+              }}
+            >
+              정책자금
+            </Typography>
           </ButtonBase>
           <ButtonBase
             onClick={() => handleRNDSearch(profileInfo?.type, router)}
             sx={{
-              cursor: "pointer",
+              cursor: 'pointer',
             }}
           >
-            <Typography>R&D 매칭</Typography>
+            <Typography whiteSpace="nowrap">R&D 매칭</Typography>
           </ButtonBase>
         </Stack>
-        <Stack direction={"row"} gap={1} alignItems={"center"}>
+        <Stack direction={'row'} gap={1} alignItems={'center'}>
           {isLogin ? (
             <>
               <NotificationsIcon
                 sx={{
-                  cursor: "pointer",
+                  cursor: 'pointer',
                   width: 28,
                   height: 28,
                 }}
               />
-              <ButtonBase onClick={() => router.push("/dashboard")}>
+              <ButtonBase onClick={() => router.push('/dashboard')}>
                 <Avatar
                   sx={{
-                    cursor: "pointer",
+                    cursor: 'pointer',
                     width: 32,
                     height: 32,
                   }}
@@ -151,17 +230,19 @@ const HeaderDesktop = () => {
               <Button
                 size="small"
                 color="primary"
-                onClick={() => handleRouteHeader("sign-in")}
+                onClick={() => handleRouteHeader('sign-in')}
+                sx={{ whiteSpace: 'nowrap' }}
               >
-                {t("login")}
+                {t('login')}
               </Button>
               <Button
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={() => handleRouteHeader("sign-up")}
+                onClick={() => handleRouteHeader('sign-up')}
+                sx={{ whiteSpace: 'nowrap' }}
               >
-                {t("sign_up")}
+                {t('sign_up')}
               </Button>
             </>
           )}
