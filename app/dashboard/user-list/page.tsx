@@ -46,7 +46,7 @@ function UserList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [type, setType] = useState("PROFESSOR");
   const [state, setState] = useState("PENDING");
-  const [sort, setSort] = useState("ASC");
+  const [sort, setSort] = useState("DESC");
   const [location, setLocation] = useState("전체");
 
   const queryParams: Record<string, any> = {

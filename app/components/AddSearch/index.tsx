@@ -52,9 +52,9 @@ function AddressSearch({
         value={selectedLocation}
         onChange={handleLocationChange}
       >
-        <MenuItem value="" disabled>
+        {/* <MenuItem value="" disabled>
           소재지 선택
-        </MenuItem>
+        </MenuItem> */}
         {locations.map((location) => (
           <MenuItem key={location} value={location}>
             {location}

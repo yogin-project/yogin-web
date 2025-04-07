@@ -39,7 +39,7 @@ function SignUpProfessor() {
     isAllowedST: "1",
     isAllowedPT: "1",
     name: "",
-    location: "",
+    location: "서울",
     branchName: "",
     organization: "",
     address: "",
@@ -54,7 +54,7 @@ function SignUpProfessor() {
 
   const [passwordError, setPasswordError] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);

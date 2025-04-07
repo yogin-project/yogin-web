@@ -39,7 +39,7 @@ function SignUpBank() {
     isAllowedST: "1",
     isAllowedPT: "1",
     name: "",
-    location: "",
+    location: "서울",
     address: "",
     branch: "",
     file: null, // 파일 업로드
