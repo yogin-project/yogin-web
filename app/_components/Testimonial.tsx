@@ -14,14 +14,20 @@ function Testimonial() {
       id="testimonial"
       mx="auto"
       width="100%"
-      marginTop="-80px"
-      paddingTop="80px"
       zIndex={-1}
       height="50vh"
       alignItems="center"
       justifyContent="center"
       maxWidth={BREAKPOINTS.tablet}
       textAlign="center"
+      sx={{
+        marginTop: '-80px',
+        paddingTop: '80px',
+        [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
+          marginTop: '-60px',
+          paddingTop: '60px',
+        },
+      }}
     >
       <FormatQuoteRounded
         sx={{

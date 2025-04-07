@@ -5,9 +5,11 @@ import { Button, Stack, Typography } from '@mui/material';
 import { BREAKPOINTS } from '../libs/theme';
 import React from 'react';
 import { SubscriptionsRounded } from '@mui/icons-material';
+import { useIsMobile } from '../hooks/useIsMobileSize';
 import { useTranslation } from 'react-i18next';
 
 function Subscription() {
+  const isMobile = useIsMobile();
   const { t } = useTranslation();
 
   return (
@@ -26,7 +28,7 @@ function Subscription() {
       borderRadius={4}
     >
       <Stack flexDirection="row" gap={2} alignItems="center">
-        <SubscriptionsRounded sx={{ fontSize: '1rem' }} />
+        {!isMobile && <SubscriptionsRounded sx={{ fontSize: '1rem' }} />}
         <Typography variant="body1">
           기업에 필요한 자료를 구독하세요.
         </Typography>

@@ -1,8 +1,13 @@
 'use client';
 
+import {
+  AndroidRounded,
+  Apple,
+  ArrowForward,
+  ArrowForwardRounded,
+} from '@mui/icons-material';
 import { Box, Button, Stack, Typography } from '@mui/material';
 
-import { ArrowForward } from '@mui/icons-material';
 import React from 'react';
 
 function Desktop() {
@@ -107,6 +112,7 @@ function Desktop() {
               color="tertiary"
               disableElevation
               endIcon={<ArrowForward />}
+              startIcon={<AndroidRounded />}
               sx={{
                 position: 'relative',
                 gridColumnStart: 1,
@@ -133,6 +139,7 @@ function Desktop() {
               color="tertiary"
               disableElevation
               endIcon={<ArrowForward />}
+              startIcon={<Apple />}
               sx={{
                 gridColumnStart: 2,
                 '& .MuiButton-endIcon': {

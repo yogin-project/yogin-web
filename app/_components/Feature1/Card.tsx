@@ -32,7 +32,7 @@ function CardsCard({
       elevation={0}
       className={`fade-section ${inView ? 'show' : ''}`}
       sx={{
-        height: isMobile ? '15vh' : '25vh',
+        height: isMobile ? 'auto' : '25vh',
         opacity: inView ? 1 : 0,
         bgcolor: 'action.hover',
         borderRadius: 8,

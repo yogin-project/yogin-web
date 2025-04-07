@@ -1,12 +1,12 @@
 'use client';
 
 import { Button, Stack, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
 import { ArrowForward } from '@mui/icons-material';
-import React, { useEffect, useState } from 'react';
-import { useScrollInfo } from '../provider/ScrollProvider';
 import useInView from '../hooks/useInView';
 import { useIsMobile } from '../hooks/useIsMobileSize';
+import { useScrollInfo } from '../provider/ScrollProvider';
 
 function CTA() {
   const isMobile = useIsMobile();
@@ -26,7 +26,12 @@ function CTA() {
   }, [scrollY, innerHeight]);
 
   return (
-    <Stack ref={ref} mx="auto" width="100%" height="30vh">
+    <Stack
+      ref={ref}
+      mx="auto"
+      width="100%"
+      height={isMobile ? 'fit-content' : '30vh'}
+    >
       <Stack
         m="auto"
         width="100%"

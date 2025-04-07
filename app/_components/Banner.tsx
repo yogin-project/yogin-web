@@ -46,8 +46,13 @@ const Banner = () => {
           justifyContent: 'center',
         }}
       >
-        <Box color="common.white" width="100%" maxWidth={BREAKPOINTS.desktop}>
-          <Typography variant="subtitle1" fontWeight={600}>
+        <Box
+          color="common.white"
+          width="100%"
+          maxWidth={BREAKPOINTS.desktop}
+          sx={{ ...(isMobile && { h6: { fontSize: '0.8rem' } }) }}
+        >
+          <Typography variant="subtitle1" fontWeight={700}>
             비즈니스 네트워크 플랫폼 ‘요긴’에 오신 것을 환영합니다.
           </Typography>
           <Typography variant="subtitle2">
