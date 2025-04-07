@@ -27,6 +27,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { isValidPassword } from "@/app/utils";
+import SuccessModal from "../_components/SuccessModal";
 
 function SignUpCorporate() {
   const router = useRouter();
@@ -52,10 +53,9 @@ function SignUpCorporate() {
   );
 
   const [formData, setFormData] = useState(initialFormData);
-
   const [agreements, setAgreements] = useState(initialAgreements);
-
   const [passwordError, setPasswordError] = useState(false); // 비밀번호 불일치 상태
+  const [openModal, setOpenModal] = useState(false);
 
   // 입력 필드 값 변경 핸들러
   const handleInputChange = handleInputChangeFactory(
@@ -95,8 +95,7 @@ function SignUpCorporate() {
       },
       {
         onSuccess: () => {
-          alert("회원가입이 완료되었습니다!");
-          router.push("/login");
+          setOpenModal(true);
         },
         onError: (error) => {
           console.error("회원가입 실패:", error);
@@ -299,6 +298,11 @@ function SignUpCorporate() {
           </Stack>
         </Box>
       </Paper>
+      <SuccessModal
+        open={openModal}
+        onClose={() => router.push("/")}
+        message={`회원가입이 완료되었습니다.\n 다시 로그인해주세요.`}
+      />
     </MobileWrapper>
   );
 }
