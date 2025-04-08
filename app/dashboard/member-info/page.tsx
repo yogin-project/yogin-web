@@ -109,6 +109,7 @@ export default function MemberInfo() {
     organization,
     region,
     verificationPhoto,
+    additionalInfo,
   } = profile;
 
   const getUserTypeLabel = (type: string) => {
@@ -126,6 +127,8 @@ export default function MemberInfo() {
     }
   };
 
+  console.log("additionalInfo: ");
+
   return (
     <Box mt={4} maxWidth={600} mx="auto">
       <Typography variant="h6" gutterBottom>
@@ -133,20 +136,6 @@ export default function MemberInfo() {
       </Typography>
       <Paper sx={{ p: 4 }} elevation={3}>
         <Grid container spacing={2} alignItems="center">
-          {verificationPhoto && (
-            <Grid item xs={12}>
-              <Box mb={2} textAlign="center">
-                <img
-                  src={verificationPhoto}
-                  alt="제출한 증명서 사진"
-                  style={{ maxWidth: "100%", maxHeight: 200, borderRadius: 8 }}
-                />
-                <Typography variant="caption" display="block" mt={1}>
-                  제출한 증명서 사진
-                </Typography>
-              </Box>
-            </Grid>
-          )}
           <Grid item xs={12}>
             <Box display="flex" flexDirection="column" gap={2}>
               <TextField label="이름" fullWidth value={name} disabled />
@@ -189,12 +178,33 @@ export default function MemberInfo() {
                   onChange={handleChange}
                 />
               )}
+
               {(type === "MANAGER" || type === "PROFESSOR") && (
-                <Input
-                  type="file"
-                  name="verificationPhoto"
-                  onChange={handleFileChange}
-                />
+                <>
+                  {additionalInfo.expertInfoVerifyData && (
+                    <Grid item xs={12}>
+                      <Box mb={2} textAlign="center">
+                        <img
+                          src={additionalInfo.expertInfoVerifyData}
+                          alt="제출한 증명서 사진"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: 200,
+                            borderRadius: 8,
+                          }}
+                        />
+                        <Typography variant="caption" display="block" mt={1}>
+                          제출한 증명서 사진
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  )}
+                  <Input
+                    type="file"
+                    name="verificationPhoto"
+                    onChange={handleFileChange}
+                  />
+                </>
               )}
               <Button variant="contained" onClick={handleSubmit}>
                 회원정보 변경
