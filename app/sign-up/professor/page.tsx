@@ -24,6 +24,7 @@ import AddressSearch from "@/app/components/AddSearch";
 import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
 import { isValidPassword } from "@/app/utils";
 import SuccessModal from "../_components/SuccessModal";
+import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
 
 function SignUpProfessor() {
   const router = useRouter();
@@ -40,7 +41,6 @@ function SignUpProfessor() {
     isAllowedPT: "1",
     name: "",
     location: "서울",
-    branchName: "",
     organization: "",
     address: "",
     position: "",
@@ -56,6 +56,9 @@ function SignUpProfessor() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [openModal, setOpenModal] = useState(false);
 
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const { handleCheckEmail } = useCheckMailHandler(setIsEmailChecked);
+
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);
   };
@@ -68,6 +71,10 @@ function SignUpProfessor() {
     // 비밀번호 확인 로직 초기화
     if (name === "password" || name === "confirmPassword") {
       setPasswordError(false);
+    }
+
+    if (name === "email") {
+      setIsEmailChecked(false);
     }
   };
 
@@ -146,12 +153,12 @@ function SignUpProfessor() {
     formData.confirmPassword &&
     formData.phoneNumber &&
     formData.name &&
-    formData.branchName &&
     formData.location &&
     formData.organization &&
     formData.address &&
     formData.position &&
-    formData.file;
+    formData.file &&
+    isEmailChecked;
 
   return (
     <MobileWrapper>
@@ -185,7 +192,11 @@ function SignUpProfessor() {
               sx={{ flex: 1 }}
               onChange={handleInputChange}
             />
-            <Button variant="contained" size="small">
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => handleCheckEmail(formData.email)}
+            >
               중복 확인
             </Button>
           </Stack>
@@ -329,7 +340,7 @@ function SignUpProfessor() {
               type="submit"
               variant="contained"
               fullWidth
-              // disabled={!isSignupEnabled || isPending}
+              disabled={!isSignupEnabled || isPending}
             >
               {isPending ? "가입 중..." : "회원가입"}
             </Button>
@@ -341,7 +352,10 @@ function SignUpProfessor() {
       </Paper>
       <SuccessModal
         open={openModal}
-        onClose={() => router.push("/")}
+        onClose={() => {
+          setOpenModal(false);
+          router.push("/");
+        }}
         message={`회원가입 신청이 정상적으로 접수되었습니다.\n관리자의 승인 절차가 완료된 후 서비스 이용이 가능하며,\n승인 결과는 등록하신 이메일로 안내드릴 예정입니다.`}
       />
     </MobileWrapper>
