@@ -16,7 +16,6 @@ import {
 import React, { useState } from "react";
 import Image from "next/image";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AgreementSection from "../_components/AgreementSection";
 import { useRouter } from "next/navigation";
@@ -24,6 +23,7 @@ import { bankList, isValidPassword } from "@/app/utils";
 import AddressSearch from "@/app/components/AddSearch";
 import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
 import SuccessModal from "../_components/SuccessModal";
+import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
 
 function SignUpBank() {
   const router = useRouter();
@@ -42,7 +42,7 @@ function SignUpBank() {
     location: "서울",
     address: "",
     branch: "",
-    file: null, // 파일 업로드
+    file: null,
   });
 
   const [agreements, setAgreements] = useState({
@@ -53,6 +53,8 @@ function SignUpBank() {
   const [passwordError, setPasswordError] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const { handleCheckEmail } = useCheckMailHandler(setIsEmailChecked);
 
   const handleAgreementChange = (updatedAgreements) => {
     setAgreements(updatedAgreements);
@@ -66,6 +68,10 @@ function SignUpBank() {
     // 비밀번호 확인 로직 초기화
     if (name === "password" || name === "confirmPassword") {
       setPasswordError(false);
+    }
+
+    if (name === "email") {
+      setIsEmailChecked(false);
     }
   };
 
@@ -105,7 +111,6 @@ function SignUpBank() {
     }
 
     const { confirmPassword, ...requestData } = formData;
-
     const form = new FormData();
 
     Object.entries(requestData).forEach(([key, value]) => {
@@ -120,13 +125,9 @@ function SignUpBank() {
     });
 
     mutate(
+      { body: form },
       {
-        body: form,
-      },
-      {
-        onSuccess: () => {
-          setOpenModal(true);
-        },
+        onSuccess: () => setOpenModal(true),
         onError: (error) => {
           console.error("회원가입 실패:", error);
           alert("회원가입에 실패했습니다. 다시 시도해주세요.");
@@ -135,7 +136,6 @@ function SignUpBank() {
     );
   };
 
-  // 회원가입 버튼 활성화 여부
   const isSignupEnabled =
     agreements.personalInfo &&
     agreements.terms &&
@@ -147,23 +147,18 @@ function SignUpBank() {
     formData.branch &&
     formData.location &&
     formData.address &&
-    formData.file;
+    formData.file &&
+    isEmailChecked;
 
   return (
     <MobileWrapper>
       <Paper
         elevation={3}
-        sx={{
-          p: 4,
-          borderRadius: 3,
-          backgroundColor: "#fff",
-          mb: 4,
-        }}
+        sx={{ p: 4, borderRadius: 3, backgroundColor: "#fff", mb: 4 }}
       >
         <Typography variant="h6" mb={1}>
           은행 회원가입
         </Typography>
-
         <Box
           component="form"
           onSubmit={handleSignUp}
@@ -172,6 +167,7 @@ function SignUpBank() {
           {/* ✅ 계정정보 */}
           <Typography variant="body1">계정정보</Typography>
           <Divider />
+
           <Stack flexDirection={"row"} gap={2} mt={2}>
             <TextField
               name="email"
@@ -181,10 +177,15 @@ function SignUpBank() {
               sx={{ flex: 1 }}
               onChange={handleInputChange}
             />
-            <Button variant="contained" size="small">
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => handleCheckEmail(formData.email)}
+            >
               중복 확인
             </Button>
           </Stack>
+
           <TextField
             name="password"
             variant="standard"
@@ -199,6 +200,7 @@ function SignUpBank() {
                 : "비밀번호는 영문자 포함 8자리 이상 입력해주세요."
             }
           />
+
           <TextField
             name="confirmPassword"
             variant="standard"
@@ -213,6 +215,7 @@ function SignUpBank() {
                 : "비밀번호를 한 번 더 입력해주세요."
             }
           />
+
           <TextField
             name="name"
             variant="standard"
@@ -233,6 +236,7 @@ function SignUpBank() {
             은행 정보
           </Typography>
           <Divider />
+
           <Select
             name="branch"
             variant="standard"
@@ -290,6 +294,7 @@ function SignUpBank() {
               onChange={handleFileUpload}
             />
           </Box>
+
           {uploadedFiles.length > 0 && (
             <Box mt={2}>
               <Stack
@@ -328,9 +333,13 @@ function SignUpBank() {
           </Stack>
         </Box>
       </Paper>
+
       <SuccessModal
         open={openModal}
-        onClose={() => router.push("/")}
+        onClose={() => {
+          setOpenModal(false);
+          router.push("/");
+        }}
         message={`회원가입 신청이 정상적으로 접수되었습니다.\n관리자의 승인 절차가 완료된 후 서비스 이용이 가능하며,\n승인 결과는 등록하신 이메일로 안내드릴 예정입니다.`}
       />
     </MobileWrapper>
