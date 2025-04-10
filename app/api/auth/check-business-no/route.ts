@@ -30,6 +30,14 @@ export async function POST(req: Request) {
             return NextResponse.json(data, { status: response.status });
         }
 
+        if(data.data[0].valid === '02') {
+            const { valid_msg } = data.data[0];
+            return NextResponse.json(
+                { message: "Invalid Business No:", valid_msg },
+                { status: 400 }
+            )
+        }
+
         return NextResponse.json(data, { status: 200 });
     } catch (error) {
         return NextResponse.json(
