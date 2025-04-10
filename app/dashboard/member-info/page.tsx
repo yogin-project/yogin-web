@@ -40,8 +40,10 @@ export default function MemberInfo() {
   const [form, setForm] = useState({
     email: profile?.email || "",
     phoneNumber: profile?.phoneNumber || "",
+    location: profile?.location || "",
+    address: profile?.address || "",
     branchName: profile?.branchName || "",
-    region: profile?.region || "",
+    organization: profile?.organization || "",
     verificationPhoto: null as File | null,
   });
 
@@ -81,22 +83,23 @@ export default function MemberInfo() {
   const handleSubmit = () => {
     if (!profile) return;
 
-    const isCorporate = profile.type === "CORPORATE";
-    const payload: any = {
-      type: profile.type.toLowerCase(),
-      email: form.email,
-      phoneNumber: form.phoneNumber,
-    };
+    const formData = new FormData();
+    formData.append("email", form.email);
+    formData.append("phoneNumber", form.phoneNumber);
+    formData.append("location", form.location);
+    formData.append("address", form.address);
 
-    if (!isCorporate) {
-      payload.branchName = form.branchName;
-      payload.region = form.region;
-      if (form.verificationPhoto) {
-        payload.verificationPhoto = form.verificationPhoto;
-      }
+    if (profile.type === "MANAGER") {
+      formData.append("branchName", form.branchName);
+    } else if (profile.type === "PROFESSOR") {
+      formData.append("organization", form.organization);
     }
 
-    patchUser({ body: payload });
+    if (form.verificationPhoto) {
+      formData.append("image", form.verificationPhoto);
+    }
+
+    patchUser({ body: formData });
   };
 
   if (!profile) return null;
@@ -107,7 +110,6 @@ export default function MemberInfo() {
     type,
     branchName,
     organization,
-    region,
     verificationPhoto,
     additionalInfo,
   } = profile;
@@ -120,14 +122,10 @@ export default function MemberInfo() {
         return "은행 매니저";
       case "PROFESSOR":
         return "교수 회원";
-      case "ADMIN":
-        return "관리자";
       default:
-        return "일반 회원";
+        return "회원";
     }
   };
-
-  console.log("additionalInfo: ");
 
   return (
     <Box mt={4} maxWidth={600} mx="auto">
@@ -146,7 +144,20 @@ export default function MemberInfo() {
                 value={form.email}
                 onChange={handleChange}
               />
-              <TextField label="소재지" fullWidth value={location} disabled />
+              <TextField
+                label="소재지"
+                name="location"
+                fullWidth
+                value={form.location}
+                onChange={handleChange}
+              />
+              <TextField
+                label="주소"
+                name="address"
+                fullWidth
+                value={form.address}
+                onChange={handleChange}
+              />
               <TextField
                 label="전화번호"
                 name="phoneNumber"
@@ -169,16 +180,15 @@ export default function MemberInfo() {
                   onChange={handleChange}
                 />
               )}
-              {(type === "MANAGER" || type === "PROFESSOR") && (
+              {type === "PROFESSOR" && (
                 <TextField
-                  label="지역"
-                  name="region"
+                  label="소속 기관"
+                  name="organization"
                   fullWidth
-                  value={form.region}
+                  value={form.organization}
                   onChange={handleChange}
                 />
               )}
-
               {(type === "MANAGER" || type === "PROFESSOR") && (
                 <>
                   {additionalInfo.expertInfoVerifyData && (
@@ -209,7 +219,6 @@ export default function MemberInfo() {
               <Button variant="contained" onClick={handleSubmit}>
                 회원정보 변경
               </Button>
-              {/* 회원 탈퇴 버튼 (눈에 띄지 않게) */}
               <Box textAlign="right">
                 <Button
                   size="small"
@@ -224,7 +233,6 @@ export default function MemberInfo() {
           </Grid>
         </Grid>
       </Paper>
-      {/* 탈퇴 확인 모달 */}
       <Dialog open={withdrawOpen} onClose={() => setWithdrawOpen(false)}>
         <DialogTitle>회원 탈퇴</DialogTitle>
         <DialogContent>

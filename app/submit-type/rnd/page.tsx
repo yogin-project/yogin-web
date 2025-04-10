@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Button,
@@ -16,41 +16,46 @@ import {
   TextField,
   Typography,
   styled,
-} from '@mui/material';
+} from "@mui/material";
 
-import AddIcon from '@mui/icons-material/Add';
-import { BREAKPOINTS } from '@/app/libs/theme';
-import { ChevronRightRounded } from '@mui/icons-material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useApplicationTemp } from '@/app/hooks/apis/useApplicationTemp';
-import { useState } from 'react';
+import AddIcon from "@mui/icons-material/Add";
+import { BREAKPOINTS } from "@/app/libs/theme";
+import { ChevronRightRounded } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
+import { useState } from "react";
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
+import { useAtomValue } from "jotai";
+import { profileAtom } from "@/app/store/profileAtom";
+import { useFirstApplicationId } from "@/app/hooks/apis/useFirstApplicationId";
+import { useCompanyApplication } from "@/app/hooks/apis/useCompanyApplication";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
   height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
+  overflow: "hidden",
+  position: "absolute",
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+  whiteSpace: "nowrap",
   width: 1,
 });
 
 export default function CompanyRNDForm() {
   const [form, setForm] = useState({
-    companyName: '',
-    ceoName: '',
-    contact: '',
-    location: '',
-    businessType: '',
-    sales: '',
-    exportStatus: '',
-    homepage: '',
-    rAndDHistory: [''],
-    rAndDItem: '',
-    rAndDFunding: '',
-    rAndDDescription: '',
+    companyName: "",
+    ceoName: "",
+    contact: "",
+    location: "",
+    businessType: "",
+    sales: "",
+    exportStatus: "",
+    homepage: "",
+    rAndDHistory: [""],
+    rAndDItem: "",
+    rAndDFunding: "",
+    rAndDDescription: "",
     files: {
       businessLicense: null,
       patent: null,
@@ -59,6 +64,35 @@ export default function CompanyRNDForm() {
   });
 
   const { mutate, isPending } = useApplicationTemp();
+  const {
+    data: applicationId,
+    isLoading,
+    refetch,
+  } = useFirstApplicationId("RND");
+
+  const { mutate: saveTempApplication, isPending: isSavePending } =
+    useCompanyApplication();
+
+  const profile = useAtomValue(profileAtom);
+
+  console.log("profile: ", profile);
+
+  console.log("applicationId: ", applicationId);
+
+  const handleSave = () => {
+    saveTempApplication(
+      {
+        body: {
+          applicationId,
+        },
+      },
+      {
+        onError: (e) => {
+          console.log("hello!", e);
+        },
+      }
+    );
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -76,7 +110,7 @@ export default function CompanyRNDForm() {
   };
 
   const addRAndDHistory = () => {
-    setForm({ ...form, rAndDHistory: [...form.rAndDHistory, ''] });
+    setForm({ ...form, rAndDHistory: [...form.rAndDHistory, ""] });
   };
 
   const removeRAndDHistory = (index) => {
@@ -89,20 +123,18 @@ export default function CompanyRNDForm() {
   };
 
   const handleSubmit = () => {
-    console.log('hello!');
-
     const formData = new FormData();
 
     const data = {
-      type: 'RND',
+      type: "RND",
       businessCategory: form.businessType,
       lastYearRevenue: {
-        year: '2024',
-        revenue: form.sales.replace(/,/g, ''),
+        year: "2024",
+        revenue: form.sales.replace(/,/g, ""),
       },
       lastYearExport: {
-        year: '2024',
-        export: form.exportStatus.replace(/,/g, ''),
+        year: "2024",
+        export: form.exportStatus.replace(/,/g, ""),
       },
       homepage: form.homepage,
       history: form.rAndDHistory.filter(Boolean).map((content, index) => ({
@@ -110,27 +142,34 @@ export default function CompanyRNDForm() {
         content,
       })),
       item: form.rAndDItem,
-      requiredBudget: form.rAndDFunding.replace(/,/g, ''),
+      requiredBudget: form.rAndDFunding.replace(/,/g, ""),
       itemSummary: form.rAndDDescription,
       isFinancialInstituteInfoShareAgreed: form.agreeToTerms,
     };
 
-    formData.append('data', JSON.stringify(data));
+    formData.append("data", JSON.stringify(data));
 
     if (form.files.businessLicense) {
-      formData.append('businessRegistrationCert', form.files.businessLicense);
+      formData.append("businessRegistrationCert", form.files.businessLicense);
     }
     if (form.files.patent) {
-      formData.append('patentCert', form.files.patent);
+      formData.append("patentCert", form.files.patent);
     }
 
     mutate(
       { body: formData },
       {
-        onSuccess: () => alert('제출 완료!'),
+        onSuccess: () => {
+          alert("제출 완료!");
+
+          setTimeout(() => {
+            refetch();
+          }, 1000);
+        },
+
         onError: (e) => {
           console.error(e);
-          alert('제출 실패');
+          alert("제출 실패");
         },
       }
     );
@@ -149,8 +188,8 @@ export default function CompanyRNDForm() {
               <Stack gap={3}>
                 <Typography variant="h6">
                   <ChevronRightRounded
-                    sx={{ verticalAlign: 'sub', height: 20 }}
-                  />{' '}
+                    sx={{ verticalAlign: "sub", height: 20 }}
+                  />{" "}
                   기업 정보
                 </Typography>
                 <Stack
@@ -163,17 +202,17 @@ export default function CompanyRNDForm() {
                   sx={{
                     [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
                       gridColumn: 1,
-                      gridTemplateColumns: 'auto',
+                      gridTemplateColumns: "auto",
                     },
-                    '& label': {
-                      display: 'inline-flex',
-                      alignItems: 'center',
+                    "& label": {
+                      display: "inline-flex",
+                      alignItems: "center",
                       p: 1,
-                      bgcolor: 'action.hover',
+                      bgcolor: "action.hover",
                       fontWeight: 600,
                     },
-                    '& .MuiInputBase-root': {
-                      height: '100%',
+                    "& .MuiInputBase-root": {
+                      height: "100%",
                       px: 1,
                     },
                   }}
@@ -191,11 +230,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       기업체명
@@ -230,11 +269,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       대표자명
@@ -264,11 +303,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       연락처
@@ -303,11 +342,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       소재지
@@ -337,11 +376,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       업태
@@ -376,11 +415,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       홈페이지
@@ -410,11 +449,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       매출액 (억)
@@ -456,11 +495,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       수출액 (억)
@@ -493,8 +532,8 @@ export default function CompanyRNDForm() {
               <Stack gap={3}>
                 <Typography variant="h6">
                   <ChevronRightRounded
-                    sx={{ verticalAlign: 'sub', height: 20 }}
-                  />{' '}
+                    sx={{ verticalAlign: "sub", height: 20 }}
+                  />{" "}
                   R&D 이력
                 </Typography>
                 <Stack gap={0.5}>
@@ -507,15 +546,15 @@ export default function CompanyRNDForm() {
                       gridColumn={3}
                       gridTemplateColumns="3fr auto"
                       sx={{
-                        '& label': {
-                          display: 'inline-flex',
-                          alignItems: 'center',
+                        "& label": {
+                          display: "inline-flex",
+                          alignItems: "center",
                           p: 1,
-                          bgcolor: 'action.hover',
+                          bgcolor: "action.hover",
                           fontWeight: 600,
                         },
-                        '& .MuiInputBase-root': {
-                          height: '100%',
+                        "& .MuiInputBase-root": {
+                          height: "100%",
                           px: 1,
                         },
                       }}
@@ -532,14 +571,14 @@ export default function CompanyRNDForm() {
                           sx={{
                             gridColumnStart: 1,
                             borderTopWidth: 1,
-                            borderTopStyle: 'solid',
-                            borderTopColor: 'action.hover',
+                            borderTopStyle: "solid",
+                            borderTopColor: "action.hover",
                             borderBottomWidth: 1,
-                            borderBottomStyle: 'solid',
-                            borderBottomColor: 'action.hover',
+                            borderBottomStyle: "solid",
+                            borderBottomColor: "action.hover",
                             borderRightWidth: 1,
-                            borderRightStyle: 'solid',
-                            borderRightColor: 'action.hover',
+                            borderRightStyle: "solid",
+                            borderRightColor: "action.hover",
                           }}
                         >
                           {index + 1}
@@ -554,8 +593,8 @@ export default function CompanyRNDForm() {
                             handleRAndDHistoryChange(index, e.target.value)
                           }
                           sx={{
-                            '.MuiInputBase-root': {
-                              borderRadius: '2px !important',
+                            ".MuiInputBase-root": {
+                              borderRadius: "2px !important",
                             },
                           }}
                         />
@@ -570,7 +609,7 @@ export default function CompanyRNDForm() {
                         <IconButton
                           onClick={() => removeRAndDHistory(index)}
                           disabled={form.rAndDHistory.length === 1}
-                          sx={{ width: 'fit-content' }}
+                          sx={{ width: "fit-content" }}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -597,8 +636,8 @@ export default function CompanyRNDForm() {
               <Stack gap={3}>
                 <Typography variant="h6">
                   <ChevronRightRounded
-                    sx={{ verticalAlign: 'sub', height: 20 }}
-                  />{' '}
+                    sx={{ verticalAlign: "sub", height: 20 }}
+                  />{" "}
                   아이템 상세
                 </Typography>
                 <Stack gap={0.5}>
@@ -611,17 +650,17 @@ export default function CompanyRNDForm() {
                     sx={{
                       [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
                         gridColumn: 1,
-                        gridTemplateColumns: 'auto',
+                        gridTemplateColumns: "auto",
                       },
-                      '& label': {
-                        display: 'inline-flex',
-                        alignItems: 'center',
+                      "& label": {
+                        display: "inline-flex",
+                        alignItems: "center",
                         p: 1,
-                        bgcolor: 'action.hover',
+                        bgcolor: "action.hover",
                         fontWeight: 600,
                       },
-                      '& .MuiInputBase-root': {
-                        height: '100%',
+                      "& .MuiInputBase-root": {
+                        height: "100%",
                         px: 1,
                       },
                     }}
@@ -631,11 +670,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       아이템 요약
@@ -674,17 +713,17 @@ export default function CompanyRNDForm() {
                     sx={{
                       [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
                         gridColumn: 1,
-                        gridTemplateColumns: 'auto',
+                        gridTemplateColumns: "auto",
                       },
-                      '& label': {
-                        display: 'inline-flex',
-                        alignItems: 'center',
+                      "& label": {
+                        display: "inline-flex",
+                        alignItems: "center",
                         p: 1,
-                        bgcolor: 'action.hover',
+                        bgcolor: "action.hover",
                         fontWeight: 600,
                       },
-                      '& .MuiInputBase-root': {
-                        height: '100%',
+                      "& .MuiInputBase-root": {
+                        height: "100%",
                         px: 1,
                       },
                     }}
@@ -694,11 +733,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       개발 필요 자금 (억)
@@ -734,17 +773,17 @@ export default function CompanyRNDForm() {
                     sx={{
                       [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
                         gridColumn: 1,
-                        gridTemplateColumns: 'auto',
+                        gridTemplateColumns: "auto",
                       },
-                      '& label': {
-                        display: 'inline-flex',
-                        alignItems: 'center',
+                      "& label": {
+                        display: "inline-flex",
+                        alignItems: "center",
                         p: 1,
-                        bgcolor: 'action.hover',
+                        bgcolor: "action.hover",
                         fontWeight: 600,
                       },
-                      '& .MuiInputBase-root': {
-                        height: '100%',
+                      "& .MuiInputBase-root": {
+                        height: "100%",
                         px: 1,
                       },
                     }}
@@ -754,11 +793,11 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                       }}
                     >
                       아이템 내용 정리
@@ -776,8 +815,8 @@ export default function CompanyRNDForm() {
                         [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
                           gridColumnStart: 1,
                         },
-                        '.MuiInputBase-root': {
-                          borderRadius: '2px !important',
+                        ".MuiInputBase-root": {
+                          borderRadius: "2px !important",
                         },
                       }}
                     />
@@ -792,8 +831,8 @@ export default function CompanyRNDForm() {
               <Stack gap={3}>
                 <Typography variant="h6">
                   <ChevronRightRounded
-                    sx={{ verticalAlign: 'sub', height: 20 }}
-                  />{' '}
+                    sx={{ verticalAlign: "sub", height: 20 }}
+                  />{" "}
                   필수 제출 자료
                 </Typography>
                 <Stack gap={0.5}>
@@ -812,18 +851,18 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                         borderRightWidth: 1,
-                        borderRightStyle: 'solid',
-                        borderRightColor: 'action.hover',
-                        display: 'inline-flex',
-                        alignItems: 'center',
+                        borderRightStyle: "solid",
+                        borderRightColor: "action.hover",
+                        display: "inline-flex",
+                        alignItems: "center",
                         p: 1,
-                        bgcolor: 'action.hover',
+                        bgcolor: "action.hover",
                         fontWeight: 600,
                       }}
                     >
@@ -834,15 +873,15 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 2,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
-                        display: 'inline-flex',
-                        alignItems: 'center',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
+                        display: "inline-flex",
+                        alignItems: "center",
                         p: 1,
-                        bgcolor: 'action.hover',
+                        bgcolor: "action.hover",
                         fontWeight: 600,
                         [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
                           gridColumnEnd: 4,
@@ -912,18 +951,18 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 1,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
                         borderRightWidth: 1,
-                        borderRightStyle: 'solid',
-                        borderRightColor: 'action.hover',
-                        display: 'inline-flex',
-                        alignItems: 'center',
+                        borderRightStyle: "solid",
+                        borderRightColor: "action.hover",
+                        display: "inline-flex",
+                        alignItems: "center",
                         p: 1,
-                        bgcolor: 'action.hover',
+                        bgcolor: "action.hover",
                         fontWeight: 600,
                       }}
                     >
@@ -934,15 +973,15 @@ export default function CompanyRNDForm() {
                       sx={{
                         gridColumnStart: 2,
                         borderTopWidth: 1,
-                        borderTopStyle: 'solid',
-                        borderTopColor: 'action.hover',
+                        borderTopStyle: "solid",
+                        borderTopColor: "action.hover",
                         borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: 'action.hover',
-                        display: 'inline-flex',
-                        alignItems: 'center',
+                        borderBottomStyle: "solid",
+                        borderBottomColor: "action.hover",
+                        display: "inline-flex",
+                        alignItems: "center",
                         p: 1,
-                        bgcolor: 'action.hover',
+                        bgcolor: "action.hover",
                         fontWeight: 600,
                         [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
                           gridColumnEnd: 4,
@@ -1018,7 +1057,7 @@ export default function CompanyRNDForm() {
             flexDirection="row"
             sx={{
               [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
-                flexDirection: 'column',
+                flexDirection: "column",
               },
             }}
           >
@@ -1028,9 +1067,15 @@ export default function CompanyRNDForm() {
               onClick={handleSubmit}
               disabled={isPending}
             >
-              {isPending ? '제출 중...' : '저장'}
+              {isPending ? "제출 중..." : "저장"}
             </Button>
-            <Button variant="contained" color="primary" fullWidth>
+            <Button
+              onClick={handleSave}
+              disabled={isSavePending}
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
               신청
             </Button>
           </Stack>
