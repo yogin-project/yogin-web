@@ -29,6 +29,8 @@ import { useAtomValue } from "jotai";
 import { profileAtom } from "@/app/store/profileAtom";
 import { useFirstApplicationId } from "@/app/hooks/apis/useFirstApplicationId";
 import { useCompanyApplication } from "@/app/hooks/apis/useCompanyApplication";
+import CommonModal from "@/app/components/CommonModal";
+import { useRouter } from "next/navigation";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -43,11 +45,25 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function CompanyRNDForm() {
+  const { mutate, isPending } = useApplicationTemp();
+  const {
+    data: applicationId,
+    isLoading,
+    refetch,
+  } = useFirstApplicationId("RND");
+
+  const { mutate: saveTempApplication, isPending: isSavePending } =
+    useCompanyApplication();
+
+  const profile = useAtomValue(profileAtom);
+
+  const router = useRouter();
+
   const [form, setForm] = useState({
-    companyName: "",
-    ceoName: "",
-    contact: "",
-    location: "",
+    companyName: profile?.additionalInfo?.corporateInfoCorpName,
+    ceoName: profile?.name,
+    contact: profile?.phoneNumber,
+    location: profile?.location ?? "서울",
     businessType: "",
     sales: "",
     exportStatus: "",
@@ -63,21 +79,9 @@ export default function CompanyRNDForm() {
     agreeToTerms: false,
   });
 
-  const { mutate, isPending } = useApplicationTemp();
-  const {
-    data: applicationId,
-    isLoading,
-    refetch,
-  } = useFirstApplicationId("RND");
-
-  const { mutate: saveTempApplication, isPending: isSavePending } =
-    useCompanyApplication();
-
-  const profile = useAtomValue(profileAtom);
-
-  console.log("profile: ", profile);
-
-  console.log("applicationId: ", applicationId);
+  const [modalText, setModalText] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSave, setIsSave] = useState(false);
 
   const handleSave = () => {
     saveTempApplication(
@@ -87,8 +91,19 @@ export default function CompanyRNDForm() {
         },
       },
       {
+        onSuccess: () => {
+          setIsSave(true);
+          setModalText(
+            "신청을 완료하였습니다.\n전문가의 검토가 시작되면 이메일로 안내드리겠습니다."
+          );
+          setIsModalOpen(true);
+        },
+
         onError: (e) => {
           console.log("hello!", e);
+          setModalText(
+            "저장 버튼을 클릭하여 신청 내역을 저장 후, 신청해주세요."
+          );
         },
       }
     );
@@ -160,7 +175,10 @@ export default function CompanyRNDForm() {
       { body: formData },
       {
         onSuccess: () => {
-          alert("제출 완료!");
+          setModalText(
+            "임시 저장을 완료하였습니다.\n신청 버튼을 클릭해주세요."
+          );
+          setIsModalOpen(true);
 
           setTimeout(() => {
             refetch();
@@ -168,8 +186,12 @@ export default function CompanyRNDForm() {
         },
 
         onError: (e) => {
-          console.error(e);
-          alert("제출 실패");
+          console.log("temp save error: ", e);
+
+          setModalText(
+            "임시 저장에 실패하였습니다.\n누락된 정보를 확인하세요."
+          );
+          setIsModalOpen(true);
         },
       }
     );
@@ -240,12 +262,14 @@ export default function CompanyRNDForm() {
                       기업체명
                     </FormLabel>
                     <TextField
+                      disabled
                       id="companyName"
                       autoComplete="off"
                       fullWidth
                       name="companyName"
                       hiddenLabel
-                      onChange={handleChange}
+                      value={profile?.additionalInfo?.corporateInfoCorpName}
+                      // onChange={handleChange}
                       variant="standard"
                       sx={{ gridColumnStart: 2 }}
                     />
@@ -279,6 +303,8 @@ export default function CompanyRNDForm() {
                       대표자명
                     </FormLabel>
                     <TextField
+                      disabled
+                      value={profile?.name}
                       id="ceoName"
                       autoComplete="off"
                       fullWidth
@@ -313,6 +339,8 @@ export default function CompanyRNDForm() {
                       연락처
                     </FormLabel>
                     <TextField
+                      disabled
+                      value={profile?.phoneNumber}
                       id="contact"
                       autoComplete="off"
                       fullWidth
@@ -352,6 +380,8 @@ export default function CompanyRNDForm() {
                       소재지
                     </FormLabel>
                     <TextField
+                      disabled
+                      value={profile?.location ?? "서울"}
                       id="location"
                       autoComplete="off"
                       fullWidth
@@ -1002,19 +1032,6 @@ export default function CompanyRNDForm() {
                         },
                       }}
                     >
-                      {form.files.patent && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          noWrap
-                          overflow="hidden"
-                          textOverflow="ellipsis"
-                          width="100%"
-                          px={1}
-                        >
-                          {form.files.patent.name}
-                        </Typography>
-                      )}
                       <Button
                         component="label"
                         role={undefined}
@@ -1028,10 +1045,23 @@ export default function CompanyRNDForm() {
                         파일 선택
                         <VisuallyHiddenInput
                           type="file"
-                          name="businessLicense"
+                          name="patent"
                           onChange={handleFileChange}
                         />
                       </Button>
+                      {form.files.patent && (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          noWrap
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                          width="100%"
+                          px={1}
+                        >
+                          {form.files.patent.name}
+                        </Typography>
+                      )}
                     </Stack>
                   </Stack>
                 </Stack>
@@ -1081,6 +1111,17 @@ export default function CompanyRNDForm() {
           </Stack>
         </Stack>
       </Paper>
+      <CommonModal
+        message={modalText}
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+
+          if (isSave) {
+            router.push("/dashboard/submit-list");
+          }
+        }}
+      />
     </Container>
   );
 }
