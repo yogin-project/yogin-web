@@ -26,6 +26,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
 import { useState } from "react";
 import { useFirstApplicationId } from "@/app/hooks/apis/useFirstApplicationId";
+import { useRouter } from "next/navigation";
+import { useCompanyApplication } from "@/app/hooks/apis/useCompanyApplication";
+import { profileAtom } from "@/app/store/profileAtom";
+import { useAtomValue } from "jotai";
+import CommonModal from "@/app/components/CommonModal";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -67,14 +72,34 @@ const bankList = [
 ];
 
 export default function Loan() {
+  const { mutate, isPending } = useApplicationTemp();
+  const {
+    data: applicationId,
+    isLoading,
+    refetch,
+  } = useFirstApplicationId("FUND");
+
+  const { mutate: saveTempApplication, isPending: isSavePending } =
+    useCompanyApplication();
+
+  const profile = useAtomValue(profileAtom);
+
+  console.log("profile: ", profile);
+
+  const router = useRouter();
+
+  const [modalText, setModalText] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSave, setIsSave] = useState(false);
+
   const [form, setForm] = useState({
-    companyName: "",
-    ceoName: "",
+    companyName: profile?.additionalInfo?.corporateInfoCorpName,
+    ceoName: profile?.name,
     ceoLocation: "",
-    companyLocation: "",
+    companyLocation: profile?.location ?? "서울",
     establishmentDate: "",
     selfOwned: false,
-    businessNumber: "",
+    businessNumber: profile?.additionalInfo?.corporateInfoBusinessNo,
     businessType: "",
     patent: "",
     sales2022: "",
@@ -94,18 +119,34 @@ export default function Loan() {
     agreeToTerms: false,
   });
 
-  const { mutate, isPending } = useApplicationTemp();
-
-  const {
-    data: applicationId,
-    isLoading,
-    refetch,
-  } = useFirstApplicationId("FUND");
-
-  console.log("applicationId: ", applicationId);
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSave = () => {
+    saveTempApplication(
+      {
+        body: {
+          applicationId,
+        },
+      },
+      {
+        onSuccess: () => {
+          setIsSave(true);
+          setModalText(
+            "신청을 완료하였습니다.\n전문가의 검토가 시작되면 이메일로 안내드리겠습니다."
+          );
+          setIsModalOpen(true);
+        },
+
+        onError: (e) => {
+          console.log("error", e);
+          setModalText(
+            "저장 버튼을 클릭하여 신청 내역을 저장 후, 신청해주세요."
+          );
+        },
+      }
+    );
   };
 
   const handleCheckboxChange = (e) => {
@@ -139,7 +180,7 @@ export default function Loan() {
     setForm({ ...form, debts: updatedDebts });
   };
 
-  const handleSave = () => {
+  const handleTempSave = () => {
     const formData = new FormData();
 
     const data = {
@@ -184,10 +225,24 @@ export default function Loan() {
     mutate(
       { body: formData },
       {
-        onSuccess: () => alert("저장 완료!"),
+        onSuccess: () => {
+          setModalText(
+            "임시 저장을 완료하였습니다.\n신청 버튼을 클릭해주세요."
+          );
+          setIsModalOpen(true);
+
+          setTimeout(() => {
+            refetch();
+          }, 1000);
+        },
+
         onError: (e) => {
-          console.error(e);
-          alert("저장 실패");
+          console.log("temp save error: ", e);
+
+          setModalText(
+            "임시 저장에 실패하였습니다.\n누락된 정보를 확인하세요."
+          );
+          setIsModalOpen(true);
         },
       }
     );
@@ -258,6 +313,8 @@ export default function Loan() {
                       기업체명
                     </FormLabel>
                     <TextField
+                      disabled
+                      value={profile?.additionalInfo?.corporateInfoCorpName}
                       id="companyName"
                       autoComplete="off"
                       fullWidth
@@ -297,6 +354,8 @@ export default function Loan() {
                       대표자명
                     </FormLabel>
                     <TextField
+                      disabled
+                      value={profile?.name}
                       id="ceoName"
                       autoComplete="off"
                       fullWidth
@@ -331,6 +390,8 @@ export default function Loan() {
                       사업자번호
                     </FormLabel>
                     <TextField
+                      disabled
+                      value={profile?.additionalInfo?.corporateInfoBusinessNo}
                       id="businessNumber"
                       autoComplete="off"
                       fullWidth
@@ -404,6 +465,8 @@ export default function Loan() {
                       기업 소재지
                     </FormLabel>
                     <TextField
+                      disabled
+                      value={profile?.location ?? "서울"}
                       id="companyLocation"
                       autoComplete="off"
                       fullWidth
@@ -617,7 +680,7 @@ export default function Loan() {
                       borderBottomColor: "action.hover",
                     }}
                   >
-                    2022년 매출액 (원)
+                    2022년 매출액 (억)
                   </FormLabel>
                   <TextField
                     id="sales2022"
@@ -636,7 +699,7 @@ export default function Loan() {
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position="end">원</InputAdornment>
+                          <InputAdornment position="end">억</InputAdornment>
                         ),
                       },
                     }}
@@ -654,7 +717,7 @@ export default function Loan() {
                       borderBottomColor: "action.hover",
                     }}
                   >
-                    2023년 매출액 (원)
+                    2023년 매출액 (억)
                   </FormLabel>
                   <TextField
                     id="sales2023"
@@ -673,7 +736,7 @@ export default function Loan() {
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position="end">원</InputAdornment>
+                          <InputAdornment position="end">억</InputAdornment>
                         ),
                       },
                     }}
@@ -691,7 +754,7 @@ export default function Loan() {
                       borderBottomColor: "action.hover",
                     }}
                   >
-                    2024년 매출액 (원)
+                    2024년 매출액 (억)
                   </FormLabel>
                   <TextField
                     id="sales2024"
@@ -710,7 +773,7 @@ export default function Loan() {
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position="end">원</InputAdornment>
+                          <InputAdornment position="end">억</InputAdornment>
                         ),
                       },
                     }}
@@ -862,7 +925,7 @@ export default function Loan() {
                               input: {
                                 endAdornment: (
                                   <InputAdornment position="end">
-                                    원
+                                    억
                                   </InputAdornment>
                                 ),
                               },
@@ -1165,19 +1228,6 @@ export default function Loan() {
                         },
                       }}
                     >
-                      {form.files.financialStatement && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          noWrap
-                          overflow="hidden"
-                          textOverflow="ellipsis"
-                          width="100%"
-                          px={1}
-                        >
-                          {form.files.financialStatement.name}
-                        </Typography>
-                      )}
                       <Button
                         component="label"
                         role={undefined}
@@ -1195,6 +1245,19 @@ export default function Loan() {
                           onChange={handleFileChange}
                         />
                       </Button>
+                      {form.files.financialStatement && (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          noWrap
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                          width="100%"
+                          px={1}
+                        >
+                          {form.files.financialStatement.name}
+                        </Typography>
+                      )}
                     </Stack>
                   </Stack>
                 </Stack>
@@ -1228,16 +1291,34 @@ export default function Loan() {
               variant="outlined"
               fullWidth
               size="large"
-              onClick={handleSave}
+              onClick={handleTempSave}
             >
               저장
             </Button>
-            <Button variant="contained" color="primary" size="large" fullWidth>
+            <Button
+              onClick={handleSave}
+              disabled={isSavePending}
+              variant="contained"
+              color="primary"
+              size="large"
+              fullWidth
+            >
               신청
             </Button>
           </Stack>
         </Stack>
       </Paper>
+      <CommonModal
+        message={modalText}
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+
+          if (isSave) {
+            router.push("/dashboard/submit-list");
+          }
+        }}
+      />
     </Container>
   );
 }
