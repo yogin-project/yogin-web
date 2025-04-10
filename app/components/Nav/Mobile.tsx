@@ -43,12 +43,33 @@ const HeaderMobile = () => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <IconButton onClick={() => router.push('/')}>
-          <Image
-            src={'/images/common/logo.png'}
-            width={85}
-            height={23}
+        <IconButton
+          onClick={() => router.push('/')}
+          sx={{ position: 'relative', minWidth: 90.5, height: '100%' }}
+        >
+          <Stack
+            component={Image}
+            src="/images/common/logo-full_landscape.png"
+            fill
+            objectFit="contain"
             alt=""
+            sx={{
+              '@media (prefers-color-scheme: dark)': {
+                display: 'none',
+              },
+            }}
+          />
+          <Stack
+            component={Image}
+            src="/images/common/logo-full_landscape_dark.png"
+            fill
+            objectFit="contain"
+            alt=""
+            sx={{
+              '@media (prefers-color-scheme: light)': {
+                display: 'none',
+              },
+            }}
           />
         </IconButton>
         <IconButton onClick={() => router.push('/mobile-menu')}>
