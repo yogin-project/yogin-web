@@ -18,3 +18,18 @@ export const useProfileMutation = (enabled: boolean) => {
     },
   }).getUseQuery;
 };
+
+export const useProfileLazyQuery = () => {
+  return useApiManager({
+    method: "GET",
+    path: "user/profile",
+    mutationOption: {
+      onSuccess: (data: any) => {
+        console.log("프로필 조회 성공 (lazy):", data);
+      },
+      onError: (error: any) => {
+        console.error("프로필 조회 실패 (lazy):", error);
+      },
+    },
+  }).useLazyQuery();
+};

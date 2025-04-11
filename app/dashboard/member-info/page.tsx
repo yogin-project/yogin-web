@@ -22,6 +22,8 @@ import { usePatchUser } from "@/app/hooks/apis/usePatchUser";
 import { useDeleteUser } from "@/app/hooks/apis/useDeleteUser";
 import { useRouter } from "next/navigation";
 import { isLoginAtom } from "@/app/store/authAtom";
+import { useProfileLazyQuery } from "@/app/hooks/apis/useProfile";
+import CommonModal from "@/app/components/CommonModal";
 
 export default function MemberInfo() {
   const profile = useAtomValue(profileAtom);
@@ -36,6 +38,11 @@ export default function MemberInfo() {
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [confirmEmail, setConfirmEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
+
+  const [isMoalOpen, setIsMoalOpen] = useState(false);
+  const [modalText, setModalText] = useState("");
+
+  const fetchProfile = useProfileLazyQuery();
 
   const [form, setForm] = useState({
     email: profile?.email || "",
@@ -80,6 +87,11 @@ export default function MemberInfo() {
     setForm((prev) => ({ ...prev, verificationPhoto: file }));
   };
 
+  const handleModalClose = () => {
+    fetchProfile();
+    setIsMoalOpen(false);
+  };
+
   const handleSubmit = () => {
     if (!profile) return;
 
@@ -99,7 +111,38 @@ export default function MemberInfo() {
       formData.append("image", form.verificationPhoto);
     }
 
-    patchUser({ body: formData });
+    patchUser(
+      { body: formData },
+      {
+        onSuccess: () => {
+          setIsMoalOpen(true);
+
+          if (profile.type === "MANAGER" || profile.type === "PROFESSOR") {
+            setModalText(
+              "관리자의 승인 절차 이후, 회원 정보 수정이 반영됩니다."
+            );
+          } else {
+            setModalText("회원 정보가 변경되었습니다.");
+          }
+        },
+        onError: (e) => {
+          console.log("error: ", e.details.error);
+          if (e.details.error === "User not approved") {
+            setIsMoalOpen(true);
+            setModalText(
+              "이미 관리자가 검토 중인 회원 정보 수정 사항이 있습니다."
+            );
+
+            return;
+          } else {
+            setIsMoalOpen(true);
+            setModalText("정보를 올바르게 입력해주세요.");
+
+            return;
+          }
+        },
+      }
+    );
   };
 
   if (!profile) return null;
@@ -257,6 +300,11 @@ export default function MemberInfo() {
           </Button>
         </DialogActions>
       </Dialog>
+      <CommonModal
+        message={modalText}
+        open={isMoalOpen}
+        onClose={handleModalClose}
+      />
     </Box>
   );
 }
