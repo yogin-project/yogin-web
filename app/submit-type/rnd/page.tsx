@@ -104,6 +104,7 @@ export default function CompanyRNDForm() {
           setModalText(
             "저장 버튼을 클릭하여 신청 내역을 저장 후, 신청해주세요."
           );
+          setIsModalOpen(true);
         },
       }
     );

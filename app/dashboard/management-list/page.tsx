@@ -20,6 +20,7 @@ import {
   Button,
 } from "@mui/material";
 import { useManagementList } from "@/app/hooks/apis/useManagementList";
+import { useRouter } from "next/navigation";
 
 const mgrTypeOptions = [
   { label: "전체", value: "" },
@@ -31,6 +32,7 @@ function ManagementList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [mgrType, setMgrType] = useState("");
+  const router = useRouter();
 
   const queryParams = {
     page: page + 1,
@@ -57,6 +59,18 @@ function ManagementList() {
   const handleFilterChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setMgrType(event.target.value as string);
     setPage(0);
+  };
+
+  const handleViewDetail = (row: any) => {
+    const query = new URLSearchParams({
+      id: row.id,
+      mgrType: row.mgrType,
+      description: row.description || "",
+      location: row.location,
+      state: row.state,
+    }).toString();
+
+    router.push(`/dashboard/management-list/management-detail?${query}`);
   };
 
   return (
@@ -114,7 +128,7 @@ function ManagementList() {
                       size="small"
                       variant="text"
                       color="primary"
-                      // onClick={() => setWithdrawOpen(true)}
+                      onClick={() => handleViewDetail(row)}
                     >
                       보기
                     </Button>
