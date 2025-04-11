@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
 import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
+import CommonModal from "@/app/components/CommonModal";
 
 const applicationStates = [
   { label: "임시저장", value: "TEMP" },
@@ -49,10 +50,13 @@ function SubmitList() {
   const [type, setType] = useState("FUND");
   const [state, setState] = useState("TEMP");
 
+  const [modalText, setModalText] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { mutate: deleteApplication, isPending: isDeletePending } =
     useCompanyApplicationCancel();
 
-  const { data, isLoading } = useCompanyFundList({
+  const { data, isLoading, refetch } = useCompanyFundList({
     page: page + 1,
     limit: rowsPerPage,
     sort,
@@ -73,6 +77,30 @@ function SubmitList() {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleDeleteApplication = (applicationId: number) => {
+    deleteApplication(
+      {
+        body: {
+          applicationId: String(applicationId),
+        },
+      },
+      {
+        onSuccess: () => {
+          setIsModalOpen(true);
+          setModalText("자금 신청이 취소되었습니다.");
+
+          refetch();
+        },
+        onError: (e) => {
+          console.log("error: ", e);
+
+          setIsModalOpen(true);
+          setModalText("일시적인 오류입니다. 잠시 후 시도해주세요.");
+        },
+      }
+    );
   };
 
   return (
@@ -173,7 +201,12 @@ function SubmitList() {
                   </TableCell>
                   <TableCell>
                     {app.state === "REGISTERED" && (
-                      <Button size="small" color="error" variant="outlined">
+                      <Button
+                        size="small"
+                        color="error"
+                        variant="outlined"
+                        onClick={() => handleDeleteApplication(app.id)}
+                      >
                         삭제
                       </Button>
                     )}
@@ -203,6 +236,13 @@ function SubmitList() {
           }
         />
       </Paper>
+      <CommonModal
+        message={modalText}
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+      />
     </Box>
   );
 }
