@@ -17,8 +17,10 @@ import {
   FormControl,
   InputLabel,
   Grid,
+  Button,
 } from "@mui/material";
 import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
+import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
 
 const applicationStates = [
   { label: "임시저장", value: "TEMP" },
@@ -46,6 +48,9 @@ function SubmitList() {
   const [sort, setSort] = useState("ASC");
   const [type, setType] = useState("FUND");
   const [state, setState] = useState("TEMP");
+
+  const { mutate: deleteApplication, isPending: isDeletePending } =
+    useCompanyApplicationCancel();
 
   const { data, isLoading } = useCompanyFundList({
     page: page + 1,
@@ -148,6 +153,7 @@ function SubmitList() {
                 <TableCell>상태</TableCell>
                 <TableCell>추가정보 요청</TableCell>
                 <TableCell>추가정보 제출</TableCell>
+                <TableCell>삭제</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -165,11 +171,18 @@ function SubmitList() {
                   <TableCell>
                     {app.isAdditionalInfoSubmitted === "Y" ? "예" : "아니오"}
                   </TableCell>
+                  <TableCell>
+                    {app.state === "REGISTERED" && (
+                      <Button size="small" color="error" variant="outlined">
+                        삭제
+                      </Button>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))}
               {applications.length === 0 && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
+                  <TableCell colSpan={7} align="center">
                     신청 내역이 없습니다.
                   </TableCell>
                 </TableRow>
