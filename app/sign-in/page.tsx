@@ -128,7 +128,11 @@ function SignIn() {
           ) {
             setPasswordError(true);
             setErrorMessage("등록되지 않은 이메일 정보입니다.");
+          } else if (error?.details?.errorCode === "NOT_APPROVED_USER") {
+            setPasswordError(true);
+            setErrorMessage("관리자의 승인 후, 로그인이 가능합니다.");
           } else {
+            setPasswordError(true);
             setErrorMessage("잠시 후 다시 시도해주세요.");
           }
         },
