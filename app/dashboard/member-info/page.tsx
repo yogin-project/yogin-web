@@ -14,7 +14,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { profileAtom } from "@/app/store/profileAtom";
 import { useAtom, useAtomValue } from "jotai";
 import { useTheme } from "@mui/material/styles";
@@ -26,7 +26,8 @@ import { useProfileLazyQuery } from "@/app/hooks/apis/useProfile";
 import CommonModal from "@/app/components/CommonModal";
 
 export default function MemberInfo() {
-  const profile = useAtomValue(profileAtom);
+  const [profile, setProfile] = useAtom(profileAtom);
+
   const { mutate: patchUser } = usePatchUser();
   const { mutate: deleteUser } = useDeleteUser();
   const router = useRouter();
@@ -45,14 +46,30 @@ export default function MemberInfo() {
   const fetchProfile = useProfileLazyQuery();
 
   const [form, setForm] = useState({
-    email: profile?.email || "",
-    phoneNumber: profile?.phoneNumber || "",
-    location: profile?.location || "",
-    address: profile?.address || "",
-    branchName: profile?.branchName || "",
-    organization: profile?.organization || "",
+    name: "",
+    email: "",
+    phoneNumber: "",
+    location: "",
+    address: "",
+    branchName: "",
+    organization: "",
     verificationPhoto: null as File | null,
   });
+
+  useEffect(() => {
+    if (profile) {
+      setForm({
+        name: profile.name || "",
+        email: profile.email || "",
+        phoneNumber: profile.phoneNumber || "",
+        location: profile.location || "",
+        address: profile.address || "",
+        branchName: profile.branchName || "",
+        organization: profile.organization || "",
+        verificationPhoto: null,
+      });
+    }
+  }, [profile]);
 
   const handleWithdraw = () => {
     if (confirmEmail !== form.email) {
@@ -88,7 +105,9 @@ export default function MemberInfo() {
   };
 
   const handleModalClose = () => {
-    fetchProfile();
+    fetchProfile().then((data) => {
+      setProfile(data.data);
+    });
     setIsMoalOpen(false);
   };
 
@@ -96,6 +115,7 @@ export default function MemberInfo() {
     if (!profile) return;
 
     const formData = new FormData();
+    formData.append("name", form.name);
     formData.append("email", form.email);
     formData.append("phoneNumber", form.phoneNumber);
     formData.append("location", form.location);
@@ -179,7 +199,13 @@ export default function MemberInfo() {
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12}>
             <Box display="flex" flexDirection="column" gap={2}>
-              <TextField label="이름" fullWidth value={name} disabled />
+              <TextField
+                label="이름"
+                name="name"
+                fullWidth
+                value={form.name}
+                onChange={handleChange}
+              />
               <TextField
                 label="이메일"
                 name="email"

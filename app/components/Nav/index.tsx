@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import HeaderDesktop from './Desktop';
-import HeaderMobile from './Mobile';
-import { profileAtom } from '@/app/store/profileAtom';
-import { useAtom } from 'jotai';
-import { useIsMobile } from '@/app/hooks/useIsMobileSize';
-import { useProfileMutation } from '@/app/hooks/apis/useProfile';
+import HeaderDesktop from "./Desktop";
+import HeaderMobile from "./Mobile";
+import { profileAtom } from "@/app/store/profileAtom";
+import { useAtom } from "jotai";
+import { useIsMobile } from "@/app/hooks/useIsMobileSize";
+import { useProfileMutation } from "@/app/hooks/apis/useProfile";
 
 function Header() {
   const isMobile = useIsMobile();
@@ -21,11 +21,11 @@ function Header() {
   useEffect(() => {
     if (!profile && data?.data) {
       setProfile(data.data);
-      console.log('✅ 프로필 저장 완료:', data.data);
+      console.log("✅ 프로필 저장 완료:", data.data);
     } else {
-      console.log('📦 캐시된 프로필:', profile);
+      console.log("📦 캐시된 프로필:", profile);
     }
-  }, [data, profile, setProfile]);
+  }, [data, profile]);
 
   return isMobile ? <HeaderMobile /> : <HeaderDesktop />;
 }
