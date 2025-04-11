@@ -17,13 +17,14 @@ import {
   FormControl,
   InputLabel,
   Chip,
+  Button,
 } from "@mui/material";
 import { useManagementList } from "@/app/hooks/apis/useManagementList";
 
 const mgrTypeOptions = [
   { label: "전체", value: "" },
-  { label: "대출신청", value: "FUND" },
-  { label: "R&D", value: "RND" },
+  { label: "대출신청", value: "대출신청" },
+  { label: "R&D", value: "R%26D" },
 ];
 
 function ManagementList() {
@@ -86,28 +87,37 @@ function ManagementList() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
                 <TableCell>유형</TableCell>
                 <TableCell>상태</TableCell>
-                <TableCell>설명</TableCell>
+                {/* <TableCell>설명</TableCell> */}
                 <TableCell>생성일</TableCell>
+                <TableCell>상세보기</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((row: any) => (
+              {items.map((row: any, index) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
                   <TableCell>
                     <Chip
-                      label={row.mgrType === "FUND" ? "대출신청" : "R&D"}
-                      color={row.mgrType === "FUND" ? "primary" : "secondary"}
+                      label={row.mgrType === "대출신청" ? "대출신청" : "R&D"}
+                      color={row.mgrType === "R&D" ? "primary" : "secondary"}
                       size="small"
                     />
                   </TableCell>
                   <TableCell>{row.state}</TableCell>
-                  <TableCell>{row.description}</TableCell>
+                  {/* <TableCell>{row.description}</TableCell> */}
                   <TableCell>
                     {new Date(row.createdAt).toLocaleString("ko-KR")}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      variant="text"
+                      color="primary"
+                      // onClick={() => setWithdrawOpen(true)}
+                    >
+                      보기
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
