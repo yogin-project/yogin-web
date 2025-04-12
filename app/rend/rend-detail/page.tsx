@@ -27,6 +27,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import CommonModal from "@/app/components/CommonModal";
 import { useCorpDetailSearch } from "@/app/hooks/apis/useCorpDetailSearch";
+import { useApplicationApprove } from "@/app/hooks/apis/useApplicationApprove";
+import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
 
 export default function Loan() {
   const searchParams = useSearchParams();
@@ -67,6 +69,11 @@ export default function Loan() {
   const [modalText, setModalText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSave, setIsSave] = useState(false);
+
+  const { mutate: handleAddRequire, isPaused: isAddRequirePending } =
+    useAddRequire();
+  const { mutate: handleApprove, isPending: isApprovePending } =
+    useApplicationApprove();
 
   return (
     <Container maxWidth="md" ref={pdfRef}>
@@ -485,7 +492,9 @@ export default function Loan() {
                     2022년 매출액 (억)
                   </FormLabel>
                   <TextField
-                    value={corpData?.threeYearRevenue[0].revenue}
+                    value={Number(
+                      corpData?.threeYearRevenue[0].revenue
+                    ).toLocaleString()}
                     id="sales2022"
                     autoComplete="off"
                     fullWidth
@@ -522,7 +531,9 @@ export default function Loan() {
                     2023년 매출액 (억)
                   </FormLabel>
                   <TextField
-                    value={corpData?.threeYearRevenue[1].revenue}
+                    value={Number(
+                      corpData?.threeYearRevenue[1].revenue
+                    ).toLocaleString()}
                     id="sales2023"
                     autoComplete="off"
                     fullWidth
@@ -559,7 +570,9 @@ export default function Loan() {
                     2024년 매출액 (억)
                   </FormLabel>
                   <TextField
-                    value={corpData?.threeYearRevenue[2].revenue}
+                    value={Number(
+                      corpData?.threeYearRevenue[2].revenue
+                    ).toLocaleString()}
                     id="sales2024"
                     autoComplete="off"
                     fullWidth
@@ -707,7 +720,7 @@ export default function Loan() {
                           <TextField
                             id={`amount-${item.debtAmount}-${index}`}
                             fullWidth
-                            value={item.debtAmount}
+                            value={Number(item.debtAmount).toLocaleString()}
                             variant="standard"
                             sx={{ gridColumnStart: 2 }}
                             slotProps={{
@@ -984,14 +997,15 @@ export default function Loan() {
             >
               PDF 저장
             </Button>
-            <Button
-              // onClick={}
-              variant="contained"
-              color="primary"
-              size="large"
-              fullWidth
-            >
-              신청
+            <Button variant="contained" color="primary" size="large" fullWidth>
+              추가자료 요청
+            </Button>
+
+            <Button variant="contained" color="primary" size="large" fullWidth>
+              승인
+            </Button>
+            <Button variant="contained" color="error" size="large" fullWidth>
+              부결
             </Button>
           </Stack>
         </Stack>
