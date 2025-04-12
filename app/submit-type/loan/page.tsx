@@ -254,7 +254,7 @@ export default function Loan() {
       <Paper elevation={1} sx={{ my: 3 }}>
         <Stack gap={6} px={3} py={6}>
           <Typography variant="h4" align="center" gutterBottom>
-            SUMMARY
+            기업 정보 요약
           </Typography>
 
           <Card variant="outlined">

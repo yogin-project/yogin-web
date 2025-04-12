@@ -17,7 +17,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { useRouter } from "next/navigation"; // ✅ 추가
+import { useRouter } from "next/navigation";
 import { useApllicationList } from "../hooks/apis/useApplicationList";
 
 function REND() {

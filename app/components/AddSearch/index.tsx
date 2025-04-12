@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -13,41 +13,48 @@ import {
 import DaumPostcode from "react-daum-postcode";
 import { locations } from "@/app/utils";
 
+interface AddressSearchProps {
+  selectedLocation: string;
+  setSelectedLocation: (value: string) => void;
+  address: string;
+  setAddress: (value: string) => void;
+}
+
 function AddressSearch({
   selectedLocation,
   setSelectedLocation,
   address,
   setAddress,
-}) {
+}: AddressSearchProps) {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [baseAddress, setBaseAddress] = useState("");
   const [detailedAddress, setDetailedAddress] = useState("");
 
-  // address 값은 base + detailedAddress 조합으로 유지
-  useEffect(() => {
-    if (baseAddress || detailedAddress) {
-      const combined = `${baseAddress} ${detailedAddress}`.trim();
-      setAddress(combined);
-    }
-  }, [baseAddress, detailedAddress, setAddress]);
-
-  const handleLocationChange = (event) => {
-    setSelectedLocation(event.target.value);
+  const handleLocationChange = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    setSelectedLocation(event.target.value as string);
   };
 
   const handleAddressSearch = () => {
     setIsAddressModalOpen(true);
   };
 
-  const handleAddressSelect = (data) => {
-    setBaseAddress(data.address);
-    setDetailedAddress(""); // 상세주소는 리셋
+  const handleAddressSelect = (data: any) => {
+    const selected = data.address;
+    setBaseAddress(selected);
+    setDetailedAddress("");
+    setAddress(selected); // 기본 주소 선택 시 바로 setAddress 호출
     setIsAddressModalOpen(false);
   };
 
-  const handleDetailedAddressChange = (e) => {
-    const newDetail = e.target.value;
-    setDetailedAddress(newDetail);
+  const handleDetailedAddressChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const detail = e.target.value;
+    setDetailedAddress(detail);
+    const combined = `${baseAddress} ${detail}`.trim();
+    setAddress(combined); // 상세 주소 입력 시마다 setAddress 호출
   };
 
   return (
@@ -67,7 +74,7 @@ function AddressSearch({
       </Select>
 
       <Box height={8} />
-      <Stack flexDirection={"row"} gap={2} mt={2}>
+      <Stack flexDirection="row" gap={2} mt={2}>
         <TextField
           variant="standard"
           label="주소 검색"
