@@ -13,13 +13,16 @@ import {
   TablePagination,
   Paper,
   Button,
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { useApllicationList } from "../hooks/apis/useApplicationList";
 
 function REND() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [sort] = useState("DESC");
+  const [sort, setSort] = useState<"ASC" | "DESC">("DESC");
 
   const queryParams: Record<string, any> = {
     page: page + 1,
@@ -29,7 +32,6 @@ function REND() {
   };
 
   const { data, isLoading } = useApllicationList(queryParams);
-
   const applications = data?.data?.applications || [];
   const isLast = data?.data?.isLast;
 
@@ -44,11 +46,39 @@ function REND() {
     setPage(0);
   };
 
+  const handleSortChange = (
+    _: React.MouseEvent<HTMLElement>,
+    newSort: "ASC" | "DESC" | null
+  ) => {
+    if (newSort) {
+      setSort(newSort);
+      setPage(0);
+    }
+  };
+
   return (
     <Box maxWidth="1000px" mx="auto" mt={4}>
       <Typography variant="h5" mb={2} fontWeight={600}>
         R&D 자금 신청 리스트
       </Typography>
+
+      {/* 🔹 정렬 필터 */}
+      <Stack direction="row" justifyContent="flex-end" mb={2}>
+        <ToggleButtonGroup
+          value={sort}
+          exclusive
+          size="small"
+          onChange={handleSortChange}
+          aria-label="정렬"
+        >
+          <ToggleButton value="ASC" aria-label="최신순">
+            최신순
+          </ToggleButton>
+          <ToggleButton value="DESC" aria-label="과거순">
+            과거순
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Stack>
 
       <Paper>
         <TableContainer>
@@ -91,7 +121,7 @@ function REND() {
                         size="small"
                         color="primary"
                         variant="outlined"
-                        // onClick={() => handleDeleteApplication(app.id)}
+                        // onClick={() => handleDetail(item.id)}
                       >
                         조회
                       </Button>
@@ -101,7 +131,7 @@ function REND() {
               })}
               {!isLoading && applications.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} align="center">
+                  <TableCell colSpan={5} align="center">
                     조회된 데이터가 없습니다.
                   </TableCell>
                 </TableRow>
