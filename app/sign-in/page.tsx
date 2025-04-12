@@ -127,7 +127,7 @@ function SignIn() {
             error?.details?.errorCode === "NOT_CORPORATE_USER"
           ) {
             setPasswordError(true);
-            setErrorMessage("등록되지 않은 이메일 정보입니다.");
+            setErrorMessage("등록되지 않은 계정 정보입니다.");
           } else if (error?.details?.errorCode === "NOT_APPROVED_USER") {
             setPasswordError(true);
             setErrorMessage("관리자의 승인 후, 로그인이 가능합니다.");
