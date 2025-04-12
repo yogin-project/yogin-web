@@ -75,6 +75,7 @@ export default function ApprovalModal({
     try {
       const value = config.placeholder ? inputValue : null;
       await onSubmit(value);
+
       setShowToast(true);
       onClose(); // 외부 모달도 닫기
     } catch (e) {
@@ -145,7 +146,9 @@ export default function ApprovalModal({
           variant="filled"
           onClose={() => setShowToast(false)}
         >
-          처리가 완료되었습니다. 이메일 회신을 기다려주세요.
+          {type !== "reject"
+            ? "처리가 완료되었습니다. 이메일 회신을 기다려주세요."
+            : "부결 처리가 완료되었습니다."}
         </Alert>
       </Snackbar>
     </>
