@@ -111,12 +111,15 @@ function RND() {
                     <TableCell>{item.corpName}</TableCell>
                     <TableCell>
                       {item.lastYearExport
-                        ? Number(item.lastYearExport).toLocaleString() + "억"
+                        ? Number(item.lastYearExport.export).toLocaleString() +
+                          "억"
                         : "-"}
                     </TableCell>
                     <TableCell>
                       {item.lastYearRevenue
-                        ? Number(item.lastYearRevenue).toLocaleString() + "억"
+                        ? Number(
+                            item.lastYearRevenue.revenue
+                          ).toLocaleString() + "억"
                         : "-"}
                     </TableCell>
                     <TableCell>
@@ -125,7 +128,7 @@ function RND() {
                         color="primary"
                         variant="outlined"
                         onClick={() => {
-                          router.push(`/rend/rend-detail?id=${item.id}`);
+                          router.push(`/rnd/rnd-detail?id=${item.id}`);
                         }}
                       >
                         조회

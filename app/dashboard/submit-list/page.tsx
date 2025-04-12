@@ -24,13 +24,12 @@ import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicat
 import CommonModal from "@/app/components/CommonModal";
 
 const applicationStates = [
-  { label: "임시저장", value: "TEMP" },
   { label: "등록완료", value: "REGISTERED" },
+  { label: "임시저장", value: "TEMP" },
   { label: "전문가 확인중", value: "REVIEWING" },
   { label: "추가 자료 요청됨", value: "ADDITIONAL_INFO_REQUIRED" },
   { label: "전문가 승인", value: "APPROVED" },
   { label: "전문가 부결", value: "REJECTED" },
-  { label: "삭제됨", value: "DELETED" },
 ];
 
 const types = [
@@ -48,7 +47,7 @@ function SubmitList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sort, setSort] = useState("ASC");
   const [type, setType] = useState("FUND");
-  const [state, setState] = useState("TEMP");
+  const [state, setState] = useState("REGISTERED");
 
   const [modalText, setModalText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
