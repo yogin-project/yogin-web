@@ -33,6 +33,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCorpDetailSearch } from "@/app/hooks/apis/useCorpDetailSearch";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
+import { useApplicationApprove } from "@/app/hooks/apis/useApplicationApprove";
+import ApprovalModal from "@/app/components/ApprovalModal";
 
 export default function RNDDetail() {
   const searchParams = useSearchParams();
@@ -47,6 +50,16 @@ export default function RNDDetail() {
   const [modalText, setModalText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSave, setIsSave] = useState(false);
+
+  const [modalType, setModalType] = useState<
+    "approve" | "reject" | "require" | null
+  >(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const { mutate: handleAddRequire, isPaused: isAddRequirePending } =
+    useAddRequire();
+  const { mutate: handleApprove, isPending: isApprovePending } =
+    useApplicationApprove();
 
   console.log("corpData: ", corpData);
 
@@ -74,9 +87,52 @@ export default function RNDDetail() {
     }
   }, [id, refetch]);
 
-  const handleSave = () => {};
+  // ✅ 승인 API
+  const handleModalOpen = (type: "approve" | "reject" | "require") => {
+    setModalType(type);
+    setModalOpen(true);
+  };
 
-  const handleSubmit = () => {};
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  const handleModalSubmit = (value: string | null) => {
+    if (!id) return;
+
+    if (modalType === "require") {
+      handleAddRequire({
+        // headers: { "Content-Type": "application/json" },
+        body: {
+          id: Number(id),
+          requirement: value,
+        },
+      });
+    }
+
+    if (modalType === "approve") {
+      handleApprove({
+        // headers: { "Content-Type": "application/json" },
+        body: {
+          id: Number(id),
+          isApproved: true,
+          availableFundAmount: value,
+        },
+      });
+    }
+
+    if (modalType === "reject") {
+      handleApprove({
+        // headers: { "Content-Type": "application/json" },
+        body: {
+          id: Number(id),
+          isApproved: false,
+        },
+      });
+    }
+
+    handleModalClose();
+  };
 
   return (
     <Container maxWidth="md" ref={pdfRef}>
@@ -887,12 +943,37 @@ export default function RNDDetail() {
               PDF 저장
             </Button>
             <Button
-              onClick={handleSave}
               variant="contained"
               color="primary"
+              size="large"
               fullWidth
+              onClick={() => {
+                handleModalOpen("require");
+              }}
             >
-              신청
+              추가자료 요청
+            </Button>
+
+            <Button
+              disabled={corpData?.state !== "ADDITIONAL_INFO_REQUIRED"}
+              variant="contained"
+              color="primary"
+              size="large"
+              fullWidth
+              onClick={() => handleModalOpen("approve")}
+            >
+              {corpData?.state !== "ADDITIONAL_INFO_REQUIRED"
+                ? "추가자료 확인 후 승인"
+                : "승인"}
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              size="large"
+              fullWidth
+              onClick={() => handleModalOpen("reject")}
+            >
+              부결
             </Button>
           </Stack>
         </Stack>
@@ -907,6 +988,13 @@ export default function RNDDetail() {
             router.push("/dashboard/submit-list");
           }
         }}
+      />
+      {/* ✅ 모달: 승인 */}
+      <ApprovalModal
+        open={modalOpen}
+        type={modalType!}
+        onClose={handleModalClose}
+        onSubmit={handleModalSubmit}
       />
     </Container>
   );

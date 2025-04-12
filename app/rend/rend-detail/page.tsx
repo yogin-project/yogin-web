@@ -80,9 +80,6 @@ export default function Loan() {
   >(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [approvedAmount, setApprovedAmount] = useState("");
-  const [requireText, setRequireText] = useState("");
-
   const { mutate: handleAddRequire, isPaused: isAddRequirePending } =
     useAddRequire();
   const { mutate: handleApprove, isPending: isApprovePending } =
