@@ -17,9 +17,11 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
+import { useRouter } from "next/navigation"; // ✅ 추가
 import { useApllicationList } from "../hooks/apis/useApplicationList";
 
 function REND() {
+  const router = useRouter(); // ✅ 추가
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sort, setSort] = useState<"ASC" | "DESC">("DESC");
@@ -71,11 +73,11 @@ function REND() {
           onChange={handleSortChange}
           aria-label="정렬"
         >
-          <ToggleButton value="ASC" aria-label="최신순">
-            최신순
-          </ToggleButton>
-          <ToggleButton value="DESC" aria-label="과거순">
+          <ToggleButton value="ASC" aria-label="과거순">
             과거순
+          </ToggleButton>
+          <ToggleButton value="DESC" aria-label="최신순">
+            최신순
           </ToggleButton>
         </ToggleButtonGroup>
       </Stack>
@@ -121,7 +123,9 @@ function REND() {
                         size="small"
                         color="primary"
                         variant="outlined"
-                        // onClick={() => handleDetail(item.id)}
+                        onClick={() => {
+                          router.push(`/rend/rend-detail?id=${item.id}`);
+                        }}
                       >
                         조회
                       </Button>
