@@ -5,15 +5,12 @@
 import {
   Button,
   Card,
-  CardActions,
   CardContent,
   Checkbox,
   Container,
   FormControlLabel,
   FormLabel,
-  IconButton,
   InputAdornment,
-  MenuItem,
   Paper,
   Stack,
   TextField,
@@ -21,38 +18,41 @@ import {
   styled,
 } from "@mui/material";
 
-import AddIcon from "@mui/icons-material/Add";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
 import { BREAKPOINTS } from "@/app/libs/theme";
 import { ChevronRightRounded } from "@mui/icons-material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
-import { useEffect, useState } from "react";
-import { useFirstApplicationId } from "@/app/hooks/apis/useFirstApplicationId";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCompanyApplication } from "@/app/hooks/apis/useCompanyApplication";
-import { useAtomValue } from "jotai";
 import CommonModal from "@/app/components/CommonModal";
 import { useCorpDetailSearch } from "@/app/hooks/apis/useCorpDetailSearch";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 
 export default function Loan() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
-  console.log("id: ", id);
-
   const { data, isLoading, refetch } = useCorpDetailSearch(id);
+
+  const pdfRef = useRef<HTMLDivElement>(null);
+
+  const handleExportPDF = async () => {
+    if (!pdfRef.current) return;
+
+    const canvas = await html2canvas(pdfRef.current, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save(`신청정보_${corpData?.corpName ?? "미지정"}.pdf`);
+  };
 
   useEffect(() => {
     if (id) {
@@ -62,29 +62,14 @@ export default function Loan() {
 
   const corpData = data?.data[0];
 
-  console.log("corpData: ", corpData);
-
   const router = useRouter();
 
   const [modalText, setModalText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSave, setIsSave] = useState(false);
 
-  const handleSave = () => {};
-
-  console.log(corpData?.fundRequirements);
-
-  console.log(corpData?.fundRequirements?.includes("OPERATE"));
-
-  const handleCheckboxChange = (e) => {
-    // setForm({
-    //   ...form,
-    //   loanOptions: { ...form.loanOptions, [e.target.name]: e.target.checked },
-    // });
-  };
-
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" ref={pdfRef}>
       <Paper elevation={1} sx={{ my: 3 }}>
         <Stack gap={6} px={3} py={6}>
           <Typography variant="h4" align="center" gutterBottom>
@@ -1000,7 +985,7 @@ export default function Loan() {
               저장
             </Button>
             <Button
-              onClick={handleSave}
+              onClick={handleExportPDF}
               variant="contained"
               color="primary"
               size="large"
