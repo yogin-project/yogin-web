@@ -40,10 +40,12 @@ const routeMap = {
   MANAGER: [
     { label: "회원 정보", path: "/dashboard/member-info" },
     { label: "비밀번호 변경", path: "/dashboard/password-change" },
+    { label: "담당 기업 조회", path: "/dashboard/mylist-loan" },
   ],
   PROFESSOR: [
     { label: "회원 정보", path: "/dashboard/member-info" },
     { label: "비밀번호 변경", path: "/dashboard/password-change" },
+    { label: "담당 기업 조회", path: "/dashboard/mylist-rnd" },
   ],
   ADMIN: [
     { label: "회원 목록 조회", path: "/dashboard/user-list" },

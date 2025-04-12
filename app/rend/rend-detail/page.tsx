@@ -1,4 +1,4 @@
-// TODO: 데이터 매핑하고 스크린샷 기능 추가해야함
+// TODO: 추가자료 요청, 승인 기능 구현해야함
 
 "use client";
 
@@ -980,12 +980,12 @@ export default function Loan() {
               variant="outlined"
               fullWidth
               size="large"
-              // onClick={handleTempSave}
+              onClick={handleExportPDF}
             >
-              저장
+              PDF 저장
             </Button>
             <Button
-              onClick={handleExportPDF}
+              // onClick={}
               variant="contained"
               color="primary"
               size="large"
