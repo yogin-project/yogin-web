@@ -1,6 +1,8 @@
 import { useApiManager } from "../../libs/apiManager";
 
-export const useAdminApllicationList = (params: Record<string, any>) => {
+export const useAdminApplicationListMutation = (
+  params: Record<string, any>
+) => {
   const queryString = new URLSearchParams(
     Object.fromEntries(
       Object.entries(params).map(([key, val]) => [key, String(val)])

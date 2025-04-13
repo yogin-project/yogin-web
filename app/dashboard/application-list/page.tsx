@@ -40,7 +40,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
-import { useAdminApllicationList } from "@/app/hooks/apis/useAdminApplicationList";
+import { useAdminApplicationListMutation } from "@/app/hooks/apis/useAdminApplicationList";
 
 function ApplicationList() {
   const [page, setPage] = useState(0);
@@ -66,7 +66,7 @@ function ApplicationList() {
   if (location !== "전체") {
     queryParams.location = location;
   }
-  const { data, isLoading } = useAdminApllicationList(queryParams);
+  const { data, isLoading } = useAdminApplicationListMutation(queryParams);
 
   const applications = data?.data?.applications || [];
   const total = data?.data?.total || 0;
