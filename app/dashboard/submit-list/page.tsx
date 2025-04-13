@@ -18,11 +18,16 @@ import {
   InputLabel,
   Grid,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
 import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
-import CommonModal from "@/app/components/CommonModal";
 import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
+import CommonModal from "@/app/components/CommonModal";
 
 const applicationStates = [
   { label: "등록완료", value: "REGISTERED" },
@@ -53,11 +58,12 @@ function SubmitList() {
   const [modalText, setModalText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [requireDialogOpen, setRequireDialogOpen] = useState(false);
+  const [requirementText, setRequirementText] = useState("");
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
   const { mutate: AddRequireApplication } = useAddRequire();
-
-  const { mutate: deleteApplication, isPending: isDeletePending } =
-    useCompanyApplicationCancel();
-
+  const { mutate: deleteApplication } = useCompanyApplicationCancel();
   const { data, isLoading, refetch } = useCompanyFundList({
     page: page + 1,
     limit: rowsPerPage,
@@ -70,10 +76,7 @@ function SubmitList() {
   const applications = data?.data?.applications || [];
   const isLast = data?.data?.isLast;
 
-  const handleChangePage = (_: any, newPage: number) => {
-    setPage(newPage);
-  };
-
+  const handleChangePage = (_: any, newPage: number) => setPage(newPage);
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -81,17 +84,27 @@ function SubmitList() {
     setPage(0);
   };
 
-  const handleAddRequireSubmit = (applicationId: number) => {
+  const handleAddRequireOpen = (applicationId: number) => {
+    setSelectedId(applicationId);
+    setRequireDialogOpen(true);
+  };
+
+  const handleAddRequireSubmit = () => {
+    if (!selectedId || !requirementText.trim()) return;
+
     AddRequireApplication(
       {
         body: {
-          id: applicationId,
+          id: selectedId,
+          requirement: requirementText.trim(),
         },
       },
       {
         onSuccess: () => {
           setModalText("추가 자료가 제출되었습니다.");
           setIsModalOpen(true);
+          setRequireDialogOpen(false);
+          setRequirementText("");
           refetch();
         },
         onError: () => {
@@ -105,20 +118,15 @@ function SubmitList() {
   const handleDeleteApplication = (applicationId: number) => {
     deleteApplication(
       {
-        body: {
-          applicationId: String(applicationId),
-        },
+        body: { applicationId: String(applicationId) },
       },
       {
         onSuccess: () => {
           setIsModalOpen(true);
           setModalText("자금 신청이 취소되었습니다.");
-
           refetch();
         },
-        onError: (e) => {
-          console.log("error: ", e);
-
+        onError: () => {
           setIsModalOpen(true);
           setModalText("일시적인 오류입니다. 잠시 후 시도해주세요.");
         },
@@ -132,7 +140,7 @@ function SubmitList() {
         자금 신청 내역
       </Typography>
 
-      {/* 필터 영역 */}
+      {/* 필터 */}
       <Grid container spacing={2} mb={2}>
         <Grid item xs={4}>
           <FormControl fullWidth>
@@ -201,10 +209,15 @@ function SubmitList() {
                 <TableCell>ID</TableCell>
                 <TableCell>신청 타입</TableCell>
                 <TableCell>신청일</TableCell>
-                <TableCell>상태</TableCell>
+                <TableCell>담당자 성함</TableCell>
+                <TableCell>담당자 연락처</TableCell>
+
                 <TableCell>추가정보 요청여부</TableCell>
-                <TableCell>추가정보 제출</TableCell>
+
+                {type === "FUND" ? <TableCell>추가정보 제출</TableCell> : null}
+
                 <TableCell>삭제</TableCell>
+                <TableCell>최종승인여부</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -212,28 +225,34 @@ function SubmitList() {
                 <TableRow key={app.id}>
                   <TableCell>{app.id}</TableCell>
                   <TableCell>{app.type}</TableCell>
+
                   <TableCell>
                     {new Date(app.createdAt).toLocaleString()}
                   </TableCell>
-                  <TableCell>{app.state}</TableCell>
+                  <TableCell>개발 중</TableCell>
+                  <TableCell>개발 중</TableCell>
+
                   <TableCell>
                     {app.isAdditionalInfoRequired === "Y" ? "요청" : "없음"}
                   </TableCell>
-                  <TableCell>
-                    {app.isAdditionalInfoSubmitted === "Y" ? (
-                      "제출 완료"
-                    ) : app.isAdditionalInfoRequired === "Y" ? (
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={() => handleAddRequireSubmit(app.id)}
-                      >
-                        제출하기
-                      </Button>
-                    ) : (
-                      <>없음</>
-                    )}
-                  </TableCell>
+                  {type === "FUND" ? (
+                    <TableCell>
+                      {app.isAdditionalInfoSubmitted === "Y" ? (
+                        "제출 완료"
+                      ) : app.isAdditionalInfoRequired === "Y" ? (
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => handleAddRequireOpen(app.id)}
+                        >
+                          제출하기
+                        </Button>
+                      ) : (
+                        "없음"
+                      )}
+                    </TableCell>
+                  ) : null}
+
                   <TableCell>
                     {app.state === "REGISTERED" && (
                       <Button
@@ -246,6 +265,7 @@ function SubmitList() {
                       </Button>
                     )}
                   </TableCell>
+                  <TableCell> - </TableCell>
                 </TableRow>
               ))}
               {applications.length === 0 && !isLoading && (
@@ -266,18 +286,53 @@ function SubmitList() {
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           rowsPerPageOptions={[5, 10, 20]}
-          labelDisplayedRows={({ from, to, count }) =>
+          labelDisplayedRows={({ from, to }) =>
             isLast ? `${from}-${to} / ${to}` : `${from}-${to} / ...`
           }
         />
       </Paper>
+
+      {/* ✅ 안내용 결과 모달 */}
       <CommonModal
         message={modalText}
         open={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
+        onClose={() => setIsModalOpen(false)}
       />
+
+      {/* ✅ 사용자 입력 받는 Dialog */}
+      <Dialog
+        open={requireDialogOpen}
+        onClose={() => {
+          setRequireDialogOpen(false);
+          setRequirementText("");
+          setSelectedId(null);
+        }}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>추가 자료 제출</DialogTitle>
+        <DialogContent
+          style={{
+            padding: 8,
+          }}
+        >
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            label="전문가에게 전달할 내용을 입력해주세요."
+            value={requirementText}
+            onChange={(e) => setRequirementText(e.target.value)}
+            placeholder="예: 추가 사업계획서 첨부하였습니다."
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setRequireDialogOpen(false)}>취소</Button>
+          <Button variant="contained" onClick={handleAddRequireSubmit}>
+            제출
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
