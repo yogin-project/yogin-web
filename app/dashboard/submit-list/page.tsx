@@ -22,6 +22,7 @@ import {
 import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
 import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
 import CommonModal from "@/app/components/CommonModal";
+import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
 
 const applicationStates = [
   { label: "등록완료", value: "REGISTERED" },
@@ -51,6 +52,8 @@ function SubmitList() {
 
   const [modalText, setModalText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { mutate: AddRequireApplication } = useAddRequire();
 
   const { mutate: deleteApplication, isPending: isDeletePending } =
     useCompanyApplicationCancel();
