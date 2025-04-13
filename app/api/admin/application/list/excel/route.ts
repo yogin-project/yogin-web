@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
   try {
-    const API_URL = process.env.API_URL;
-
+    const API_URL = process.env.API_URL!;
     const { searchParams } = new URL(req.url);
 
     const response = await fetch(
@@ -11,27 +10,27 @@ export async function GET(req: Request) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
           Authorization: req.headers.get("authorization") ?? "",
         },
         credentials: "include",
       }
     );
 
-    const data = await response.json();
+    const buffer = await response.arrayBuffer();
 
-    return NextResponse.json(data, {
+    return new Response(buffer, {
       status: response.status,
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Allow-Credentials": "true",
+        "Content-Disposition":
+          response.headers.get("Content-Disposition") ?? "",
+        "Content-Type":
+          response.headers.get("Content-Type") ?? "application/octet-stream",
       },
     });
   } catch (error) {
+    console.error("Excel Download Error:", error);
     return NextResponse.json(
-      { message: "Internal Server Error", error },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }
