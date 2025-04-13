@@ -1,6 +1,6 @@
-import { useApiManager } from "../../libs/apiManager";
+import { useApiManager } from '../../libs/apiManager';
 
-export const useAdminApplicationListMutation = (
+export const useAdminFinancialSummaryMutation = (
   params: Record<string, any>
 ) => {
   const queryString = new URLSearchParams(
@@ -10,14 +10,14 @@ export const useAdminApplicationListMutation = (
   ).toString();
 
   return useApiManager({
-    method: "GET",
-    path: `admin/application/list?${queryString}`,
+    method: 'GET',
+    path: `admin/financial-summary?${queryString}`,
     mutationOption: {
       onSuccess: (data: any) => {
-        console.log("자금 신청 목록 조회 성공:", data);
+        console.log('기업 회원 재무요약 조회 성공:', data);
       },
       onError: (error: any) => {
-        console.error("자금 신청 목록 조회 실패:", error);
+        console.error('기업 회원 재무요약 조회 실패:', error);
       },
     },
   }).getUseQuery;
