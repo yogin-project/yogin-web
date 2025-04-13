@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  Stack,
-  FormControlLabel,
+  Button,
   Checkbox,
   Divider,
-  Button,
+  FormControlLabel,
+  Stack,
 } from "@mui/material";
+import React, { useState } from "react";
+
+import Link from "next/link";
 
 function AgreementSection({ agreements, onAgreementChange }) {
   const [agreeAll, setAgreeAll] = useState(false);
@@ -49,7 +51,13 @@ function AgreementSection({ agreements, onAgreementChange }) {
           }
           label="개인 정보 수집 및 이용 동의 (필수)"
         />
-        <Button variant="outlined" size="small">
+        <Button
+          LinkComponent={Link}
+          href="https://docs.google.com/document/d/e/2PACX-1vR2MrP40iS-__0nj5xPGKi2s1C6wDK4OPHQF08OnbBaNxHvR3lR5LwXsn0n5wWbKalGM8-3U5xooolc/pub"
+          target="_blank"
+          variant="outlined"
+          size="small"
+        >
           보기
         </Button>
       </Stack>
@@ -63,7 +71,13 @@ function AgreementSection({ agreements, onAgreementChange }) {
           }
           label="이용 약관 동의 (필수)"
         />
-        <Button variant="outlined" size="small">
+        <Button
+          LinkComponent={Link}
+          href="https://docs.google.com/document/d/e/2PACX-1vTxhWN6az8yEoXwWgoO4fO0UgpjVHSEp4_UNDudvsNMvK_32sEy9RDkj5WNNgpL8oQKTUU7Q9DGC3HH/pub"
+          target="_blank"
+          variant="outlined"
+          size="small"
+        >
           보기
         </Button>
       </Stack>
