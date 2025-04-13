@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { Avatar, Button, ButtonBase, Stack, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import { Avatar, Button, ButtonBase, Stack, Typography } from "@mui/material";
+import React, { useEffect } from "react";
 import {
   handleCorporateSubmit,
   handleRNDSearch,
   handleRendSearch,
-} from './index.utils';
-import { useAtomValue, useSetAtom } from 'jotai';
+} from "./index.utils";
+import { useAtomValue, useSetAtom } from "jotai";
 
-import { BREAKPOINTS } from '@/app/libs/theme';
-import Image from 'next/image';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { isAuthenticated } from '@/app/utils';
-import { isLoginAtom } from '@/app/store/authAtom';
-import { profileAtom } from '@/app/store/profileAtom';
-import { useIsMobile } from '@/app/hooks/useIsMobileSize';
-import { useRouteInHeader } from './index.hooks';
-import { useRouter } from 'next/navigation';
-import useScrollDirection from '@/app/hooks/useScrollDirection';
-import { useTranslation } from 'react-i18next';
+import { BREAKPOINTS } from "@/app/libs/theme";
+import Image from "next/image";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { isAuthenticated } from "@/app/utils";
+import { isLoginAtom } from "@/app/store/authAtom";
+import { profileAtom } from "@/app/store/profileAtom";
+import { useIsMobile } from "@/app/hooks/useIsMobileSize";
+import { useRouteInHeader } from "./index.hooks";
+import { useRouter } from "next/navigation";
+import useScrollDirection from "@/app/hooks/useScrollDirection";
+import { useTranslation } from "react-i18next";
 
 const HeaderDesktop = () => {
   const { t } = useTranslation();
@@ -29,7 +29,7 @@ const HeaderDesktop = () => {
 
   const isMobile = useIsMobile();
   const direction = useScrollDirection(80);
-  const isVisible = direction !== 'down';
+  const isVisible = direction !== "down";
 
   const isLogin = useAtomValue(isLoginAtom);
   const setIsLogin = useSetAtom(isLoginAtom);
@@ -51,16 +51,16 @@ const HeaderDesktop = () => {
       justifyContent="center"
       px={3}
       sx={{
-        position: 'fixed',
+        position: "fixed",
         top: 80,
         zIndex: 1000,
-        webkitBackdropFilter: 'blur(15px)',
-        backdropFilter: 'blur(15px)',
-        '@media (prefers-color-scheme: dark)': {
-          backgroundColor: 'rgba(var(--background), 0.2)',
+        webkitBackdropFilter: "blur(15px)",
+        backdropFilter: "blur(15px)",
+        "@media (prefers-color-scheme: dark)": {
+          // backgroundColor: 'rgba(var(--background), 0.2)',
         },
-        transform: isVisible ? 'translateY(0)' : 'translateY(-80px)',
-        transition: 'transform 0.3s ease-in-out',
+        transform: isVisible ? "translateY(0)" : "translateY(-80px)",
+        transition: "transform 0.3s ease-in-out",
       }}
     >
       <Stack
@@ -68,12 +68,12 @@ const HeaderDesktop = () => {
         height={80}
         width="100%"
         margin="0 auto"
-        direction={'row'}
-        justifyContent={'space-between'}
-        alignItems={'center'}
+        direction={"row"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
       >
         <Stack
-          direction={'row'}
+          direction={"row"}
           sx={{
             gap: 4,
             [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
@@ -83,8 +83,8 @@ const HeaderDesktop = () => {
         >
           <Stack
             sx={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              flexDirection: "row",
+              alignItems: "center",
               gap: 2,
             }}
           >
@@ -95,37 +95,19 @@ const HeaderDesktop = () => {
               minHeight={30}
               width="100%"
               height="100%"
-              sx={{ cursor: 'pointer' }}
+              sx={{ cursor: "pointer" }}
             >
               <Stack
                 component={Image}
-                onClick={() => handleRouteHeader('')}
+                onClick={() => handleRouteHeader("")}
                 src="/images/common/logo-full_landscape.png"
                 fill
                 objectFit="contain"
-                alt=""
-                sx={{
-                  '@media (prefers-color-scheme: dark)': {
-                    display: 'none',
-                  },
-                }}
-              />
-              <Stack
-                component={Image}
-                onClick={() => handleRouteHeader('')}
-                src="/images/common/logo-full_landscape_dark.png"
-                fill
-                objectFit="contain"
-                alt=""
-                sx={{
-                  '@media (prefers-color-scheme: light)': {
-                    display: 'none',
-                  },
-                }}
+                alt="yogin logo"
               />
             </Stack>
             <Typography
-              onClick={() => handleRouteHeader('')}
+              onClick={() => handleRouteHeader("")}
               fontSize="0.9rem"
               fontWeight={700}
               letterSpacing={-0.25}
@@ -133,9 +115,9 @@ const HeaderDesktop = () => {
               whiteSpace="nowrap"
               color="tertiary.light"
               sx={{
-                cursor: 'pointer',
+                cursor: "pointer",
                 [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
-                  display: 'none',
+                  display: "none",
                 },
               }}
             >
@@ -144,7 +126,7 @@ const HeaderDesktop = () => {
           </Stack>
           <ButtonBase
             onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
-            sx={{ verticalAlign: 'baseline' }}
+            sx={{ verticalAlign: "baseline" }}
           >
             <Typography whiteSpace="nowrap">신청하기</Typography>
             <Typography
@@ -155,13 +137,13 @@ const HeaderDesktop = () => {
               whiteSpace="nowrap"
               lineHeight={1}
               sx={{
-                marginLeft: '0.5rem',
+                marginLeft: "0.5rem",
                 [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
                   marginLeft: 0,
-                  position: 'absolute',
-                  top: 'calc(50% + 0.9rem)',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
+                  position: "absolute",
+                  top: "calc(50% + 0.9rem)",
+                  left: "50%",
+                  transform: "translateX(-50%)",
                 },
               }}
             >
@@ -171,7 +153,7 @@ const HeaderDesktop = () => {
           <ButtonBase
             onClick={() => handleRendSearch(profileInfo?.type, router)}
             sx={{
-              cursor: 'pointer',
+              cursor: "pointer",
             }}
           >
             <Typography whiteSpace="nowrap">대출찾기</Typography>
@@ -183,13 +165,13 @@ const HeaderDesktop = () => {
               whiteSpace="nowrap"
               lineHeight={1}
               sx={{
-                marginLeft: '0.5rem',
+                marginLeft: "0.5rem",
                 [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
                   marginLeft: 0,
-                  position: 'absolute',
-                  top: 'calc(50% + 0.9rem)',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
+                  position: "absolute",
+                  top: "calc(50% + 0.9rem)",
+                  left: "50%",
+                  transform: "translateX(-50%)",
                 },
               }}
             >
@@ -199,26 +181,26 @@ const HeaderDesktop = () => {
           <ButtonBase
             onClick={() => handleRNDSearch(profileInfo?.type, router)}
             sx={{
-              cursor: 'pointer',
+              cursor: "pointer",
             }}
           >
             <Typography whiteSpace="nowrap">R&D 매칭</Typography>
           </ButtonBase>
         </Stack>
-        <Stack direction={'row'} gap={1} alignItems={'center'}>
+        <Stack direction={"row"} gap={1} alignItems={"center"}>
           {isLogin ? (
             <>
               <NotificationsIcon
                 sx={{
-                  cursor: 'pointer',
+                  cursor: "pointer",
                   width: 28,
                   height: 28,
                 }}
               />
-              <ButtonBase onClick={() => router.push('/dashboard')}>
+              <ButtonBase onClick={() => router.push("/dashboard")}>
                 <Avatar
                   sx={{
-                    cursor: 'pointer',
+                    cursor: "pointer",
                     width: 32,
                     height: 32,
                   }}
@@ -230,19 +212,19 @@ const HeaderDesktop = () => {
               <Button
                 size="small"
                 color="primary"
-                onClick={() => handleRouteHeader('sign-in')}
-                sx={{ whiteSpace: 'nowrap' }}
+                onClick={() => handleRouteHeader("sign-in")}
+                sx={{ whiteSpace: "nowrap" }}
               >
-                {t('login')}
+                {t("login")}
               </Button>
               <Button
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={() => handleRouteHeader('sign-up')}
-                sx={{ whiteSpace: 'nowrap' }}
+                onClick={() => handleRouteHeader("sign-up")}
+                sx={{ whiteSpace: "nowrap" }}
               >
-                {t('sign_up')}
+                {t("sign_up")}
               </Button>
             </>
           )}
