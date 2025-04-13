@@ -50,7 +50,7 @@ const routeMap = {
   ADMIN: [
     { label: "회원 목록 조회", path: "/dashboard/user-list" },
     { label: "자금 신청 목록 조회", path: "/dashboard/application-list" },
-    { label: "엑셀 다운로드", path: "/dashboard/excel-list" },
+    { label: "회원 정보 다운로드", path: "/dashboard/excel-list" },
   ],
 };
 

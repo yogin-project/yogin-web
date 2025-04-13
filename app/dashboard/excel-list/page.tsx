@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -22,10 +22,16 @@ const ExcelDownloadPage = () => {
   const [region, setRegion] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+  useEffect(() => {
+    if (type === "CORPORATE") {
+      setState(""); // 기업 유형일 경우 상태 초기화
+    }
+  }, [type]);
+
   const handleDownload = async () => {
     const params: Record<string, string> = {};
     if (type) params.type = type;
-    if (state) params.state = state;
+    if (type !== "CORPORATE" && state) params.state = state; // 조건부 추가
     if (region) params.region = region;
 
     const queryString = new URLSearchParams(params).toString();
@@ -89,18 +95,20 @@ const ExcelDownloadPage = () => {
           </Select>
         </FormControl>
 
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>회원 상태</InputLabel>
-          <Select
-            value={state}
-            label="회원 상태"
-            onChange={(e) => setState(e.target.value)}
-          >
-            <MenuItem value="PENDING">승인 대기중</MenuItem>
-            <MenuItem value="APPROVED">승인</MenuItem>
-            <MenuItem value="REJECTED">반려</MenuItem>
-          </Select>
-        </FormControl>
+        {type !== "CORPORATE" && (
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>회원 상태</InputLabel>
+            <Select
+              value={state}
+              label="회원 상태"
+              onChange={(e) => setState(e.target.value)}
+            >
+              <MenuItem value="PENDING">승인 대기중</MenuItem>
+              <MenuItem value="APPROVED">승인</MenuItem>
+              <MenuItem value="REJECTED">반려</MenuItem>
+            </Select>
+          </FormControl>
+        )}
 
         <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel>지역</InputLabel>
