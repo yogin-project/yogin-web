@@ -26,6 +26,20 @@ import { useAtom } from "jotai";
 import { profileAtom } from "../store/profileAtom";
 import { isLoginAtom } from "../store/authAtom";
 
+// 아이콘 import
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LockIcon from "@mui/icons-material/Lock";
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import BusinessIcon from "@mui/icons-material/Business";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 const drawerWidth = 240;
 
 const routeMap = {
@@ -56,6 +70,22 @@ const routeMap = {
       path: "/dashboard/application-excel-list",
     },
   ],
+};
+
+// 아이콘 매핑
+const iconMap: Record<string, JSX.Element> = {
+  "회원 정보": <AccountCircleIcon />,
+  "비밀번호 변경": <LockIcon />,
+  "자금 신청 현황": <RequestQuoteIcon />,
+  "매니징 신청": <HowToRegIcon />,
+  "재무 진단 요약": <AssessmentIcon />,
+  "매니지먼트 신청 목록 조회": <ListAltIcon />,
+  "담당 기업 조회": <BusinessIcon />,
+  "회원 목록 조회": <PeopleAltIcon />,
+  "자금 신청 목록 조회": <AssignmentIcon />,
+  "회원 정보 다운로드": <FileDownloadIcon />,
+  "자금 신청 현황 다운로드": <DownloadDoneIcon />,
+  로그아웃: <LogoutIcon />,
 };
 
 export default function DashboardLayout({
@@ -105,11 +135,35 @@ export default function DashboardLayout({
               router.push(route.path);
               if (isMobile) setMobileOpen(false);
             }}
+            sx={{
+              "&:hover": {
+                color: theme.palette.primary.main,
+              },
+              ...(pathname === route.path && {
+                backgroundColor: theme.palette.action.selected,
+                color: theme.palette.primary.main,
+                fontWeight: "bold",
+              }),
+            }}
           >
+            <Box mr={1} display="flex" alignItems="center">
+              {iconMap[route.label]}
+            </Box>
             <ListItemText primary={route.label} />
           </ListItemButton>
         ))}
-        <ListItemButton onClick={() => setOpenLogoutDialog(true)}>
+
+        <ListItemButton
+          onClick={() => setOpenLogoutDialog(true)}
+          sx={{
+            "&:hover": {
+              color: theme.palette.error.main,
+            },
+          }}
+        >
+          <Box mr={1} display="flex" alignItems="center">
+            {iconMap["로그아웃"]}
+          </Box>
           <ListItemText primary="로그아웃" />
         </ListItemButton>
       </List>
