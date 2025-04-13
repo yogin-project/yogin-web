@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
 import {
   AndroidRounded,
   Apple,
   ArrowForward,
   ArrowForwardRounded,
-} from '@mui/icons-material';
-import { Box, Button, Stack, Typography } from '@mui/material';
+} from "@mui/icons-material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
-import React from 'react';
+import React from "react";
 
 function Desktop() {
   return (
@@ -16,11 +16,11 @@ function Desktop() {
       <Stack
         height="100%"
         sx={{
-          position: 'relative',
-          overflow: 'hidden',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <Box
@@ -30,11 +30,11 @@ function Desktop() {
           loop
           playsInline
           sx={{
-            position: 'absolute',
+            position: "absolute",
             inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
             zIndex: -1,
           }}
         >
@@ -45,18 +45,10 @@ function Desktop() {
 
         <Box
           sx={{
-            position: 'absolute',
+            position: "absolute",
             inset: 0,
-            width: '100%',
-            height: '100%',
-            // background: `radial-gradient(
-            //   circle,
-            //   rgba(255, 255, 255, 0.3) 0%,
-            //   rgba(255, 255, 255, 0.4) 40%,
-            //   rgba(255, 255, 255, 0.6) 70%,
-            //   rgba(255, 255, 255, 0.7) 100%
-            // )`,
-            // '@media (prefers-color-scheme: dark)': {
+            width: "100%",
+            height: "100%",
             background: `radial-gradient(
                 circle,
                 rgba(0, 0, 0, 0.3) 0%,
@@ -64,7 +56,6 @@ function Desktop() {
                 rgba(0, 0, 0, 0.6) 70%,
                 rgba(0, 0, 0, 0.7) 100%
               )`,
-            // },
           }}
         />
 
@@ -73,9 +64,9 @@ function Desktop() {
           alignItems="center"
           gap={4}
           sx={{
-            position: 'relative',
+            position: "relative",
             zIndex: 1,
-            textAlign: 'center',
+            textAlign: "center",
           }}
         >
           <Typography variant="h1" fontSize={48} lineHeight={1.3}>
@@ -114,18 +105,18 @@ function Desktop() {
               endIcon={<ArrowForward />}
               startIcon={<AndroidRounded />}
               sx={{
-                position: 'relative',
+                position: "relative",
                 gridColumnStart: 1,
-                '& .MuiButton-endIcon': {
-                  marginLeft: '-16px',
-                  transform: 'translateX(-4px)',
+                "& .MuiButton-endIcon": {
+                  marginLeft: "-16px",
+                  transform: "translateX(-4px)",
                   opacity: 0,
-                  transition: 'all 0.2s ease-in-out',
+                  transition: "all 0.2s ease-in-out",
                 },
-                '&:hover .MuiButton-endIcon': {
-                  transform: 'translateX(0)',
+                "&:hover .MuiButton-endIcon": {
+                  transform: "translateX(0)",
                   opacity: 1,
-                  marginLeft: '8px', // 기본 spacing
+                  marginLeft: "8px", // 기본 spacing
                 },
               }}
             >
@@ -142,16 +133,16 @@ function Desktop() {
               startIcon={<Apple />}
               sx={{
                 gridColumnStart: 2,
-                '& .MuiButton-endIcon': {
-                  marginLeft: '-16px',
-                  transform: 'translateX(-4px)',
+                "& .MuiButton-endIcon": {
+                  marginLeft: "-16px",
+                  transform: "translateX(-4px)",
                   opacity: 0,
-                  transition: 'all 0.2s ease-in-out',
+                  transition: "all 0.2s ease-in-out",
                 },
-                '&:hover .MuiButton-endIcon': {
-                  transform: 'translateX(0)',
+                "&:hover .MuiButton-endIcon": {
+                  transform: "translateX(0)",
                   opacity: 1,
-                  marginLeft: '8px', // 기본 spacing
+                  marginLeft: "8px", // 기본 spacing
                 },
               }}
             >
@@ -165,12 +156,12 @@ function Desktop() {
           href="#testimonial"
           color="common.white"
           sx={{
-            cursor: 'pointer',
-            position: 'absolute',
-            bottom: '16px',
-            fill: 'common.white',
-            webkitAnimation: 'arrow 0.5s linear 0s infinite alternate',
-            animation: 'arrow 0.5s linear 0s infinite alternate',
+            cursor: "pointer",
+            position: "absolute",
+            bottom: "16px",
+            fill: "common.white",
+            webkitAnimation: "arrow 0.5s linear 0s infinite alternate",
+            animation: "arrow 0.5s linear 0s infinite alternate",
           }}
         >
           <svg
