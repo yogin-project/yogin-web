@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { AndroidRounded, Apple, ArrowForward } from '@mui/icons-material';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { AndroidRounded, Apple, ArrowForward } from "@mui/icons-material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
-import React from 'react';
+import React from "react";
 
 function Mobile() {
   return (
@@ -11,11 +11,11 @@ function Mobile() {
       <Stack
         height="100%"
         sx={{
-          position: 'relative',
-          overflow: 'hidden',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <Box
@@ -25,11 +25,11 @@ function Mobile() {
           loop
           playsInline
           sx={{
-            position: 'absolute',
+            position: "absolute",
             inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
             zIndex: -1,
           }}
         >
@@ -40,10 +40,10 @@ function Mobile() {
 
         <Box
           sx={{
-            position: 'absolute',
+            position: "absolute",
             inset: 0,
-            width: '100%',
-            height: '100%',
+            width: "100%",
+            height: "100%",
             background: `radial-gradient(
                 circle,
                 rgba(0, 0, 0, 0.3) 0%,
@@ -59,9 +59,9 @@ function Mobile() {
           alignItems="center"
           gap={4}
           sx={{
-            position: 'relative',
+            position: "relative",
             zIndex: 1,
-            textAlign: 'center',
+            textAlign: "center",
           }}
         >
           <Typography variant="h2">
@@ -92,7 +92,7 @@ function Mobile() {
           >
             <Button
               component="a"
-              href=""
+              href="#"
               variant="contained"
               size="large"
               color="tertiary"
@@ -100,18 +100,18 @@ function Mobile() {
               endIcon={<ArrowForward />}
               startIcon={<AndroidRounded />}
               sx={{
-                position: 'relative',
+                position: "relative",
                 gridColumnStart: 1,
-                '& .MuiButton-endIcon': {
-                  marginLeft: '-16px',
-                  transform: 'translateX(-4px)',
+                "& .MuiButton-endIcon": {
+                  marginLeft: "-16px",
+                  transform: "translateX(-4px)",
                   opacity: 0,
-                  transition: 'all 0.2s ease-in-out',
+                  transition: "all 0.2s ease-in-out",
                 },
-                '&:hover .MuiButton-endIcon': {
-                  transform: 'translateX(0)',
+                "&:hover .MuiButton-endIcon": {
+                  transform: "translateX(0)",
                   opacity: 1,
-                  marginLeft: '8px', // 기본 spacing
+                  marginLeft: "8px", // 기본 spacing
                 },
               }}
             >
@@ -119,7 +119,7 @@ function Mobile() {
             </Button>
             <Button
               component="a"
-              href=""
+              href="#"
               variant="contained"
               size="large"
               color="tertiary"
@@ -128,21 +128,28 @@ function Mobile() {
               startIcon={<Apple />}
               sx={{
                 gridColumnStart: 2,
-                '& .MuiButton-endIcon': {
-                  marginLeft: '-16px',
-                  transform: 'translateX(-4px)',
+                "& .MuiButton-endIcon": {
+                  marginLeft: "-16px",
+                  transform: "translateX(-4px)",
                   opacity: 0,
-                  transition: 'all 0.2s ease-in-out',
+                  transition: "all 0.2s ease-in-out",
                 },
-                '&:hover .MuiButton-endIcon': {
-                  transform: 'translateX(0)',
+                "&:hover .MuiButton-endIcon": {
+                  transform: "translateX(0)",
                   opacity: 1,
-                  marginLeft: '8px', // 기본 spacing
+                  marginLeft: "8px", // 기본 spacing
                 },
               }}
             >
               IOS
             </Button>
+          </Stack>
+
+          {/* 앱 배포 후, 링크 달고 지우기 */}
+          <Stack mt={-3}>
+            <Typography variant="caption" fontWeight={700}>
+              현재 앱 준비중입니다.
+            </Typography>
           </Stack>
         </Stack>
 
@@ -151,12 +158,12 @@ function Mobile() {
           href="#testimonial"
           color="common.white"
           sx={{
-            cursor: 'pointer',
-            position: 'absolute',
-            bottom: '16px',
-            fill: 'common.white',
-            webkitAnimation: 'arrow 0.5s linear 0s infinite alternate',
-            animation: 'arrow 0.5s linear 0s infinite alternate',
+            cursor: "pointer",
+            position: "absolute",
+            bottom: "16px",
+            fill: "common.white",
+            webkitAnimation: "arrow 0.5s linear 0s infinite alternate",
+            animation: "arrow 0.5s linear 0s infinite alternate",
           }}
         >
           <svg

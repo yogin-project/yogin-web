@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  AndroidRounded,
-  Apple,
-  ArrowForward,
-  ArrowForwardRounded,
-} from "@mui/icons-material";
+import { AndroidRounded, Apple, ArrowForward } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
 import React from "react";
@@ -76,17 +71,14 @@ function Desktop() {
             <br />
             대출받으세요?
           </Typography>
-
           <Typography variant="h5">
             기업 여신은 기업의 재무제표를 가지고 결정됩니다.
             <br />
             브로커의 능력이 아닙니다.
           </Typography>
-
           <Typography variant="h5" marginTop={-3}>
             요긴에서 수수료 없이 무료로 진행하세요.
           </Typography>
-
           <Stack
             width="100%"
             maxWidth="300px"
@@ -97,7 +89,7 @@ function Desktop() {
           >
             <Button
               component="a"
-              href=""
+              href="#"
               variant="contained"
               size="large"
               color="tertiary"
@@ -124,7 +116,7 @@ function Desktop() {
             </Button>
             <Button
               component="a"
-              href=""
+              href="#"
               variant="contained"
               size="large"
               color="tertiary"
@@ -148,6 +140,13 @@ function Desktop() {
             >
               IOS
             </Button>
+          </Stack>
+
+          {/* 앱 배포 후, 링크 달고 지우기 */}
+          <Stack mt={-3}>
+            <Typography variant="caption" fontWeight={700}>
+              현재 앱 준비중입니다.
+            </Typography>
           </Stack>
         </Stack>
 
