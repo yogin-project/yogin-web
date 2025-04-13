@@ -89,3 +89,13 @@ export const isValidPassword = (password: string): boolean => {
   const regex = /^(?=.*[A-Za-z]).{8,}$/;
   return regex.test(password);
 };
+
+export const stateLabelMap: Record<string, string> = {
+  TEMP: "임시저장",
+  REGISTERED: "등록",
+  REVIEWING: "확인 중",
+  ADDITIONAL_INFO_REQUIRED: "추가 자료 요청",
+  APPROVED: "승인",
+  REJECTED: "부결",
+  DELETED: "삭제됨",
+};

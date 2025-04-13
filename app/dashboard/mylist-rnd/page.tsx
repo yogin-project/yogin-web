@@ -1,6 +1,7 @@
 "use client";
 
 import { useExportApllicationList } from "@/app/hooks/apis/useExpertAppplicationList";
+import { stateLabelMap } from "@/app/utils";
 import {
   Box,
   Typography,
@@ -93,6 +94,7 @@ function MyListRND() {
                 <TableCell>24년 수출</TableCell>
                 <TableCell>24년 매출</TableCell>
                 <TableCell>상세 조회</TableCell>
+                <TableCell>상태</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -129,6 +131,9 @@ function MyListRND() {
                       >
                         조회
                       </Button>
+                    </TableCell>
+                    <TableCell>
+                      {stateLabelMap[item.state] ?? item.state}
                     </TableCell>
                   </TableRow>
                 );
