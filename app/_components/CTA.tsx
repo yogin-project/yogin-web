@@ -1,18 +1,31 @@
-'use client';
+"use client";
 
-import { ArrowForward, MoneyOffRounded } from '@mui/icons-material';
-import { Button, Stack, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { ArrowForward, MoneyOffRounded } from "@mui/icons-material";
+import { Button, Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 
-import useInView from '../hooks/useInView';
-import { useIsMobile } from '../hooks/useIsMobileSize';
-import { useScrollInfo } from '../provider/ScrollProvider';
+import { isLoginAtom } from "../store/authAtom";
+import { useAtomValue } from "jotai";
+import useInView from "../hooks/useInView";
+import { useIsMobile } from "../hooks/useIsMobileSize";
+import { useRouter } from "next/navigation";
+import { useScrollInfo } from "../provider/ScrollProvider";
 
 function CTA() {
+  const isLogin = useAtomValue(isLoginAtom);
+  const router = useRouter();
   const isMobile = useIsMobile();
   const { scrollY, innerHeight } = useScrollInfo();
   const { ref, inView } = useInView();
   const [widthPercent, setWidthPercent] = useState(0);
+
+  const handleClickCTAButton = () => {
+    if (isLogin) {
+      router.push("/submit-type");
+    } else {
+      router.push("/sign-in");
+    }
+  };
 
   useEffect(() => {
     if (!ref.current) return;
@@ -30,7 +43,7 @@ function CTA() {
       ref={ref}
       mx="auto"
       width="100%"
-      height={isMobile ? 'fit-content' : '30vh'}
+      height={isMobile ? "fit-content" : "30vh"}
     >
       <Stack
         m="auto"
@@ -43,47 +56,49 @@ function CTA() {
         py={9}
         gap={3}
         sx={{
-          transition: 'width 0.2s ease-out, height 0.2s ease-out',
-          overflow: 'hidden',
+          transition: "width 0.2s ease-out, height 0.2s ease-out",
+          overflow: "hidden",
         }}
       >
         <Typography variant="h3">
-          기업에 필요한 서비스를{' '}
-          <br style={{ display: isMobile ? 'block' : 'none' }} />
+          기업에 필요한 서비스를{" "}
+          <br style={{ display: isMobile ? "block" : "none" }} />
           계속 발전 시켜 나가겠습니다.
         </Typography>
         <Typography variant="h5">
           지금 바로 가입하여
           <br />
-          요긴의 모든 기능을{' '}
+          요긴의 모든 기능을{" "}
           <Typography component="span" variant="h5" color="primary.main">
             무료
           </Typography>
           로 이용해보세요!
         </Typography>
+
         <Button
           variant="contained"
           size="large"
           color="primary"
           disableElevation
+          onClick={handleClickCTAButton}
           startIcon={<MoneyOffRounded />}
           endIcon={<ArrowForward />}
           sx={{
             gridColumnStart: 2,
-            '& .MuiButton-endIcon': {
-              marginLeft: '-16px',
-              transform: 'translateX(-4px)',
+            "& .MuiButton-endIcon": {
+              marginLeft: "-16px",
+              transform: "translateX(-4px)",
               opacity: 0,
-              transition: 'all 0.2s ease-in-out',
+              transition: "all 0.2s ease-in-out",
             },
-            '&:hover .MuiButton-endIcon': {
-              transform: 'translateX(0)',
+            "&:hover .MuiButton-endIcon": {
+              transform: "translateX(0)",
               opacity: 1,
-              marginLeft: '8px', // 기본 spacing
+              marginLeft: "8px", // 기본 spacing
             },
           }}
         >
-          무료로 시작하기
+          무료로 {isLogin ? "신청하기" : "시작하기"}
         </Button>
       </Stack>
     </Stack>

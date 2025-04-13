@@ -1,16 +1,28 @@
-'use client';
+"use client";
 
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from "@mui/material";
 
-import { BREAKPOINTS } from '../libs/theme';
-import React from 'react';
-import { SubscriptionsRounded } from '@mui/icons-material';
-import { useIsMobile } from '../hooks/useIsMobileSize';
-import { useTranslation } from 'react-i18next';
+import { BREAKPOINTS } from "../libs/theme";
+import React from "react";
+import { SubscriptionsRounded } from "@mui/icons-material";
+import { isLoginAtom } from "../store/authAtom";
+import { useAtomValue } from "jotai";
+import { useIsMobile } from "../hooks/useIsMobileSize";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 function Subscription() {
+  const router = useRouter();
+  const isLogin = useAtomValue(isLoginAtom);
   const isMobile = useIsMobile();
   const { t } = useTranslation();
+
+  const handleSubscribeButton = () => {
+    if (isLogin) {
+    } else {
+      router.push("/sign-in");
+    }
+  };
 
   return (
     <Stack
@@ -28,13 +40,19 @@ function Subscription() {
       borderRadius={4}
     >
       <Stack flexDirection="row" gap={2} alignItems="center">
-        {!isMobile && <SubscriptionsRounded sx={{ fontSize: '1rem' }} />}
+        {!isMobile && <SubscriptionsRounded sx={{ fontSize: "1rem" }} />}
         <Typography variant="body1">
           기업에 필요한 자료를 구독하세요.
         </Typography>
       </Stack>
-      <Button variant="contained" color="primary" size="small" disableElevation>
-        {t('subscribe')}
+      <Button
+        variant="contained"
+        color="primary"
+        size="small"
+        onClick={handleSubscribeButton}
+        disableElevation
+      >
+        {t("subscribe")}
       </Button>
     </Stack>
   );
