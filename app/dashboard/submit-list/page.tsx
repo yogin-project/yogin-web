@@ -81,6 +81,27 @@ function SubmitList() {
     setPage(0);
   };
 
+  const handleAddRequireSubmit = (applicationId: number) => {
+    AddRequireApplication(
+      {
+        body: {
+          id: applicationId,
+        },
+      },
+      {
+        onSuccess: () => {
+          setModalText("추가 자료가 제출되었습니다.");
+          setIsModalOpen(true);
+          refetch();
+        },
+        onError: () => {
+          setModalText("제출에 실패했습니다. 다시 시도해주세요.");
+          setIsModalOpen(true);
+        },
+      }
+    );
+  };
+
   const handleDeleteApplication = (applicationId: number) => {
     deleteApplication(
       {
@@ -181,7 +202,7 @@ function SubmitList() {
                 <TableCell>신청 타입</TableCell>
                 <TableCell>신청일</TableCell>
                 <TableCell>상태</TableCell>
-                <TableCell>추가정보 요청</TableCell>
+                <TableCell>추가정보 요청여부</TableCell>
                 <TableCell>추가정보 제출</TableCell>
                 <TableCell>삭제</TableCell>
               </TableRow>
@@ -196,10 +217,22 @@ function SubmitList() {
                   </TableCell>
                   <TableCell>{app.state}</TableCell>
                   <TableCell>
-                    {app.isAdditionalInfoRequired === "Y" ? "예" : "아니오"}
+                    {app.isAdditionalInfoRequired === "Y" ? "요청" : "없음"}
                   </TableCell>
                   <TableCell>
-                    {app.isAdditionalInfoSubmitted === "Y" ? "예" : "아니오"}
+                    {app.isAdditionalInfoSubmitted === "Y" ? (
+                      "제출 완료"
+                    ) : app.isAdditionalInfoRequired === "Y" ? (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={() => handleAddRequireSubmit(app.id)}
+                      >
+                        제출하기
+                      </Button>
+                    ) : (
+                      <>없음</>
+                    )}
                   </TableCell>
                   <TableCell>
                     {app.state === "REGISTERED" && (
