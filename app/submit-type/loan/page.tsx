@@ -7,12 +7,14 @@ import {
   CardContent,
   Checkbox,
   Container,
+  FormControl,
   FormControlLabel,
   FormLabel,
   IconButton,
   InputAdornment,
   MenuItem,
   Paper,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -31,6 +33,7 @@ import { useCompanyApplication } from "@/app/hooks/apis/useCompanyApplication";
 import { profileAtom } from "@/app/store/profileAtom";
 import { useAtomValue } from "jotai";
 import CommonModal from "@/app/components/CommonModal";
+import { LOCATIONS } from "@/app/libs/contstant";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -127,7 +130,7 @@ export default function Loan() {
     saveTempApplication(
       {
         body: {
-          applicationId,
+          applicationId: applicationId?.applications[0]?.id,
         },
       },
       {
@@ -506,16 +509,25 @@ export default function Loan() {
                     >
                       대표 소재지
                     </FormLabel>
-                    <TextField
-                      id="ceoLocation"
-                      autoComplete="off"
-                      fullWidth
-                      name="ceoLocation"
-                      hiddenLabel
-                      onChange={handleChange}
-                      variant="standard"
-                      sx={{ gridColumnStart: 2 }}
-                    />
+                    <FormControl fullWidth sx={{ gridColumnStart: 2 }}>
+                      <Select
+                        id="ceoLocation"
+                        name="ceoLocation"
+                        value={form.ceoLocation}
+                        onChange={handleChange}
+                        variant="standard"
+                        displayEmpty
+                      >
+                        <MenuItem value="">
+                          <em>선택해주세요</em>
+                        </MenuItem>
+                        {LOCATIONS.map((loc) => (
+                          <MenuItem key={loc} value={loc}>
+                            {loc}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Stack>
 
                   <Stack

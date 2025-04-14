@@ -216,9 +216,9 @@ function SubmitList() {
 
                 {type === "FUND" ? <TableCell>추가정보 제출</TableCell> : null}
 
-                <TableCell>삭제</TableCell>
                 <TableCell>최종승인여부</TableCell>
                 <TableCell>승인 금액</TableCell>
+                <TableCell>삭제</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -254,7 +254,7 @@ function SubmitList() {
                       )}
                     </TableCell>
                   ) : null}
-
+                  <TableCell> - </TableCell>
                   <TableCell>
                     {app.state === "REGISTERED" && (
                       <Button
@@ -267,12 +267,11 @@ function SubmitList() {
                       </Button>
                     )}
                   </TableCell>
-                  <TableCell> - </TableCell>
                 </TableRow>
               ))}
               {applications.length === 0 && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={7} align="center">
+                  <TableCell colSpan={10} align="center">
                     신청 내역이 없습니다.
                   </TableCell>
                 </TableRow>

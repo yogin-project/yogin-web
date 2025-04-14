@@ -89,7 +89,7 @@ export default function CompanyRNDForm() {
     saveTempApplication(
       {
         body: {
-          applicationId,
+          applicationId: applicationId?.id,
         },
       },
       {
