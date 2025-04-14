@@ -181,7 +181,7 @@ function ApplicationList() {
               <TableCell>상세보기</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody key={type}>
             {applications.map((row: any) => (
               <TableRow key={row.id + row.state}>
                 <TableCell>
