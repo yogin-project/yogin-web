@@ -4,15 +4,25 @@ import { IconButton, Stack } from "@mui/material";
 
 import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
-import React from "react";
-import { useRouter } from "next/navigation";
+import React, { Fragment } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import useScrollDirection from "@/app/hooks/useScrollDirection";
+import { useAtomValue } from "jotai";
+import { isLoginAtom } from "@/app/store/authAtom";
 
 const HeaderMobile = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const isLogin = useAtomValue(isLoginAtom);
 
   const direction = useScrollDirection(100);
   const isVisible = direction !== "down";
+
+  const isDashboardPage = pathname.startsWith("/dashboard");
+
+  if (isDashboardPage) {
+    return <Fragment />;
+  }
 
   return (
     <Stack
@@ -55,7 +65,11 @@ const HeaderMobile = () => {
             alt="yogin logo"
           />
         </IconButton>
-        <IconButton onClick={() => router.push("/mobile-menu")}>
+        <IconButton
+          onClick={() =>
+            isLogin ? router.push("/dashboard") : router.push("/mobile-menu")
+          }
+        >
           <MenuIcon />
         </IconButton>
       </Stack>
