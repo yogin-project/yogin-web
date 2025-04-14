@@ -134,7 +134,7 @@ function MyListLoan() {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      {stateLabelMap[item.state] ?? item.state}
+                      {stateLabelMap?.[item.state] ?? item.state ?? "-"}
                     </TableCell>
                   </TableRow>
                 );

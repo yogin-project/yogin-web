@@ -99,8 +99,6 @@ function MyListRND() {
             </TableHead>
             <TableBody>
               {applications.map((item: any) => {
-                const debt2024 = item.debtStatus?.[0]?.debtAmount ?? "-";
-
                 return (
                   <TableRow key={item.id}>
                     <TableCell>
@@ -108,13 +106,13 @@ function MyListRND() {
                     </TableCell>
                     <TableCell>{item.corpName}</TableCell>
                     <TableCell>
-                      {item.lastYearExport.export
+                      {item.lastYearExport?.export
                         ? Number(item.lastYearExport.export).toLocaleString() +
                           "억"
                         : "-"}
                     </TableCell>
                     <TableCell>
-                      {item.lastYearRevenue.revenue
+                      {item.lastYearRevenue?.revenue
                         ? Number(
                             item.lastYearRevenue.revenue
                           ).toLocaleString() + "억"
@@ -133,7 +131,7 @@ function MyListRND() {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      {stateLabelMap[item.state] ?? item.state}
+                      {stateLabelMap?.[item.state] ?? item.state ?? "-"}
                     </TableCell>
                   </TableRow>
                 );
