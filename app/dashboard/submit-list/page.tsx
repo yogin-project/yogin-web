@@ -218,6 +218,7 @@ function SubmitList() {
 
                 <TableCell>삭제</TableCell>
                 <TableCell>최종승인여부</TableCell>
+                <TableCell>승인 금액</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -231,6 +232,7 @@ function SubmitList() {
                   </TableCell>
                   <TableCell>개발 중</TableCell>
                   <TableCell>개발 중</TableCell>
+                  <TableCell>승인 금액</TableCell>
 
                   <TableCell>
                     {app.isAdditionalInfoRequired === "Y" ? "요청" : "없음"}

@@ -508,67 +508,68 @@ export default function RNDDetailClient() {
                   R&D 이력
                 </Typography>
                 <Stack gap={0.5}>
-                  {corpData?.history.map((item, index) => (
-                    <Stack
-                      key={index}
-                      display="grid"
-                      rowGap={0.5}
-                      columnGap={1}
-                      gridColumn={3}
-                      gridTemplateColumns="3fr auto"
-                      sx={{
-                        "& label": {
-                          display: "inline-flex",
-                          alignItems: "center",
-                          p: 1,
-                          bgcolor: "action.hover",
-                          fontWeight: 600,
-                        },
-                        "& .MuiInputBase-root": {
-                          height: "100%",
-                          px: 1,
-                        },
-                      }}
-                    >
+                  {corpData?.history ? (
+                    corpData?.history.map((item, index) => (
                       <Stack
-                        sx={{ gridColumnStart: 1 }}
+                        key={index}
                         display="grid"
                         rowGap={0.5}
+                        columnGap={1}
                         gridColumn={3}
-                        gridTemplateColumns="auto 1fr"
+                        gridTemplateColumns="3fr auto"
+                        sx={{
+                          "& label": {
+                            display: "inline-flex",
+                            alignItems: "center",
+                            p: 1,
+                            bgcolor: "action.hover",
+                            fontWeight: 600,
+                          },
+                          "& .MuiInputBase-root": {
+                            height: "100%",
+                            px: 1,
+                          },
+                        }}
                       >
-                        <FormLabel
-                          htmlFor={`rAndDHistoryDetail-${index}`}
-                          sx={{
-                            gridColumnStart: 1,
-                            borderTopWidth: 1,
-                            borderTopStyle: "solid",
-                            borderTopColor: "action.hover",
-                            borderBottomWidth: 1,
-                            borderBottomStyle: "solid",
-                            borderBottomColor: "action.hover",
-                            borderRightWidth: 1,
-                            borderRightStyle: "solid",
-                            borderRightColor: "action.hover",
-                          }}
+                        <Stack
+                          sx={{ gridColumnStart: 1 }}
+                          display="grid"
+                          rowGap={0.5}
+                          gridColumn={3}
+                          gridTemplateColumns="auto 1fr"
                         >
-                          {index + 1}
-                        </FormLabel>
-                        <TextField
-                          id={`rAndDHistoryDetail-${index}`}
-                          fullWidth
-                          multiline
-                          minRows={2}
-                          value={item.content}
-                          sx={{
-                            ".MuiInputBase-root": {
-                              borderRadius: "2px !important",
-                            },
-                          }}
-                        />
-                      </Stack>
+                          <FormLabel
+                            htmlFor={`rAndDHistoryDetail-${index}`}
+                            sx={{
+                              gridColumnStart: 1,
+                              borderTopWidth: 1,
+                              borderTopStyle: "solid",
+                              borderTopColor: "action.hover",
+                              borderBottomWidth: 1,
+                              borderBottomStyle: "solid",
+                              borderBottomColor: "action.hover",
+                              borderRightWidth: 1,
+                              borderRightStyle: "solid",
+                              borderRightColor: "action.hover",
+                            }}
+                          >
+                            {index + 1}
+                          </FormLabel>
+                          <TextField
+                            id={`rAndDHistoryDetail-${index}`}
+                            fullWidth
+                            multiline
+                            minRows={2}
+                            value={item.content}
+                            sx={{
+                              ".MuiInputBase-root": {
+                                borderRadius: "2px !important",
+                              },
+                            }}
+                          />
+                        </Stack>
 
-                      {/* <Stack
+                        {/* <Stack
                         display="flex"
                         justifyContent="center"
                         alignItems="center"
@@ -576,8 +577,11 @@ export default function RNDDetailClient() {
                       >
                         
                       </Stack> */}
-                    </Stack>
-                  ))}
+                      </Stack>
+                    ))
+                  ) : (
+                    <></>
+                  )}
                 </Stack>
               </Stack>
             </CardContent>
