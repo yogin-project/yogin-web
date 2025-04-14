@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import './globals.css';
+import "./globals.css";
 
-import Banner from './_components/Banner';
-import { Box } from '@mui/material';
-import MultiProvider from './provider';
-import Nav from './components/Nav';
-import i18n from '../i18n';
-import { useEffect } from 'react';
+import Banner from "./_components/Banner";
+import { Box } from "@mui/material";
+import MultiProvider from "./provider";
+import Nav from "./components/Nav";
+import Script from "next/script";
+import i18n from "../i18n";
+import { useEffect } from "react";
 
 export default function RootLayout({
   children,
@@ -16,12 +17,18 @@ export default function RootLayout({
 }>) {
   useEffect(() => {
     // 클라이언트에서 i18n 초기화
-    i18n.changeLanguage(i18n.language || 'ko');
+    i18n.changeLanguage(i18n.language || "ko");
   }, []);
 
   return (
     <html lang="ko">
       <head>
+        {/* 초기 native-dark-active 제거 */}
+        <Script strategy="beforeInteractive">
+          {`
+            document.documentElement.removeAttribute('native-dark-active');
+          `}
+        </Script>
         <meta
           name="google-site-verification"
           content="BJUqKge_eLtpQsGImlCxGtMkE_8umyc8uUaPZTqDlqQ"
@@ -110,7 +117,6 @@ export default function RootLayout({
 
         <meta name="format-detection" content="telephone=no" />
         <meta name="theme-color" content="#2979ff" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
