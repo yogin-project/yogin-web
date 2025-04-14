@@ -46,7 +46,7 @@ function ApplicationList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [type, setType] = useState("FUND");
-  const [state, setState] = useState("전체");
+  const [status, setStatus] = useState("전체");
   const [sort, setSort] = useState("DESC");
   const [location, setLocation] = useState("전체");
 
@@ -60,8 +60,8 @@ function ApplicationList() {
     sort,
     orderBy: "createdAt",
   };
-  if (state !== "전체") {
-    queryParams.state = state;
+  if (status !== "전체") {
+    queryParams.status = status;
   }
   if (location !== "전체") {
     queryParams.location = location;
@@ -88,7 +88,7 @@ function ApplicationList() {
   };
 
   const handleStateChange = (event: SelectChangeEvent<string>) => {
-    setState(event.target.value);
+    setStatus(event.target.value);
     setPage(0);
   };
 
@@ -132,7 +132,7 @@ function ApplicationList() {
 
         <FormControl sx={{ minWidth: 120 }} size="small">
           <InputLabel>상태</InputLabel>
-          <Select value={state} label="상태" onChange={handleStateChange}>
+          <Select value={status} label="상태" onChange={handleStateChange}>
             <MenuItem value="전체">전체</MenuItem>
             {APPLICATION_STATES.map((item) => (
               <MenuItem key={item.value} value={item.value}>
