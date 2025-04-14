@@ -1,8 +1,8 @@
-import { Divider, Stack, Typography } from '@mui/material';
+import { Divider, Stack, Typography } from "@mui/material";
 
-import { BREAKPOINTS } from '@/app/libs/theme';
-import Link from 'next/link';
-import React from 'react';
+import { BREAKPOINTS } from "@/app/libs/theme";
+import Link from "next/link";
+import React from "react";
 
 function Mobile() {
   return (
@@ -17,22 +17,30 @@ function Mobile() {
       spacing={2}
     >
       {/* Navigation Links */}
-      <Stack direction="column" spacing={2} justifyContent={'flex-start'}>
-        <Link href="#" underline="none" color="inherit">
+      <Stack direction="column" spacing={2} justifyContent={"flex-start"}>
+        <Link href="#" color="inherit">
           회사소개
         </Link>
-        <Link href="#" underline="none" color="inherit">
+        <Link href="#" color="inherit">
           제휴제안
         </Link>
-        <Link href="#" underline="none" color="inherit">
+        <Link
+          href="https://docs.google.com/document/d/e/2PACX-1vTxhWN6az8yEoXwWgoO4fO0UgpjVHSEp4_UNDudvsNMvK_32sEy9RDkj5WNNgpL8oQKTUU7Q9DGC3HH/pub"
+          target="_blank"
+          color="inherit"
+        >
           이용약관
         </Link>
-        <Link href="#" underline="none" color="inherit">
+        <Link
+          href="https://docs.google.com/document/d/e/2PACX-1vR2MrP40iS-__0nj5xPGKi2s1C6wDK4OPHQF08OnbBaNxHvR3lR5LwXsn0n5wWbKalGM8-3U5xooolc/pub"
+          target="_blank"
+          color="inherit"
+        >
           개인정보취급방침
         </Link>
       </Stack>
 
-      <Divider sx={{ width: '100%', maxWidth: BREAKPOINTS.mobile }} />
+      <Divider sx={{ width: "100%", maxWidth: BREAKPOINTS.mobile }} />
 
       {/* Company Info */}
       <Stack spacing={1}>

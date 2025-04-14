@@ -1,15 +1,29 @@
-'use client';
+"use client";
 
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from "@mui/material";
 
-import { ArrowForward } from '@mui/icons-material';
-import { BREAKPOINTS } from '@/app/libs/theme';
-import Card from './Card';
-import { cards } from './cards';
-import useInView from '@/app/hooks/useInView';
+import { ArrowForward } from "@mui/icons-material";
+import { BREAKPOINTS } from "@/app/libs/theme";
+import Card from "./Card";
+import { cards } from "./cards";
+import { isLoginAtom } from "@/app/store/authAtom";
+import { useAtomValue } from "jotai";
+import useInView from "@/app/hooks/useInView";
+import { useRouter } from "next/navigation";
 
 function Mobile() {
+  const router = useRouter();
   const { ref, inView } = useInView();
+
+  const isLogin = useAtomValue(isLoginAtom);
+
+  const handleClickApplication = () => {
+    if (isLogin) {
+      router.push("/submit-type");
+    } else {
+      router.push("/sign-in");
+    }
+  };
   return (
     <Stack
       width="100%"
@@ -22,7 +36,7 @@ function Mobile() {
     >
       <Stack
         ref={ref}
-        className={`fade-section ${inView ? 'show' : ''}`}
+        className={`fade-section ${inView ? "show" : ""}`}
         mx="auto"
         width="100%"
         display="flex"
@@ -48,22 +62,23 @@ function Mobile() {
             variant="contained"
             size="large"
             color="primary"
+            onClick={handleClickApplication}
             disableElevation
             endIcon={<ArrowForward />}
             sx={{
               paddingX: 6,
-              position: 'relative',
+              position: "relative",
               gridColumnStart: 1,
-              '& .MuiButton-endIcon': {
-                marginLeft: '-16px',
-                transform: 'translateX(-4px)',
+              "& .MuiButton-endIcon": {
+                marginLeft: "-16px",
+                transform: "translateX(-4px)",
                 opacity: 0,
-                transition: 'all 0.2s ease-in-out',
+                transition: "all 0.2s ease-in-out",
               },
-              '&:hover .MuiButton-endIcon': {
-                transform: 'translateX(0)',
+              "&:hover .MuiButton-endIcon": {
+                transform: "translateX(0)",
                 opacity: 1,
-                marginLeft: '8px', // 기본 spacing
+                marginLeft: "8px", // 기본 spacing
               },
             }}
           >
@@ -77,8 +92,8 @@ function Mobile() {
         gap={2}
         px={2}
         sx={{
-          display: 'grid',
-          gridTemplateColumns: '1fr',
+          display: "grid",
+          gridTemplateColumns: "1fr",
         }}
       >
         {cards.map((card, i) => (

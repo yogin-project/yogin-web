@@ -1,15 +1,30 @@
-'use client';
+"use client";
 
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from "@mui/material";
 
-import { ArrowForward } from '@mui/icons-material';
-import { BREAKPOINTS } from '@/app/libs/theme';
-import Card from './Card';
-import { cards } from './cards';
-import useInView from '@/app/hooks/useInView';
+import { ArrowForward } from "@mui/icons-material";
+import { BREAKPOINTS } from "@/app/libs/theme";
+import Card from "./Card";
+import { cards } from "./cards";
+import { isLoginAtom } from "@/app/store/authAtom";
+import { useAtomValue } from "jotai";
+import useInView from "@/app/hooks/useInView";
+import { useRouter } from "next/navigation";
 
 function Desktop() {
+  const router = useRouter();
   const { ref, inView } = useInView();
+
+  const isLogin = useAtomValue(isLoginAtom);
+
+  const handleClickApplication = () => {
+    if (isLogin) {
+      router.push("/submit-type");
+    } else {
+      router.push("/sign-in");
+    }
+  };
+
   return (
     <Stack
       mx="auto"
@@ -23,7 +38,7 @@ function Desktop() {
     >
       <Stack
         ref={ref}
-        className={`fade-section ${inView ? 'show' : ''}`}
+        className={`fade-section ${inView ? "show" : ""}`}
         mx="auto"
         width="100%"
         maxWidth={BREAKPOINTS.tablet}
@@ -47,10 +62,10 @@ function Desktop() {
 
         <Stack
           sx={{
-            position: 'absolute',
-            transform: 'translateY(-50%)',
-            top: '50%',
-            right: '24px',
+            position: "absolute",
+            transform: "translateY(-50%)",
+            top: "50%",
+            right: "24px",
           }}
         >
           <Button
@@ -59,20 +74,21 @@ function Desktop() {
             color="primary"
             disableElevation
             endIcon={<ArrowForward />}
+            onClick={handleClickApplication}
             sx={{
               paddingX: 6,
-              position: 'relative',
+              position: "relative",
               gridColumnStart: 1,
-              '& .MuiButton-endIcon': {
-                marginLeft: '-16px',
-                transform: 'translateX(-4px)',
+              "& .MuiButton-endIcon": {
+                marginLeft: "-16px",
+                transform: "translateX(-4px)",
                 opacity: 0,
-                transition: 'all 0.2s ease-in-out',
+                transition: "all 0.2s ease-in-out",
               },
-              '&:hover .MuiButton-endIcon': {
-                transform: 'translateX(0)',
+              "&:hover .MuiButton-endIcon": {
+                transform: "translateX(0)",
                 opacity: 1,
-                marginLeft: '8px', // 기본 spacing
+                marginLeft: "8px", // 기본 spacing
               },
             }}
           >
@@ -86,8 +102,8 @@ function Desktop() {
         gap={2}
         px={3}
         sx={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
         }}
       >
         {cards.map((card, i) => (
