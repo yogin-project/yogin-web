@@ -1,13 +1,14 @@
 "use client";
 
 import { Button, Stack, Typography } from "@mui/material";
+import { useAtom, useAtomValue } from "jotai";
 
 import { ArrowForward } from "@mui/icons-material";
 import { BREAKPOINTS } from "@/app/libs/theme";
 import Card from "./Card";
 import { cards } from "./cards";
 import { isLoginAtom } from "@/app/store/authAtom";
-import { useAtomValue } from "jotai";
+import { profileAtom } from "@/app/store/profileAtom";
 import useInView from "@/app/hooks/useInView";
 import { useRouter } from "next/navigation";
 
@@ -16,10 +17,16 @@ function Mobile() {
   const { ref, inView } = useInView();
 
   const isLogin = useAtomValue(isLoginAtom);
+  const [profile] = useAtom(profileAtom);
+  const role = profile?.type || "CORPORATE";
 
   const handleClickApplication = () => {
     if (isLogin) {
-      router.push("/submit-type");
+      if (role === "CORPORATE") {
+        router.push("/submit-type");
+      } else {
+        alert("기업 회원만 이용할 수 있습니다.");
+      }
     } else {
       router.push("/sign-in");
     }
