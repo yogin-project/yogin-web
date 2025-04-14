@@ -18,8 +18,8 @@ export const useFirstApplicationId = (type: "FUND" | "RND") => {
     queryOption: {
       enabled: !!type,
       select: (res: any) => {
-        const first = res?.data?.applications?.[0];
-        return first?.id ?? null;
+        const first = res?.data;
+        return first ?? null;
       },
     },
     mutationOption: {

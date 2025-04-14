@@ -47,10 +47,12 @@ const VisuallyHiddenInput = styled("input")({
 export default function CompanyRNDForm() {
   const { mutate, isPending } = useApplicationTemp();
   const {
-    data: applicationId,
+    data: applicationData,
     isLoading,
     refetch,
   } = useFirstApplicationId("RND");
+
+  const applicationId = applicationData?.applications[0];
 
   const { mutate: saveTempApplication, isPending: isSavePending } =
     useCompanyApplication();
