@@ -28,10 +28,11 @@ import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
 import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
 import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
 import CommonModal from "@/app/components/CommonModal";
+import { useAddSubmit } from "@/app/hooks/apis/useAddSubmit";
 
 const applicationStates = [
   { label: "등록완료", value: "REGISTERED" },
-  { label: "임시저장", value: "TEMP" },
+
   { label: "전문가 확인중", value: "REVIEWING" },
   { label: "추가 자료 요청됨", value: "ADDITIONAL_INFO_REQUIRED" },
   { label: "전문가 승인", value: "APPROVED" },
@@ -62,7 +63,7 @@ function SubmitList() {
   const [requirementText, setRequirementText] = useState("");
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const { mutate: AddRequireApplication } = useAddRequire();
+  const { mutate: AddRequireApplication } = useAddSubmit();
   const { mutate: deleteApplication } = useCompanyApplicationCancel();
   const { data, isLoading, refetch } = useCompanyFundList({
     page: page + 1,
@@ -89,14 +90,13 @@ function SubmitList() {
     setRequireDialogOpen(true);
   };
 
-  const handleAddRequireSubmit = () => {
-    if (!selectedId || !requirementText.trim()) return;
+  const handleAddRequireSubmit = (selectedId: number) => {
+    if (!selectedId) return;
 
     AddRequireApplication(
       {
         body: {
-          id: selectedId,
-          requirement: requirementText.trim(),
+          id: String(selectedId),
         },
       },
       {
@@ -203,11 +203,11 @@ function SubmitList() {
 
       <Paper>
         <TableContainer>
-          <Table>
+          <Table key={state}>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
-                <TableCell>신청 타입</TableCell>
+
                 <TableCell>신청일</TableCell>
                 <TableCell>담당자 성함</TableCell>
                 <TableCell>담당자 연락처</TableCell>
@@ -225,36 +225,31 @@ function SubmitList() {
               {applications.map((app: any) => (
                 <TableRow key={app.id}>
                   <TableCell>{app.id}</TableCell>
-                  <TableCell>{app.type}</TableCell>
 
                   <TableCell>
                     {new Date(app.createdAt).toLocaleString()}
                   </TableCell>
-                  <TableCell>개발 중</TableCell>
-                  <TableCell>개발 중</TableCell>
-                  <TableCell>승인 금액</TableCell>
-
+                  <TableCell>{app.expertName ?? "미지정"}</TableCell>
+                  <TableCell>{app.expertEamil ?? "미지정"}</TableCell>
                   <TableCell>
-                    {app.isAdditionalInfoRequired === "Y" ? "요청" : "없음"}
+                    {app.isAdditionalInfoRequired === "Y" ? (
+                      <Button
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => handleAddRequireSubmit(app.id)}
+                      >
+                        제출완료
+                      </Button>
+                    ) : (
+                      "없음"
+                    )}
                   </TableCell>
-                  {type === "FUND" ? (
-                    <TableCell>
-                      {app.isAdditionalInfoSubmitted === "Y" ? (
-                        "제출 완료"
-                      ) : app.isAdditionalInfoRequired === "Y" ? (
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={() => handleAddRequireOpen(app.id)}
-                        >
-                          제출하기
-                        </Button>
-                      ) : (
-                        "없음"
-                      )}
-                    </TableCell>
-                  ) : null}
                   <TableCell> - </TableCell>
+                  <TableCell> - </TableCell>
+
+                  <TableCell>{app.availableFundAmount}</TableCell>
+
                   <TableCell>
                     {app.state === "REGISTERED" && (
                       <Button

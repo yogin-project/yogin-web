@@ -1,6 +1,6 @@
 import { useApiManager } from "@/app/libs/apiManager";
 
-export const useAddRequire = () => {
+export const useAddSubmit = () => {
   return useApiManager({
     method: "POST",
     path: "company/application/additional-info/submitted",
