@@ -1,6 +1,6 @@
-import { useCheckBusinessNo } from "@/app/hooks/apis/useCheckBusinessNo";
-import { Dayjs } from "dayjs";
 import { ChangeEvent } from "react";
+import { Dayjs } from "dayjs";
+import { useCheckBusinessNo } from "@/app/hooks/apis/useCheckBusinessNo";
 
 export const initialFormData = {
   type: "CORPORATE",
@@ -10,6 +10,7 @@ export const initialFormData = {
   phoneNumber: "",
   name: "",
   corpName: "",
+  ceoName: "",
   businessNo: "",
   location: "서울",
   address: "",
@@ -65,6 +66,7 @@ export const isSignupEnabled = ({
     formData.phoneNumber &&
     formData.name &&
     formData.corpName &&
+    formData.ceoName &&
     formData.businessNo &&
     formData.location &&
     formData.address &&
@@ -79,7 +81,7 @@ export const useCheckBusinessNoHandler = (
 
   const handleCheckBusinessNo = (
     businessNo: string,
-    ownerName: string,
+    ceoName: string,
     startDate: null | Dayjs
   ) => {
     let numberOnly = businessNo;
@@ -106,7 +108,7 @@ export const useCheckBusinessNoHandler = (
             {
               b_no: numberOnly,
               start_dt: formattedStartDate,
-              p_nm: ownerName,
+              p_nm: ceoName,
               p_nm2: "",
               b_nm: "",
               corp_no: "",

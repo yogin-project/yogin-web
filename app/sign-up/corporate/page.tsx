@@ -1,21 +1,16 @@
 "use client";
 
-import MobileWrapper from "@/app/layout/MobileWrapper";
 import {
   Box,
   Button,
   Divider,
+  Paper,
+  Stack,
   TextField,
   Typography,
-  Stack,
-  Paper,
 } from "@mui/material";
 import React, { ChangeEvent, useState } from "react";
-import AgreementSection from "../_components/AgreementSection";
-import { useRouter } from "next/navigation";
-import AddressSearch from "@/app/components/AddSearch";
-import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
-import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
+import dayjs, { Dayjs } from "dayjs";
 import {
   handleAgreementChangeFactory,
   handleInputChangeFactory,
@@ -24,10 +19,16 @@ import {
   isSignupEnabled,
   useCheckBusinessNoHandler,
 } from "./index.utils";
+
+import AddressSearch from "@/app/components/AddSearch";
+import AgreementSection from "../_components/AgreementSection";
 import { DatePicker } from "@mui/x-date-pickers";
-import dayjs, { Dayjs } from "dayjs";
-import { isValidPassword } from "@/app/utils";
+import MobileWrapper from "@/app/layout/MobileWrapper";
 import SuccessModal from "../_components/SuccessModal";
+import { isValidPassword } from "@/app/utils";
+import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
+import { useRouter } from "next/navigation";
+import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
 
 function SignUpCorporate() {
   const router = useRouter();
@@ -43,9 +44,10 @@ function SignUpCorporate() {
     if (!date) return;
     setBusinessStartDate(date);
   };
-  const [ownerName, setOwnerName] = useState("");
+  const [ceoName, setCeoName] = useState("");
   const handleChangeOwnerName = (e: ChangeEvent<HTMLInputElement>) => {
-    setOwnerName(e.target.value);
+    setCeoName(e.target.value);
+    handleInputChange(e);
   };
   const [isBusinessNoChecked, setIsBusinessNoChecked] = useState(false);
   const { handleCheckBusinessNo } = useCheckBusinessNoHandler(
@@ -150,7 +152,7 @@ function SignUpCorporate() {
 
           <Stack flexDirection={"row"} gap={2} mt={2}>
             <TextField
-              name="ownerName"
+              name="ceoName"
               variant="standard"
               label="대표자명"
               fullWidth
@@ -173,14 +175,14 @@ function SignUpCorporate() {
               size="medium"
               disabled={
                 formData.businessNo === "" ||
-                ownerName === "" ||
+                ceoName === "" ||
                 businessStartDate === null ||
                 isBusinessNoChecked
               }
               onClick={(e) =>
                 handleCheckBusinessNo(
                   formData.businessNo,
-                  ownerName,
+                  ceoName,
                   businessStartDate
                 )
               }
