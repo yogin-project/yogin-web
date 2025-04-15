@@ -26,7 +26,7 @@ function formatDate(dateStr: string) {
 
 export default function NotificationListPage() {
   const [page, setPage] = useState(1);
-  const take = 10;
+  const take = 5;
 
   const { data, isLoading } = useGetPush({ page, take });
   const items = data?.data?.items || [];
