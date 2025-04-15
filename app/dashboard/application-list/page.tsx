@@ -5,7 +5,6 @@ import {
   APPLICATION_STATES_OBJ,
   APPLICATION_TYPES,
   APPLICATION_TYPES_OBJ,
-  FUND_REQUIREMENTS_OBJ,
   LOCATIONS,
   SORT_OPTIONS,
 } from "@/app/libs/contstant";
@@ -13,22 +12,12 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
   FormControl,
   InputLabel,
-  List,
-  ListItem,
-  ListItemText,
-  ListSubheader,
   MenuItem,
   Paper,
   Select,
   SelectChangeEvent,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -40,6 +29,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
+import ApplicationDetailDialog from "./ApplicationDetailDialog";
 import { useAdminApplicationListMutation } from "@/app/hooks/apis/useAdminApplicationList";
 
 function ApplicationList() {
@@ -59,6 +49,7 @@ function ApplicationList() {
     limit: rowsPerPage,
     sort,
     orderBy: "createdAt",
+    subData: "CORPORATE",
   };
   if (state !== "전체") {
     queryParams.state = state;
@@ -67,6 +58,7 @@ function ApplicationList() {
     queryParams.location = location;
   }
   const { data, isLoading } = useAdminApplicationListMutation(queryParams);
+  console.log(data);
 
   const applications = data?.data?.applications || [];
   const total = data?.data?.total || 0;
@@ -246,358 +238,7 @@ function ApplicationList() {
         rowsPerPageOptions={[5, 10, 20]}
       />
 
-      {!!item && (
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          scroll="paper"
-          fullWidth
-          maxWidth="md"
-        >
-          <Stack component={DialogTitle} flexDirection="row">
-            <Stack flexDirection="row" width="100%" gap={1}>
-              <Chip
-                label={
-                  APPLICATION_TYPES_OBJ[
-                    item.type as keyof typeof APPLICATION_TYPES_OBJ
-                  ]
-                }
-                color={item.type === "RND" ? "primary" : "secondary"}
-                size="small"
-              />
-
-              <Typography variant="h6">{item.corpName}</Typography>
-            </Stack>
-            <Typography whiteSpace="pre">
-              {
-                APPLICATION_STATES_OBJ[
-                  item.state as keyof typeof APPLICATION_STATES_OBJ
-                ]
-              }
-            </Typography>
-          </Stack>
-
-          <DialogContent dividers sx={{ p: 0 }}>
-            <Stack
-              component={List}
-              gap={1}
-              subheader
-              sx={{
-                ".MuiListSubheader-root": {
-                  fontSize: "0.9rem",
-                  fontWeight: 700,
-                  lineHeight: "1.5",
-                  px: 2,
-                  py: 1,
-                },
-              }}
-            >
-              <ListSubheader color="primary">신청 정보</ListSubheader>
-              <ListItem sx={{ p: 0 }}>
-                <Stack
-                  component={List}
-                  width="100%"
-                  sx={{
-                    p: 0,
-                    ul: { p: 0 },
-                    li: { p: 0 },
-                    ".MuiListItem-root": { px: 2 },
-                  }}
-                >
-                  <ListSubheader>신청일</ListSubheader>
-                  <ListItem>
-                    <ListItemText
-                      primary={new Date(item.createdAt).toLocaleString("ko-KR")}
-                    />
-                  </ListItem>
-
-                  <ListSubheader>신청분류</ListSubheader>
-                  <ListItem>
-                    <ListItemText
-                      primary={
-                        APPLICATION_TYPES_OBJ[
-                          item.type as keyof typeof APPLICATION_TYPES_OBJ
-                        ]
-                      }
-                    />
-                  </ListItem>
-
-                  <ListSubheader>
-                    {
-                      APPLICATION_TYPES_OBJ[
-                        item.type as keyof typeof APPLICATION_TYPES_OBJ
-                      ]
-                    }{" "}
-                    유형
-                  </ListSubheader>
-                  <ListItem>
-                    <ListItemText
-                      primary={item.fundRequirements?.map(
-                        (value: string, index: number) =>
-                          FUND_REQUIREMENTS_OBJ[
-                            value as keyof typeof FUND_REQUIREMENTS_OBJ
-                          ] +
-                          (index == item.fundRequirements.length - 1
-                            ? ""
-                            : ", ")
-                      )}
-                    />
-                  </ListItem>
-                </Stack>
-              </ListItem>
-
-              <Divider />
-
-              <ListSubheader color="primary">기업 정보</ListSubheader>
-              <ListItem sx={{ p: 0 }}>
-                <Stack
-                  component={List}
-                  width="100%"
-                  sx={{
-                    p: 0,
-                    ul: { p: 0 },
-                    li: { p: 0 },
-                    ".MuiListItem-root": { px: 2 },
-                  }}
-                >
-                  <ListSubheader>기업명</ListSubheader>
-                  <ListItem>
-                    <ListItemText primary={item.corpName} />
-                  </ListItem>
-
-                  <ListSubheader>사업자번호</ListSubheader>
-                  <ListItem>
-                    <ListItemText primary={item.businessNo} />
-                  </ListItem>
-
-                  <ListSubheader>사업자등록번호</ListSubheader>
-                  <ListItem>
-                    <ListItemText primary={item.businessRegistrationNo} />
-                  </ListItem>
-
-                  <ListSubheader>설립일</ListSubheader>
-                  <ListItem>
-                    <ListItemText
-                      primary={
-                        item.foundDate
-                          ? new Date(item.foundDate).toLocaleString("ko-KR")
-                          : "-"
-                      }
-                    />
-                  </ListItem>
-
-                  <ListSubheader>사업 분류</ListSubheader>
-                  <ListItem>
-                    <ListItemText primary={item.businessCategory} />
-                  </ListItem>
-
-                  <ListSubheader>특허 보유</ListSubheader>
-                  <ListItem>
-                    <ListItemText primary={item.isPatentOwned} />
-                  </ListItem>
-
-                  <ListSubheader>증명</ListSubheader>
-                  <ListItem>
-                    {item.businessRegistrationCert?.map((url: string) => (
-                      <Stack>
-                        {/* <Box
-                          component="img"
-                          key={url}
-                          src={url}
-                          sx={{ width: '100%', objectFit: 'contain' }}
-                        /> */}
-                        <Button
-                          LinkComponent="a"
-                          href={url}
-                          target="_blank"
-                          size="small"
-                          variant="contained"
-                          color="secondary"
-                          disableElevation
-                        >
-                          새 창 보기
-                        </Button>
-                      </Stack>
-                    ))}
-                  </ListItem>
-                </Stack>
-              </ListItem>
-
-              <Divider />
-
-              <ListSubheader color="primary">대표 정보</ListSubheader>
-              <ListItem sx={{ p: 0 }}>
-                <Stack
-                  component={List}
-                  width="100%"
-                  sx={{
-                    p: 0,
-                    ul: { p: 0 },
-                    li: { p: 0 },
-                    ".MuiListItem-root": { px: 2 },
-                  }}
-                >
-                  <ListSubheader>이름</ListSubheader>
-                  <ListItem>
-                    <ListItemText primary={item.name} />
-                  </ListItem>
-
-                  <ListSubheader>소재지</ListSubheader>
-                  <ListItem>
-                    <ListItemText primary={item.ownerLocation} />
-                  </ListItem>
-                </Stack>
-              </ListItem>
-
-              <Divider />
-
-              <ListSubheader color="primary">자산/부채 정보</ListSubheader>
-              <ListItem sx={{ p: 0 }}>
-                <Stack
-                  component={List}
-                  width="100%"
-                  sx={{
-                    p: 0,
-                    ul: { p: 0 },
-                    li: { p: 0 },
-                    ".MuiListItem-root": { px: 2 },
-                  }}
-                >
-                  <ListSubheader>3개년 수익</ListSubheader>
-                  <Stack component={ListItem} alignItems="start">
-                    {item.threeYearRevenue?.map((row: any) => (
-                      <Stack component={ListItemText} id={row.year}>
-                        {row.year} : {row.revenue} (억)
-                      </Stack>
-                    ))}
-                  </Stack>
-
-                  <ListSubheader>부채 상태</ListSubheader>
-                  <Stack component={ListItem} alignItems="start">
-                    {item.debtStatus?.map((row: any) => (
-                      <Stack component={ListItemText} id={row.bankName}>
-                        {row.bankName} : {row.debtAmount} (억)
-                      </Stack>
-                    ))}
-                  </Stack>
-
-                  <ListSubheader>재무제표</ListSubheader>
-                  <ListItem>
-                    {item.financialReports?.map((url: string) => (
-                      <Stack>
-                        <Button
-                          LinkComponent="a"
-                          href={url}
-                          target="_blank"
-                          size="small"
-                          variant="contained"
-                          color="secondary"
-                          disableElevation
-                        >
-                          새 창 보기
-                        </Button>
-                      </Stack>
-                    ))}
-                  </ListItem>
-                </Stack>
-              </ListItem>
-
-              <Divider />
-
-              <ListSubheader color="primary">검토 정보</ListSubheader>
-              <ListItem sx={{ p: 0 }}>
-                <Stack
-                  component={List}
-                  width="100%"
-                  sx={{
-                    p: 0,
-                    ul: { p: 0 },
-                    li: { p: 0 },
-                    ".MuiListItem-root": { px: 2 },
-                  }}
-                >
-                  <ListSubheader>추가 자료 요청</ListSubheader>
-                  <ListItem>
-                    <ListItemText
-                      primary={
-                        item.additionalInfoSubmittedAt
-                          ? `제출 완료 (${new Date(
-                              item.additionalInfoSubmittedAt
-                            ).toLocaleString("ko-KR")})`
-                          : item.isAdditionalInfoRequired == "Y"
-                          ? "추가 자료 필요"
-                          : "-"
-                      }
-                    />
-                  </ListItem>
-
-                  <ListSubheader>대출 가능 금액</ListSubheader>
-                  <ListItem>
-                    <ListItemText primary={item.availableFundAmount} />
-                  </ListItem>
-
-                  <ListSubheader>검토 상태</ListSubheader>
-                  <ListItem>
-                    <ListItemText
-                      primary={
-                        APPLICATION_STATES_OBJ[
-                          item.state as keyof typeof APPLICATION_STATES_OBJ
-                        ]
-                      }
-                    />
-                    {item.state == "APPROVED" && (
-                      <ListItemText
-                        primary={new Date(item.approveRejectAt).toLocaleString(
-                          "ko-KR"
-                        )}
-                      />
-                    )}
-                  </ListItem>
-
-                  <ListSubheader>증명</ListSubheader>
-                  <ListItem>
-                    {item.businessRegistrationCert?.map((url: string) => (
-                      <Stack>
-                        {/* <Box
-                          component="img"
-                          key={url}
-                          src={url}
-                          sx={{ width: '100%', objectFit: 'contain' }}
-                        /> */}
-                        <Button
-                          LinkComponent="a"
-                          href={url}
-                          target="_blank"
-                          size="small"
-                          variant="contained"
-                          color="secondary"
-                          disableElevation
-                        >
-                          새 창 보기
-                        </Button>
-                      </Stack>
-                    ))}
-                  </ListItem>
-                </Stack>
-              </ListItem>
-
-              <Divider />
-
-              <ListSubheader color="primary">컨설팅 신청 정보</ListSubheader>
-              <ListItem>
-                <ListItemText
-                  primary={
-                    item.isManagementApplied ? <b>신청</b> : "신청하지 않음"
-                  }
-                />
-              </ListItem>
-            </Stack>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>닫기</Button>
-          </DialogActions>
-        </Dialog>
-      )}
+      <ApplicationDetailDialog open={open} onClose={handleClose} item={item} />
     </Box>
   );
 }
