@@ -1,44 +1,44 @@
 "use client";
 
 import {
+  AppBar,
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Drawer,
+  IconButton,
   List,
   ListItemButton,
   ListItemText,
+  Theme,
   Toolbar,
   Typography,
-  IconButton,
-  AppBar,
   useMediaQuery,
-  Theme,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useTheme } from "@mui/material/styles";
-import { useState, useMemo, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { useAtom } from "jotai";
-import { profileAtom } from "../store/profileAtom";
-import { isLoginAtom } from "../store/authAtom";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 // 아이콘 import
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import LockIcon from "@mui/icons-material/Lock";
-import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
 import AssessmentIcon from "@mui/icons-material/Assessment";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import BusinessIcon from "@mui/icons-material/Business";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import BusinessIcon from "@mui/icons-material/Business";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import { isLoginAtom } from "../store/authAtom";
+import { profileAtom } from "../store/profileAtom";
+import { useAtom } from "jotai";
+import { useTheme } from "@mui/material/styles";
 
 const drawerWidth = 240;
 
@@ -246,10 +246,8 @@ export default function DashboardLayout({
           },
         }}
       >
-        <DialogTitle>
-          <Typography variant="h6" fontWeight={700} textAlign="center">
-            로그아웃 하시겠어요?
-          </Typography>
+        <DialogTitle variant="h6" fontWeight={700} textAlign="center">
+          로그아웃 하시겠어요?
         </DialogTitle>
         <DialogContent>
           <Typography
