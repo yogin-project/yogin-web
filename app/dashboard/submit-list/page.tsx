@@ -29,6 +29,7 @@ import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicat
 import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
 import CommonModal from "@/app/components/CommonModal";
 import { useAddSubmit } from "@/app/hooks/apis/useAddSubmit";
+import { useApproveFinal } from "@/app/hooks/apis/useApproveFinal";
 
 const applicationStates = [
   { label: "등록완료", value: "REGISTERED" },
@@ -63,8 +64,11 @@ function SubmitList() {
   const [requirementText, setRequirementText] = useState("");
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const { mutate: AddRequireApplication } = useAddSubmit();
-  const { mutate: deleteApplication } = useCompanyApplicationCancel();
+  const { mutate: AddRequireApplication } = useAddSubmit(); // 추가자료 완료 api
+  const { mutate: deleteApplication } = useCompanyApplicationCancel(); // 자금신청 삭제 api
+
+  const { mutate: approveFinal } = useApproveFinal(); // 최종승인 api
+
   const { data, isLoading, refetch } = useCompanyFundList({
     page: page + 1,
     limit: rowsPerPage,
@@ -85,9 +89,11 @@ function SubmitList() {
     setPage(0);
   };
 
-  const handleAddRequireOpen = (applicationId: number) => {
-    setSelectedId(applicationId);
-    setRequireDialogOpen(true);
+  // TODO: 스펙 확인하고 마무리작업해야함
+  const handleApproveFinal = () => {
+    approveFinal({
+      body: {},
+    });
   };
 
   const handleAddRequireSubmit = (selectedId: number) => {
@@ -95,6 +101,7 @@ function SubmitList() {
 
     AddRequireApplication(
       {
+        // TODO: 스펙 확인하고 추가 작업해야함
         body: {
           id: String(selectedId),
         },
@@ -250,6 +257,7 @@ function SubmitList() {
                     )}
                   </TableCell>
 
+                  {/* 최종승인 버튼 추가해서 동작시켜야함 */}
                   <TableCell> - </TableCell>
 
                   <TableCell>
