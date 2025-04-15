@@ -135,7 +135,13 @@ function SubmitList() {
   };
 
   return (
-    <Box mt={4} maxWidth="1000px" mx="auto">
+    <Box
+      mt={4}
+      maxWidth="1000px"
+      mx="auto"
+      component={Paper}
+      sx={{ overflowX: "auto" }}
+    >
       <Typography variant="h6" gutterBottom>
         자금 신청 내역
       </Typography>
@@ -212,11 +218,9 @@ function SubmitList() {
                 <TableCell>담당자 성함</TableCell>
                 <TableCell>담당자 연락처</TableCell>
 
-                <TableCell>추가정보 요청여부</TableCell>
+                <TableCell>추가자료요청</TableCell>
 
-                {type === "FUND" ? <TableCell>추가정보 제출</TableCell> : null}
-
-                <TableCell>최종승인여부</TableCell>
+                <TableCell>최종승인</TableCell>
                 <TableCell>승인 금액</TableCell>
                 <TableCell>삭제</TableCell>
               </TableRow>
@@ -245,10 +249,14 @@ function SubmitList() {
                       "없음"
                     )}
                   </TableCell>
-                  <TableCell> - </TableCell>
+
                   <TableCell> - </TableCell>
 
-                  <TableCell>{app.availableFundAmount}</TableCell>
+                  <TableCell>
+                    {app.availableFundAmount
+                      ? Number(app.availableFundAmount).toLocaleString() + "억"
+                      : "-"}
+                  </TableCell>
 
                   <TableCell>
                     {app.state === "REGISTERED" && (
@@ -266,7 +274,7 @@ function SubmitList() {
               ))}
               {applications.length === 0 && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={10} align="center">
+                  <TableCell colSpan={8} align="center">
                     신청 내역이 없습니다.
                   </TableCell>
                 </TableRow>
