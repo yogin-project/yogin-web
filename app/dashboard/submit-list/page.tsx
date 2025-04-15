@@ -90,10 +90,31 @@ function SubmitList() {
   };
 
   // TODO: 스펙 확인하고 마무리작업해야함
-  const handleApproveFinal = () => {
-    approveFinal({
-      body: {},
-    });
+  const handleApproveFinal = (selectedId: number) => {
+    approveFinal(
+      {
+        body: {
+          id: Number(selectedId),
+          isApproved: true,
+          // applicationExpertId: String(selectedId),
+        },
+      },
+      {
+        onSuccess: () => {
+          setModalText(
+            "해당 전문가와의 매칭이 완료되었습니다\n전문가와 회신을 기다려주세요."
+          );
+          setIsModalOpen(true);
+          setRequireDialogOpen(false);
+          setRequirementText("");
+          refetch();
+        },
+        onError: () => {
+          setModalText("제출에 실패했습니다. 잠시 후, 시도해주세요.");
+          setIsModalOpen(true);
+        },
+      }
+    );
   };
 
   const handleAddRequireSubmit = (selectedId: number) => {
@@ -103,7 +124,7 @@ function SubmitList() {
       {
         // TODO: 스펙 확인하고 추가 작업해야함
         body: {
-          id: String(selectedId),
+          applicationExpertId: String(selectedId),
         },
       },
       {
@@ -258,7 +279,18 @@ function SubmitList() {
                   </TableCell>
 
                   {/* 최종승인 버튼 추가해서 동작시켜야함 */}
-                  <TableCell> - </TableCell>
+                  <TableCell>
+                    {app.state === "APPROVED" ? (
+                      <Button
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => handleApproveFinal(app.id)}
+                      >
+                        승인하기
+                      </Button>
+                    ) : null}
+                  </TableCell>
 
                   <TableCell>
                     {app.availableFundAmount
