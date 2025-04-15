@@ -83,11 +83,17 @@ function Desktop() {
             width="100%"
             maxWidth="300px"
             display="grid"
-            gridColumn={2}
-            gridTemplateColumns="repeat(2, 1fr)"
+            gridColumn={1}
+            gridTemplateColumns="repeat(1, 1fr)"
             gap={1}
           >
             <Button
+              onClick={() =>
+                window.open(
+                  "https://play.google.com/store/apps/details?id=com.yoginapp&pli=1",
+                  "_blank"
+                )
+              }
               component="a"
               href="#"
               variant="contained"
@@ -114,7 +120,7 @@ function Desktop() {
             >
               Android
             </Button>
-            <Button
+            {/* <Button
               component="a"
               href="#"
               variant="contained"
@@ -139,15 +145,15 @@ function Desktop() {
               }}
             >
               IOS
-            </Button>
+            </Button> */}
           </Stack>
 
           {/* 앱 배포 후, 링크 달고 지우기 */}
-          <Stack mt={-3}>
+          {/* <Stack mt={-3}>
             <Typography variant="caption" fontWeight={700}>
               현재 앱 준비중입니다.
             </Typography>
-          </Stack>
+          </Stack> */}
         </Stack>
 
         <Box

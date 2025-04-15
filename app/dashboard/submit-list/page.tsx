@@ -264,14 +264,15 @@ function SubmitList() {
                   <TableCell>{app.expertName ?? "미지정"}</TableCell>
                   <TableCell>{app.expertEamil ?? "미지정"}</TableCell>
                   <TableCell>
-                    {app.isAdditionalInfoRequired === "Y" ? (
+                    {app.state === "ADDITIONAL_INFO_REQUIRED" &&
+                    app.isAdditionalInfoRequired === "Y" ? (
                       <Button
                         size="small"
                         color="primary"
                         variant="outlined"
                         onClick={() => handleAddRequireSubmit(app.id)}
                       >
-                        제출완료
+                        제출하기
                       </Button>
                     ) : (
                       "없음"
