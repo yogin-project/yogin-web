@@ -190,15 +190,18 @@ const HeaderDesktop = () => {
         <Stack direction={"row"} gap={1} alignItems={"center"}>
           {isLogin ? (
             <>
-              <ButtonBase onClick={() => router.push("/noti-list")}>
-                <NotificationsIcon
-                  sx={{
-                    cursor: "pointer",
-                    width: 28,
-                    height: 28,
-                  }}
-                />
-              </ButtonBase>
+              {profileInfo?.type !== "ADMIN" ? (
+                <ButtonBase onClick={() => router.push("/noti-list")}>
+                  <NotificationsIcon
+                    sx={{
+                      cursor: "pointer",
+                      width: 28,
+                      height: 28,
+                    }}
+                  />
+                </ButtonBase>
+              ) : null}
+
               <ButtonBase onClick={() => router.push("/dashboard")}>
                 <Avatar
                   sx={{

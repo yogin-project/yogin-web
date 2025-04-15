@@ -65,7 +65,7 @@ export default function MemberInfo() {
         location: profile.location || "",
         address: profile.address || "",
         branchName: profile.branchName || "",
-        organization: profile.organization || "",
+        organization: profile.additionalInfo.expertInfoOrganization || "",
         verificationPhoto: null,
       });
     }

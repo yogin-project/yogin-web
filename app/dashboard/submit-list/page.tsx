@@ -28,10 +28,12 @@ import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
 import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
 import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
 import CommonModal from "@/app/components/CommonModal";
+import { useAddSubmit } from "@/app/hooks/apis/useAddSubmit";
+import { useApproveFinal } from "@/app/hooks/apis/useApproveFinal";
 
 const applicationStates = [
   { label: "등록완료", value: "REGISTERED" },
-  { label: "임시저장", value: "TEMP" },
+
   { label: "전문가 확인중", value: "REVIEWING" },
   { label: "추가 자료 요청됨", value: "ADDITIONAL_INFO_REQUIRED" },
   { label: "전문가 승인", value: "APPROVED" },
@@ -62,8 +64,11 @@ function SubmitList() {
   const [requirementText, setRequirementText] = useState("");
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const { mutate: AddRequireApplication } = useAddRequire();
-  const { mutate: deleteApplication } = useCompanyApplicationCancel();
+  const { mutate: AddRequireApplication } = useAddSubmit(); // 추가자료 완료 api
+  const { mutate: deleteApplication } = useCompanyApplicationCancel(); // 자금신청 삭제 api
+
+  const { mutate: approveFinal } = useApproveFinal(); // 최종승인 api
+
   const { data, isLoading, refetch } = useCompanyFundList({
     page: page + 1,
     limit: rowsPerPage,
@@ -84,19 +89,42 @@ function SubmitList() {
     setPage(0);
   };
 
-  const handleAddRequireOpen = (applicationId: number) => {
-    setSelectedId(applicationId);
-    setRequireDialogOpen(true);
+  // TODO: 스펙 확인하고 마무리작업해야함
+  const handleApproveFinal = (selectedId: number) => {
+    approveFinal(
+      {
+        body: {
+          id: Number(selectedId),
+          isApproved: true,
+          // applicationExpertId: String(selectedId),
+        },
+      },
+      {
+        onSuccess: () => {
+          setModalText(
+            "해당 전문가와의 매칭이 완료되었습니다\n전문가와 회신을 기다려주세요."
+          );
+          setIsModalOpen(true);
+          setRequireDialogOpen(false);
+          setRequirementText("");
+          refetch();
+        },
+        onError: () => {
+          setModalText("제출에 실패했습니다. 잠시 후, 시도해주세요.");
+          setIsModalOpen(true);
+        },
+      }
+    );
   };
 
-  const handleAddRequireSubmit = () => {
-    if (!selectedId || !requirementText.trim()) return;
+  const handleAddRequireSubmit = (selectedId: number) => {
+    if (!selectedId) return;
 
     AddRequireApplication(
       {
+        // TODO: 스펙 확인하고 추가 작업해야함
         body: {
-          id: selectedId,
-          requirement: requirementText.trim(),
+          applicationExpertId: String(selectedId),
         },
       },
       {
@@ -135,7 +163,13 @@ function SubmitList() {
   };
 
   return (
-    <Box mt={4} maxWidth="1000px" mx="auto">
+    <Box
+      mt={4}
+      maxWidth="1000px"
+      mx="auto"
+      component={Paper}
+      sx={{ overflowX: "auto" }}
+    >
       <Typography variant="h6" gutterBottom>
         자금 신청 내역
       </Typography>
@@ -203,20 +237,18 @@ function SubmitList() {
 
       <Paper>
         <TableContainer>
-          <Table>
+          <Table key={state}>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
-                <TableCell>신청 타입</TableCell>
+
                 <TableCell>신청일</TableCell>
                 <TableCell>담당자 성함</TableCell>
                 <TableCell>담당자 연락처</TableCell>
 
-                <TableCell>추가정보 요청여부</TableCell>
+                <TableCell>추가자료요청</TableCell>
 
-                {type === "FUND" ? <TableCell>추가정보 제출</TableCell> : null}
-
-                <TableCell>최종승인여부</TableCell>
+                <TableCell>최종승인</TableCell>
                 <TableCell>승인 금액</TableCell>
                 <TableCell>삭제</TableCell>
               </TableRow>
@@ -225,36 +257,47 @@ function SubmitList() {
               {applications.map((app: any) => (
                 <TableRow key={app.id}>
                   <TableCell>{app.id}</TableCell>
-                  <TableCell>{app.type}</TableCell>
 
                   <TableCell>
                     {new Date(app.createdAt).toLocaleString()}
                   </TableCell>
-                  <TableCell>개발 중</TableCell>
-                  <TableCell>개발 중</TableCell>
-                  <TableCell>승인 금액</TableCell>
+                  <TableCell>{app.expertName ?? "미지정"}</TableCell>
+                  <TableCell>{app.expertEamil ?? "미지정"}</TableCell>
+                  <TableCell>
+                    {app.isAdditionalInfoRequired === "Y" ? (
+                      <Button
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => handleAddRequireSubmit(app.id)}
+                      >
+                        제출완료
+                      </Button>
+                    ) : (
+                      "없음"
+                    )}
+                  </TableCell>
+
+                  {/* 최종승인 버튼 추가해서 동작시켜야함 */}
+                  <TableCell>
+                    {app.state === "APPROVED" ? (
+                      <Button
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => handleApproveFinal(app.id)}
+                      >
+                        승인하기
+                      </Button>
+                    ) : null}
+                  </TableCell>
 
                   <TableCell>
-                    {app.isAdditionalInfoRequired === "Y" ? "요청" : "없음"}
+                    {app.availableFundAmount
+                      ? Number(app.availableFundAmount).toLocaleString() + "억"
+                      : "-"}
                   </TableCell>
-                  {type === "FUND" ? (
-                    <TableCell>
-                      {app.isAdditionalInfoSubmitted === "Y" ? (
-                        "제출 완료"
-                      ) : app.isAdditionalInfoRequired === "Y" ? (
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={() => handleAddRequireOpen(app.id)}
-                        >
-                          제출하기
-                        </Button>
-                      ) : (
-                        "없음"
-                      )}
-                    </TableCell>
-                  ) : null}
-                  <TableCell> - </TableCell>
+
                   <TableCell>
                     {app.state === "REGISTERED" && (
                       <Button
@@ -271,7 +314,7 @@ function SubmitList() {
               ))}
               {applications.length === 0 && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={10} align="center">
+                  <TableCell colSpan={8} align="center">
                     신청 내역이 없습니다.
                   </TableCell>
                 </TableRow>

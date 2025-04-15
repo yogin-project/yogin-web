@@ -39,6 +39,7 @@ import { isLoginAtom } from "../store/authAtom";
 import { profileAtom } from "../store/profileAtom";
 import { useAtom } from "jotai";
 import { useTheme } from "@mui/material/styles";
+import MessageIcon from "@mui/icons-material/Message";
 
 const drawerWidth = 240;
 
@@ -65,6 +66,7 @@ const routeMap = {
     { label: "회원 목록 조회", path: "/dashboard/user-list" },
     { label: "자금 신청 목록 조회", path: "/dashboard/application-list" },
     { label: "회원 정보 다운로드", path: "/dashboard/excel-list" },
+    { label: "메시지 전송", path: "/dashboard/message-send" },
     {
       label: "자금 신청 현황 다운로드",
       path: "/dashboard/application-excel-list",
@@ -85,6 +87,7 @@ const iconMap: Record<string, JSX.Element> = {
   "자금 신청 목록 조회": <AssignmentIcon />,
   "회원 정보 다운로드": <FileDownloadIcon />,
   "자금 신청 현황 다운로드": <DownloadDoneIcon />,
+  "메시지 전송": <MessageIcon />,
   로그아웃: <LogoutIcon />,
 };
 

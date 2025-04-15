@@ -1,15 +1,15 @@
 import { useApiManager } from "@/app/libs/apiManager";
 
-export const useAddSubmit = () => {
+export const usePostPush = () => {
   return useApiManager({
     method: "POST",
-    path: "company/application/additional-info/submitted",
+    path: "push/all",
     mutationOption: {
       onSuccess: (data: any) => {
-        console.log("추가 자료 발송 완료:", data);
+        console.log("메시지 전송 완료:", data);
       },
       onError: (error: any) => {
-        console.error("추가 자료 발송 실패:", error);
+        console.error("메시지 전송 실패:", error);
       },
     },
   }).setUseMutation;

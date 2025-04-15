@@ -9,11 +9,13 @@ import { useRouter, usePathname } from "next/navigation";
 import useScrollDirection from "@/app/hooks/useScrollDirection";
 import { useAtomValue } from "jotai";
 import { isLoginAtom } from "@/app/store/authAtom";
+import { profileAtom } from "@/app/store/profileAtom";
 
 const HeaderMobile = () => {
   const router = useRouter();
   const pathname = usePathname();
   const isLogin = useAtomValue(isLoginAtom);
+  const profile = useAtomValue(profileAtom);
 
   const direction = useScrollDirection(100);
   const isVisible = direction !== "down";
