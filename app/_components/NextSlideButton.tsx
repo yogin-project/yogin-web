@@ -1,18 +1,24 @@
-import { Stack, Typography } from '@mui/material';
+import { BREAKPOINTS } from "../libs/theme";
+import { Box } from "@mui/material";
 
-function PleaseScrollDown() {
+export default function NextSlideButton({
+  href,
+  color = "common.white",
+}: {
+  href: string;
+  color?: string;
+}) {
   return (
-    <Stack
-      width="fit-content"
-      alignItems="center"
+    <Box
+      component="a"
+      href={href}
+      color={color}
       sx={{
-        opacity: 1,
-        position: 'sticky',
-        transform: 'translateX(-50%)',
-        left: '50%',
-        bottom: '16px',
-        webkitAnimation: 'arrow 0.5s linear 0s infinite alternate',
-        animation: 'arrow 0.5s linear 0s infinite alternate',
+        cursor: "pointer",
+        position: "absolute",
+        fill: "currentcolor",
+        webkitAnimation: "arrow 0.5s linear 0s infinite alternate",
+        animation: "arrow 0.5s linear 0s infinite alternate",
       }}
     >
       <svg
@@ -27,9 +33,6 @@ function PleaseScrollDown() {
           <path d="M8.46967 13.0303C8.17678 12.7374 8.17678 12.2626 8.46967 11.9697C8.76256 11.6768 9.23744 11.6768 9.53033 11.9697L12 14.4393L14.4697 11.9697C14.7626 11.6768 15.2374 11.6768 15.5303 11.9697C15.8232 12.2626 15.8232 12.7374 15.5303 13.0303L12.5303 16.0303C12.2374 16.3232 11.7626 16.3232 11.4697 16.0303L8.46967 13.0303Z"></path>
         </g>
       </svg>
-      <Typography variant="caption">스크롤을 내려주세요</Typography>
-    </Stack>
+    </Box>
   );
 }
-
-export default PleaseScrollDown;
