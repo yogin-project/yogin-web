@@ -128,8 +128,20 @@ function Desktop() {
               <strong className={`fade-text ${textInView ? "show" : ""}`}>
                 우수한 연구 인력
               </strong>
-              을 통해 연구 계획서 작성과 기술애로를 해결 대학은 기업의 R&D에
-              참여하면서 실무를 경험할 수 있습니다.
+              을 통해
+              <br />
+              연구 계획서 작성과 기술애로를 해결할 수 있습니다.
+            </Typography>
+
+            <Typography
+              fontSize="1.4rem"
+              fontWeight={400}
+              whiteSpace="pre-wrap"
+              sx={{ wordBreak: "keep-all" }}
+            >
+              대학은 기업의 R&D에 참여하면서
+              <br />
+              실무를 경험할 수 있습니다.
             </Typography>
           </Stack>
 
