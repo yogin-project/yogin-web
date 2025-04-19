@@ -145,7 +145,7 @@ const HeaderDesktop = () => {
               onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
               sx={{ verticalAlign: "baseline" }}
             >
-              <Typography whiteSpace="nowrap">신청하기</Typography>
+              <Typography whiteSpace="nowrap">자금신청</Typography>
               <Typography
                 component="span"
                 color="primary.main"
@@ -164,40 +164,11 @@ const HeaderDesktop = () => {
                   },
                 }}
               >
-                기업용
+                정책자금 / R&D
               </Typography>
             </ButtonBase>
           )}
-          {(type == "MANAGER" || type == "ADMIN") && (
-            <ButtonBase
-              onClick={() => handleRendSearch(profileInfo?.type, router)}
-              sx={{
-                cursor: "pointer",
-              }}
-            >
-              <Typography whiteSpace="nowrap">대출찾기</Typography>
-              <Typography
-                component="span"
-                color="primary.main"
-                fontSize="0.75rem"
-                fontWeight={600}
-                whiteSpace="nowrap"
-                lineHeight={1}
-                sx={{
-                  marginLeft: "0.5rem",
-                  [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
-                    marginLeft: 0,
-                    position: "absolute",
-                    top: "calc(50% + 0.9rem)",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                  },
-                }}
-              >
-                정책자금
-              </Typography>
-            </ButtonBase>
-          )}
+
           {(type == "PROFESSOR" || type == "ADMIN") && (
             <ButtonBase
               onClick={() => handleRNDSearch(profileInfo?.type, router)}
@@ -205,7 +176,7 @@ const HeaderDesktop = () => {
                 cursor: "pointer",
               }}
             >
-              <Typography whiteSpace="nowrap">R&D 매칭</Typography>
+              <Typography whiteSpace="nowrap">전문가 신청</Typography>
             </ButtonBase>
           )}
         </Stack>
