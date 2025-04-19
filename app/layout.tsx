@@ -8,12 +8,14 @@ import Nav from "./components/Nav";
 import Script from "next/script";
 import i18n from "../i18n";
 import { useEffect } from "react";
+import { useIsMobile } from "./hooks/useIsMobileSize";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isMobile = useIsMobile();
   useEffect(() => {
     // 클라이언트에서 i18n 초기화
     i18n.changeLanguage(i18n.language || "ko");
@@ -126,6 +128,7 @@ export default function RootLayout({
       <MultiProvider>
         <body>
           <Nav />
+          <Box height={isMobile ? "60px" : "80px"} />
           {children}
         </body>
       </MultiProvider>

@@ -1,15 +1,15 @@
 "use client";
 
 import { IconButton, Stack } from "@mui/material";
+import React, { Fragment } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { Fragment } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import useScrollDirection from "@/app/hooks/useScrollDirection";
-import { useAtomValue } from "jotai";
 import { isLoginAtom } from "@/app/store/authAtom";
 import { profileAtom } from "@/app/store/profileAtom";
+import { useAtomValue } from "jotai";
+import useScrollDirection from "@/app/hooks/useScrollDirection";
 
 const HeaderMobile = () => {
   const router = useRouter();
@@ -36,7 +36,7 @@ const HeaderMobile = () => {
       px={2}
       sx={{
         position: "fixed",
-        top: 100,
+        top: 0,
         zIndex: 1000,
         webkitBackdropFilter: "blur(15px)",
         backdropFilter: "blur(15px)",

@@ -27,7 +27,6 @@ const HeaderDesktop = () => {
   const handleRouteHeader = useRouteInHeader();
   const profileInfo = useAtomValue(profileAtom);
 
-  const isMobile = useIsMobile();
   const direction = useScrollDirection(80);
   const isVisible = direction !== "down";
 
@@ -52,7 +51,7 @@ const HeaderDesktop = () => {
       px={3}
       sx={{
         position: "fixed",
-        top: 80,
+        top: 0,
         zIndex: 1000,
         webkitBackdropFilter: "blur(15px)",
         backdropFilter: "blur(15px)",
@@ -109,7 +108,7 @@ const HeaderDesktop = () => {
             <Typography
               onClick={() => handleRouteHeader("")}
               fontSize="0.9rem"
-              fontWeight={700}
+              fontWeight={800}
               letterSpacing={-0.25}
               lineHeight={1}
               whiteSpace="nowrap"

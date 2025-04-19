@@ -1,13 +1,14 @@
-import { BREAKPOINTS } from "../libs/theme";
 import { Box } from "@mui/material";
+import { useIsMobile } from "../hooks/useIsMobileSize";
 
 export default function NextSlideButton({
   href,
-  color = "common.white",
+  color = "common.black",
 }: {
   href: string;
   color?: string;
 }) {
+  const isMobile = useIsMobile();
   return (
     <Box
       component="a"
@@ -23,8 +24,8 @@ export default function NextSlideButton({
     >
       <svg
         fill="currentColor"
-        width="50px"
-        height="50px"
+        width={isMobile ? "36px" : "50px"}
+        height={isMobile ? "36px" : "50px"}
         viewBox="-2.4 -2.4 28.80 28.80"
         xmlns="http://www.w3.org/2000/svg"
       >
