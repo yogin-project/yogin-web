@@ -2,7 +2,6 @@
 
 import "./globals.css";
 
-import Banner from "./_components/Banner";
 import { Box } from "@mui/material";
 import MultiProvider from "./provider";
 import Nav from "./components/Nav";
@@ -126,9 +125,7 @@ export default function RootLayout({
 
       <MultiProvider>
         <body>
-          <Banner />
           <Nav />
-          <Box height="160px" />
           {children}
         </body>
       </MultiProvider>
