@@ -18,7 +18,8 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { DESKTOP_NAV_HEIGHT, DRAWER_WIDTH } from "../libs/contstant";
+import { JSX, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 // 아이콘 import
@@ -33,15 +34,13 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import MessageIcon from "@mui/icons-material/Message";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import { isLoginAtom } from "../store/authAtom";
 import { profileAtom } from "../store/profileAtom";
 import { useAtom } from "jotai";
 import { useTheme } from "@mui/material/styles";
-import MessageIcon from "@mui/icons-material/Message";
-
-const drawerWidth = 240;
 
 const routeMap = {
   CORPORATE: [
@@ -107,7 +106,10 @@ export default function DashboardLayout({
   );
 
   const role = profile?.type || "CORPORATE";
-  const routes = useMemo(() => routeMap[role] || [], [role]);
+  const routes = useMemo(
+    () => routeMap[role as keyof typeof routeMap] || [],
+    [role]
+  );
 
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
 
@@ -126,10 +128,10 @@ export default function DashboardLayout({
 
   const drawerContent = (
     <Box>
-      <Toolbar>
+      <Toolbar sx={{ height: DESKTOP_NAV_HEIGHT }}>
         <Typography variant="h6">메뉴</Typography>
       </Toolbar>
-      <List>
+      <List sx={{ py: 0 }}>
         {routes.map((route) => (
           <ListItemButton
             key={route.path}
@@ -174,7 +176,7 @@ export default function DashboardLayout({
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box position="relative" sx={{ display: "flex" }}>
       {isMobile && (
         <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Toolbar>
@@ -195,7 +197,7 @@ export default function DashboardLayout({
 
       <Box
         component="nav"
-        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+        sx={{ width: { md: DRAWER_WIDTH }, flexShrink: { md: 0 } }}
         aria-label="sidebar menu"
       >
         <Drawer
@@ -205,7 +207,9 @@ export default function DashboardLayout({
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: "block", md: "none" },
-            "& .MuiDrawer-paper": { width: drawerWidth },
+            "& .MuiDrawer-paper": {
+              width: DRAWER_WIDTH,
+            },
           }}
         >
           {drawerContent}
@@ -216,7 +220,7 @@ export default function DashboardLayout({
           sx={{
             display: { xs: "none", md: "block" },
             "& .MuiDrawer-paper": {
-              width: drawerWidth,
+              width: DRAWER_WIDTH,
               boxSizing: "border-box",
             },
           }}
@@ -231,7 +235,7 @@ export default function DashboardLayout({
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { md: `calc(100% - ${drawerWidth}px)` },
+          width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
           mt: isMobile ? 8 : 0,
         }}
       >
@@ -241,12 +245,10 @@ export default function DashboardLayout({
       <Dialog
         open={openLogoutDialog}
         onClose={() => setOpenLogoutDialog(false)}
-        PaperProps={{
-          sx: {
-            borderRadius: 3,
-            p: 2,
-            minWidth: 320,
-          },
+        sx={{
+          borderRadius: 3,
+          p: 2,
+          minWidth: 320,
         }}
       >
         <DialogTitle variant="h6" fontWeight={700} textAlign="center">

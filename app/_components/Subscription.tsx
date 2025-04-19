@@ -38,6 +38,9 @@ function Subscription() {
       marginY={4}
       padding={2}
       borderRadius={4}
+      sx={{
+        scrollSnapAlign: "center",
+      }}
     >
       <Stack flexDirection="row" gap={2} alignItems="center">
         {!isMobile && <SubscriptionsRounded sx={{ fontSize: "1rem" }} />}
