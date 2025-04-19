@@ -138,7 +138,7 @@ function Mobile() {
           }}
         />
 
-        <Stack color="action.active" gap={0.5}>
+        <Stack gap={0.5}>
           <Typography variant="subtitle2" fontSize={12} fontWeight={800}>
             비즈니스 네트워크 플랫폼 ‘요긴’에 오신 것을 환영합니다.
           </Typography>

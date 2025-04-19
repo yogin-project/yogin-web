@@ -146,7 +146,7 @@ function Desktop() {
             }}
           />
 
-          <Stack color="action.active">
+          <Stack>
             <Typography variant="subtitle1" fontWeight={800}>
               비즈니스 네트워크 플랫폼 ‘요긴’에 오신 것을 환영합니다.
             </Typography>
