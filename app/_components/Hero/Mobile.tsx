@@ -11,8 +11,6 @@ function Mobile() {
   return (
     <Stack
       width="100%"
-      mt="-60px"
-      minHeight="100vh"
       alignItems="center"
       position="relative"
       sx={{

@@ -11,9 +11,7 @@ import React from "react";
 function Desktop() {
   return (
     <Stack
-      mt="-80px"
       width="100%"
-      minHeight="100vh"
       alignItems="center"
       position="relative"
       sx={{
@@ -23,7 +21,6 @@ function Desktop() {
       <Stack
         maxWidth={BREAKPOINTS.desktop}
         mx="auto"
-        mt="auto"
         height="calc(100vh - 80px)"
         sx={{
           display: "grid",

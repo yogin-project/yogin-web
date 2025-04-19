@@ -13,7 +13,6 @@ function Home() {
   return (
     <Stack
       width="100%"
-      maxHeight="100vh"
       display="flex"
       flexDirection="column"
       sx={{
