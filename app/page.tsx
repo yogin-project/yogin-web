@@ -1,34 +1,54 @@
-'use client';
+"use client";
 
-import { Divider, Stack } from '@mui/material';
-
-import { BREAKPOINTS } from './libs/theme';
-import CTA from './_components/CTA';
-import Feature1 from './_components/Feature1';
-import Feature2 from './_components/Feature2';
-import Footer from './_components/Footer';
-import Hero from './_components/Hero';
-import React from 'react';
-import Subscription from './_components/Subscription';
-import Testimonial from './_components/Testimonial';
-import Feature3 from './_components/Feature3';
+import CTA from "./_components/CTA";
+import Footer from "./_components/Footer";
+import Hero from "./_components/Hero";
+import LoanFeature from "./_components/LoanFeature";
+import React from "react";
+import RndFeature from "./_components/RndFeature";
+import ServiceList from "./_components/ServiceList";
+import { Stack } from "@mui/material";
 
 function Home() {
   return (
-    <Stack width="100%" display="flex" flexDirection="column">
+    <Stack
+      width="100%"
+      display="flex"
+      flexDirection="column"
+      sx={{
+        overflowY: "scroll",
+        scrollSnapType: "y mandatory",
+        WebkitOverflowScrolling: "touch",
+        overscrollBehaviorY: "auto",
+      }}
+    >
       <Hero />
-      <Testimonial />
+      <LoanFeature />
+      <RndFeature />
+      <Stack
+        id="feature-service"
+        width="100%"
+        height="fit-content"
+        minHeight="100vh"
+        sx={{
+          scrollSnapAlign: "start",
+        }}
+      >
+        <Stack
+          mx="auto"
+          width="100%"
+          flexGrow="1"
+          pt="80px"
+          justifyContent="center"
+          position="relative"
+          bgcolor="action.hover"
+        >
+          <ServiceList />
+          <CTA />
+        </Stack>
 
-      <Divider
-        sx={{ mx: 'auto', width: '100%', maxWidth: BREAKPOINTS.tablet }}
-      />
-
-      <Feature1 />
-      <Feature2 />
-      <Feature3 />
-      <CTA />
-      <Subscription />
-      <Footer />
+        <Footer />
+      </Stack>
     </Stack>
   );
 }

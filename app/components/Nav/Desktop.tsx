@@ -1,23 +1,23 @@
 "use client";
 
 import { Avatar, Button, ButtonBase, Stack, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   handleCorporateSubmit,
   handleRNDSearch,
   handleRendSearch,
 } from "./index.utils";
 import { useAtomValue, useSetAtom } from "jotai";
+import { usePathname, useRouter } from "next/navigation";
 
 import { BREAKPOINTS } from "@/app/libs/theme";
+import { DRAWER_WIDTH } from "@/app/libs/contstant";
 import Image from "next/image";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { isAuthenticated } from "@/app/utils";
 import { isLoginAtom } from "@/app/store/authAtom";
 import { profileAtom } from "@/app/store/profileAtom";
-import { useIsMobile } from "@/app/hooks/useIsMobileSize";
 import { useRouteInHeader } from "./index.hooks";
-import { useRouter } from "next/navigation";
 import useScrollDirection from "@/app/hooks/useScrollDirection";
 import { useTranslation } from "react-i18next";
 
@@ -26,9 +26,12 @@ const HeaderDesktop = () => {
   const router = useRouter();
   const handleRouteHeader = useRouteInHeader();
   const profileInfo = useAtomValue(profileAtom);
+  const pathname = usePathname();
 
-  const isMobile = useIsMobile();
   const direction = useScrollDirection(80);
+
+  const [type, setType] = useState("");
+
   const isVisible = direction !== "down";
 
   const isLogin = useAtomValue(isLoginAtom);
@@ -41,6 +44,17 @@ const HeaderDesktop = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (profileInfo?.type) {
+      setType(profileInfo?.type);
+    } else {
+      setType("");
+    }
+    return () => {
+      setType("");
+    };
+  }, [profileInfo?.type]);
+
   return (
     <Stack
       component="nav"
@@ -52,7 +66,7 @@ const HeaderDesktop = () => {
       px={3}
       sx={{
         position: "fixed",
-        top: 80,
+        top: 0,
         zIndex: 1000,
         webkitBackdropFilter: "blur(15px)",
         backdropFilter: "blur(15px)",
@@ -64,10 +78,15 @@ const HeaderDesktop = () => {
       }}
     >
       <Stack
+        ml="auto"
+        width={{
+          xs: "100%",
+          md: pathname.startsWith("/dashboard")
+            ? `calc(100% - ${DRAWER_WIDTH}px)`
+            : "100%",
+        }}
         maxWidth={BREAKPOINTS.desktop}
         height={80}
-        width="100%"
-        margin="0 auto"
         direction={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
@@ -109,83 +128,63 @@ const HeaderDesktop = () => {
             <Typography
               onClick={() => handleRouteHeader("")}
               fontSize="0.9rem"
-              fontWeight={700}
+              fontWeight={800}
               letterSpacing={-0.25}
               lineHeight={1}
               whiteSpace="nowrap"
               color="tertiary.light"
               sx={{
                 cursor: "pointer",
-                [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
-                  display: "none",
-                },
               }}
             >
               요긴하게 이용하세요
             </Typography>
           </Stack>
-          <ButtonBase
-            onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
-            sx={{ verticalAlign: "baseline" }}
-          >
-            <Typography whiteSpace="nowrap">신청하기</Typography>
-            <Typography
-              component="span"
-              color="primary.main"
-              fontSize="0.75rem"
-              fontWeight={600}
-              whiteSpace="nowrap"
-              lineHeight={1}
+          {type == "CORPORATE" && (
+            <ButtonBase
+              onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
+              sx={{ verticalAlign: "baseline" }}
+            >
+              <Typography whiteSpace="nowrap">자금신청</Typography>
+              <Typography
+                component="span"
+                color="primary.main"
+                fontSize="0.75rem"
+                fontWeight={600}
+                whiteSpace="nowrap"
+                lineHeight={1}
+                sx={{
+                  marginLeft: "0.5rem",
+                  [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
+                    marginLeft: 0,
+                    position: "absolute",
+                    top: "calc(50% + 0.9rem)",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                  },
+                }}
+              >
+                정책자금 / R&D
+              </Typography>
+            </ButtonBase>
+          )}
+
+          {(type === "MANAGER" || type == "PROFESSOR") && (
+            <ButtonBase
+              onClick={() => {
+                if (type === "MANAGER") {
+                  handleRendSearch(profileInfo?.type, router);
+                } else {
+                  handleRNDSearch(profileInfo?.type, router);
+                }
+              }}
               sx={{
-                marginLeft: "0.5rem",
-                [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
-                  marginLeft: 0,
-                  position: "absolute",
-                  top: "calc(50% + 0.9rem)",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                },
+                cursor: "pointer",
               }}
             >
-              기업용
-            </Typography>
-          </ButtonBase>
-          <ButtonBase
-            onClick={() => handleRendSearch(profileInfo?.type, router)}
-            sx={{
-              cursor: "pointer",
-            }}
-          >
-            <Typography whiteSpace="nowrap">대출찾기</Typography>
-            <Typography
-              component="span"
-              color="primary.main"
-              fontSize="0.75rem"
-              fontWeight={600}
-              whiteSpace="nowrap"
-              lineHeight={1}
-              sx={{
-                marginLeft: "0.5rem",
-                [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
-                  marginLeft: 0,
-                  position: "absolute",
-                  top: "calc(50% + 0.9rem)",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                },
-              }}
-            >
-              정책자금
-            </Typography>
-          </ButtonBase>
-          <ButtonBase
-            onClick={() => handleRNDSearch(profileInfo?.type, router)}
-            sx={{
-              cursor: "pointer",
-            }}
-          >
-            <Typography whiteSpace="nowrap">R&D 매칭</Typography>
-          </ButtonBase>
+              <Typography whiteSpace="nowrap">전문가 신청</Typography>
+            </ButtonBase>
+          )}
         </Stack>
         <Stack direction={"row"} gap={1} alignItems={"center"}>
           {isLogin ? (

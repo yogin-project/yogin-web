@@ -130,7 +130,7 @@ export default function Loan() {
     saveTempApplication(
       {
         body: {
-          applicationId: applicationId?.applications[0]?.id,
+          applicationId: Number(applicationId?.applications[0]?.id),
         },
       },
       {

@@ -1,84 +1,69 @@
 "use client";
 
-import { AndroidRounded, Apple, ArrowForward } from "@mui/icons-material";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { AndroidRounded, ArrowForward } from "@mui/icons-material";
+import { Button, Divider, Stack, Typography } from "@mui/material";
 
+import { BREAKPOINTS } from "@/app/libs/theme";
+import Image from "next/image";
+import NextSlideButton from "../NextSlideButton";
 import React from "react";
 
 function Desktop() {
   return (
-    <Stack height="calc(100vh - 160px)">
+    <Stack
+      width="100%"
+      alignItems="center"
+      position="relative"
+      sx={{
+        scrollSnapAlign: "start",
+      }}
+    >
       <Stack
-        height="100%"
+        maxWidth={BREAKPOINTS.desktop}
+        mx="auto"
+        height="calc(100vh - 80px)"
         sx={{
-          position: "relative",
-          overflow: "hidden",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          display: "grid",
+          gridColumn: 2,
+          gridTemplateColumns: "3fr 2fr",
         }}
       >
-        <Box
-          component="video"
-          autoPlay
-          muted
-          loop
-          playsInline
-          sx={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            zIndex: -1,
-          }}
-        >
-          <source src="/videos/landing-bg.webm" type="video/webm" />
-          <source src="/videos/landing-bg.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </Box>
-
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            background: `radial-gradient(
-                circle,
-                rgba(0, 0, 0, 0.3) 0%,
-                rgba(0, 0, 0, 0.4) 40%,
-                rgba(0, 0, 0, 0.6) 70%,
-                rgba(0, 0, 0, 0.7) 100%
-              )`,
-          }}
-        />
+        <Stack position="relative">
+          <Image
+            fill
+            alt="main image"
+            src="/images/landing/flat-hand-drawn-people-starting-business-project.png"
+            style={{ minWidth: "100%", objectFit: "contain" }}
+          />
+        </Stack>
 
         <Stack
-          color="common.white"
-          alignItems="center"
-          gap={4}
+          justifyContent="center"
+          px={2}
+          gap={2}
           sx={{
-            position: "relative",
             zIndex: 1,
-            textAlign: "center",
+            gridColumnStart: 2,
           }}
         >
-          <Typography variant="h1" fontSize={48} lineHeight={1.3}>
+          <Typography variant="h2" lineHeight={1.3} fontWeight={500}>
             아직도
             <br />
             <strong>비싼 수수료</strong>를 지불하면서
             <br />
             대출받으세요?
           </Typography>
+
           <Typography variant="h5">
             기업 여신은 기업의 재무제표를 가지고 결정됩니다.
             <br />
             브로커의 능력이 아닙니다.
           </Typography>
-          <Typography variant="h5" marginTop={-3}>
+
+          <Typography variant="h5">
             요긴에서 수수료 없이 무료로 진행하세요.
           </Typography>
+
           <Stack
             width="100%"
             maxWidth="300px"
@@ -147,42 +132,35 @@ function Desktop() {
               IOS
             </Button> */}
           </Stack>
-
           {/* 앱 배포 후, 링크 달고 지우기 */}
           {/* <Stack mt={-3}>
-            <Typography variant="caption" fontWeight={700}>
+            <Typography variant="caption" fontWeight={800}>
               현재 앱 준비중입니다.
             </Typography>
           </Stack> */}
-        </Stack>
 
-        <Box
-          component="a"
-          href="#testimonial"
-          color="common.white"
-          sx={{
-            cursor: "pointer",
-            position: "absolute",
-            bottom: "16px",
-            fill: "common.white",
-            webkitAnimation: "arrow 0.5s linear 0s infinite alternate",
-            animation: "arrow 0.5s linear 0s infinite alternate",
-          }}
-        >
-          <svg
-            fill="currentColor"
-            width="50px"
-            height="50px"
-            viewBox="-2.4 -2.4 28.80 28.80"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g>
-              <path d="M8.46967 9.03033C8.17678 8.73744 8.17678 8.26256 8.46967 7.96967C8.76256 7.67678 9.23744 7.67678 9.53033 7.96967L12 10.4393L14.4697 7.96967C14.7626 7.67678 15.2374 7.67678 15.5303 7.96967C15.8232 8.26256 15.8232 8.73744 15.5303 9.03033L12.5303 12.0303C12.2374 12.3232 11.7626 12.3232 11.4697 12.0303L8.46967 9.03033Z"></path>
-              <path d="M8.46967 13.0303C8.17678 12.7374 8.17678 12.2626 8.46967 11.9697C8.76256 11.6768 9.23744 11.6768 9.53033 11.9697L12 14.4393L14.4697 11.9697C14.7626 11.6768 15.2374 11.6768 15.5303 11.9697C15.8232 12.2626 15.8232 12.7374 15.5303 13.0303L12.5303 16.0303C12.2374 16.3232 11.7626 16.3232 11.4697 16.0303L8.46967 13.0303Z"></path>
-            </g>
-          </svg>
-        </Box>
+          <Divider
+            sx={{
+              width: "100%",
+              bgcolor: "action.hover",
+            }}
+          />
+
+          <Stack>
+            <Typography variant="subtitle1" fontWeight={800}>
+              비즈니스 네트워크 플랫폼 ‘요긴’에 오신 것을 환영합니다.
+            </Typography>
+            <Typography variant="subtitle2">
+              요긴 플랫폼은 2025년 4월 출시되었습니다. 현재 베타 버전으로 사용중
+              불편 또는 개선 사항이 있는 경우
+              <a href="mailto:aranya78@naver.com">aranya78@naver.com</a>
+              으로 의견을 보내주시면 적극 반영하겠습니다.
+            </Typography>
+          </Stack>
+        </Stack>
       </Stack>
+
+      <NextSlideButton href="#feature-loan" />
     </Stack>
   );
 }
