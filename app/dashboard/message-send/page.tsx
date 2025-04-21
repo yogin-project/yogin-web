@@ -39,8 +39,8 @@ const subTypeMap: Record<(typeof types)[number], string[]> = {
 const subTypeLabels: Record<string, string> = {
   ALL: "전체 사용자",
   CORP: "기업 회원",
-  MANAGER: "지점 매니저",
-  PROFESSOR: "전문가",
+  MANAGER: "은행 회원",
+  PROFESSOR: "전문가 회원",
   APPROVED: "승인 대상자",
   REJECT: "반려 대상자",
   APPLY: "매니저 신청한 기업",
