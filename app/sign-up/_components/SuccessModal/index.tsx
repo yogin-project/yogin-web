@@ -3,15 +3,17 @@
 "use client";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
   Box,
-  Stack,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
   IconButton,
+  Stack,
+  Typography,
 } from "@mui/material";
+
+import { BREAKPOINTS } from "@/app/libs/theme";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -36,7 +38,7 @@ export default function SuccessModal({
           p: 3,
           textAlign: "center",
           width: "100%",
-          maxWidth: 400,
+          maxWidth: BREAKPOINTS.mobile,
         },
       }}
     >
@@ -51,7 +53,7 @@ export default function SuccessModal({
         <Typography
           variant="h6"
           color="text.secondary"
-          sx={{ whiteSpace: "pre-line" }}
+          sx={{ whiteSpace: "pre-wrap", wordBreak: "keep-all" }}
         >
           {message}
         </Typography>
