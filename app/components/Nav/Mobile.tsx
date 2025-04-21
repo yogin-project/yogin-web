@@ -63,8 +63,8 @@ const HeaderMobile = () => {
             component={Image}
             src="/images/common/logo-full_landscape.png"
             fill
-            objectFit="contain"
             alt="yogin logo"
+            sx={{ objectFit: "contain" }}
           />
         </IconButton>
         <IconButton

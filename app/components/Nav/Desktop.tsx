@@ -121,8 +121,8 @@ const HeaderDesktop = () => {
                 onClick={() => handleRouteHeader("")}
                 src="/images/common/logo-full_landscape.png"
                 fill
-                objectFit="contain"
                 alt="yogin logo"
+                sx={{ objectFit: "contain" }}
               />
             </Stack>
             <Typography
