@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   Grid,
   Input,
   Paper,
@@ -193,39 +194,38 @@ export default function MemberInfo() {
 
   return (
     <Box mt={4} maxWidth={600} mx="auto">
-      <Typography variant="h6" gutterBottom>
-        회원 정보
-      </Typography>
       <Paper sx={{ p: 4 }} elevation={3}>
+        <Typography variant="h6" mb={6}>
+          회원 정보
+        </Typography>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12}>
             <Box display="flex" flexDirection="column" gap={2}>
               <TextField
+                label="기업명"
+                fullWidth
+                value={additionalInfo?.corporateInfoCorpName}
+                disabled
+              />
+              <TextField
+                label="대표명"
+                fullWidth
+                value={additionalInfo?.corporateInfoCeoName}
+                disabled
+              />
+
+              {/* <TextField
                 label="이름"
                 name="name"
                 fullWidth
                 value={form.name}
                 onChange={handleChange}
-              />
+              /> */}
               <TextField
                 label="이메일"
                 name="email"
                 fullWidth
                 value={form.email}
-                onChange={handleChange}
-              />
-              <TextField
-                label="소재지"
-                name="location"
-                fullWidth
-                value={form.location}
-                onChange={handleChange}
-              />
-              <TextField
-                label="주소"
-                name="address"
-                fullWidth
-                value={form.address}
                 onChange={handleChange}
               />
               <TextField
@@ -236,11 +236,19 @@ export default function MemberInfo() {
                 onChange={handleChange}
               />
               <TextField
-                label="회원유형"
+                label="소재지"
+                name="location"
                 fullWidth
-                value={getUserTypeLabel(type)}
-                disabled
+                value={form.location}
+                onChange={handleChange}
               />
+              {/* <TextField
+                label="주소"
+                name="address"
+                fullWidth
+                value={form.address}
+                onChange={handleChange}
+              /> */}
               {type === "MANAGER" && (
                 <TextField
                   label="지점명"
