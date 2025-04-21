@@ -45,15 +45,15 @@ const HeaderDesktop = () => {
   }, []);
 
   useEffect(() => {
+    if (!isLogin) {
+      setType("");
+    }
     if (profileInfo?.type) {
       setType(profileInfo?.type);
     } else {
       setType("");
     }
-    return () => {
-      setType("");
-    };
-  }, [profileInfo?.type]);
+  }, [profileInfo?.type, isLogin]);
 
   return (
     <Stack
