@@ -10,11 +10,13 @@ import {
   DialogTitle,
   MenuItem,
   Paper,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 
+import { InfoOutlined } from "@mui/icons-material";
 import { useManagement } from "@/app/hooks/apis/useManagement";
 
 function SubmitManaging() {
@@ -57,22 +59,24 @@ function SubmitManaging() {
   return (
     <Box mt={4} maxWidth={600} mx="auto">
       <Typography variant="h5" gutterBottom fontWeight={600}>
-        매니지 신청
+        매니저 신청
       </Typography>
 
-      <Alert
-        severity="info"
-        sx={{ mb: 3, fontSize: 15, lineHeight: 1.8, borderRadius: 2 }}
+      <Stack
+        bgcolor="action.hover"
+        gap={1}
+        p={2}
+        borderRadius={2}
+        mb={2}
+        direction="row"
+        alignItems="center"
       >
-        자금조달 신청 후 어떤 전문가에게도 승인이 나지 않고 계속 부결될 경우,
-        <strong>
-          {" "}
-          매니저에게 직접 자금조달 관련 상담을 요청할 수 있습니다.
-        </strong>{" "}
-        <br />
-        해당 기능을 통해 매니저에게 메시지를 전달하면 빠르게 검토 후 연락을
-        드립니다.
-      </Alert>
+        <InfoOutlined sx={{ color: "action.active" }} />
+        <Typography ml={1} fontSize={14}>
+          대출 신청 후 부결 되거나 혹은 기타 서비스가 필요한 경우 매니저에게
+          직접 상담을 요청할 수 있습니다.
+        </Typography>
+      </Stack>
 
       <Paper sx={{ p: 4 }} elevation={3}>
         <Box display="flex" flexDirection="column" gap={2}>
@@ -83,8 +87,9 @@ function SubmitManaging() {
             onChange={(e) => setApplyType(e.target.value)}
             fullWidth
           >
+            <MenuItem value="대출신청">대출</MenuItem>
             <MenuItem value="R&D">R&D</MenuItem>
-            <MenuItem value="대출신청">대출신청</MenuItem>
+            <MenuItem value="기타">기타</MenuItem>
           </TextField>
 
           <TextField
@@ -102,7 +107,7 @@ function SubmitManaging() {
             color="primary"
             onClick={() => setShowApplyDialog(true)}
           >
-            매니지 신청하기
+            매니저 신청하기
           </Button>
 
           <Dialog open={showApplyDialog} fullWidth>
