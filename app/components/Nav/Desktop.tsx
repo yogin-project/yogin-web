@@ -78,7 +78,7 @@ const HeaderDesktop = () => {
       }}
     >
       <Stack
-        ml="auto"
+        mx="auto"
         width={{
           xs: "100%",
           md: pathname.startsWith("/dashboard")
