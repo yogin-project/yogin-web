@@ -2,15 +2,16 @@
 
 import {
   Box,
-  Typography,
-  Paper,
-  Grid,
-  TextField,
   Button,
   CircularProgress,
   Container,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
 import { useFinancialSummary } from "@/app/hooks/apis/useFinancialSummary";
 import { useIsMobile } from "@/app/hooks/useIsMobileSize";
 
@@ -233,7 +234,7 @@ export default function FinanceSummaryPage() {
 
       <Box mt={5}>
         <Typography variant="subtitle1" gutterBottom textAlign="center">
-          모든 항목에 숫자(억 단위)만 입력하세요
+          모든 항목에 숫자(원 단위)만 입력하세요
         </Typography>
 
         <Grid container spacing={2}>
