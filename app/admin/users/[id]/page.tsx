@@ -1,24 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
 import {
+  Alert,
   Box,
-  Typography,
-  Paper,
-  Divider,
-  Stack,
+  Button,
   Chip,
   Dialog,
   DialogContent,
+  Divider,
   IconButton,
-  Button,
-  TextField,
+  Paper,
   Snackbar,
-  Alert,
+  Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
+import React, { useState } from "react";
+
 import CloseIcon from "@mui/icons-material/Close";
-import { useSearchParams } from "next/navigation";
 import { useAdminApprove } from "@/app/hooks/apis/useAdminApprove";
+import { useSearchParams } from "next/navigation";
 
 function UserDetailPage() {
   const searchParams = useSearchParams();
@@ -134,6 +135,8 @@ function UserDetailPage() {
     </>
   );
 
+  console.log(user);
+
   return (
     <Box maxWidth="700px" mx="auto" mt={6} px={3}>
       <Typography variant="h4" gutterBottom fontWeight={600} textAlign="center">
@@ -197,7 +200,7 @@ function UserDetailPage() {
             <>
               <Typography variant="h6">지점장 정보</Typography>
               <Typography>
-                <b>지점명:</b> {user.branchName}
+                <b>은행명:</b> {user.branchName}
               </Typography>
               <Typography>
                 <b>관리자 승인 여부:</b>{" "}
