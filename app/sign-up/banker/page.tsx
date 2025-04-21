@@ -1,29 +1,33 @@
 "use client";
 
-import MobileWrapper from "@/app/layout/MobileWrapper";
 import {
   Box,
   Button,
   Divider,
+  FormControl,
+  FormLabel,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
   Stack,
   TextField,
   Typography,
-  Select,
-  MenuItem,
-  IconButton,
-  Paper,
 } from "@mui/material";
 import React, { useState } from "react";
-import Image from "next/image";
-import DeleteIcon from "@mui/icons-material/Delete";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import AgreementSection from "../_components/AgreementSection";
-import { useRouter } from "next/navigation";
 import { bankList, isValidPassword } from "@/app/utils";
+
 import AddressSearch from "@/app/components/AddSearch";
-import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
+import AgreementSection from "../_components/AgreementSection";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Image from "next/image";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import MobileWrapper from "@/app/layout/MobileWrapper";
 import SuccessModal from "../_components/SuccessModal";
 import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
+import { useRouter } from "next/navigation";
+import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
 
 function SignUpBank() {
   const router = useRouter();
@@ -147,8 +151,7 @@ function SignUpBank() {
     formData.branch &&
     formData.location &&
     formData.address &&
-    formData.file &&
-    isEmailChecked;
+    formData.file;
 
   return (
     <MobileWrapper>
@@ -156,19 +159,16 @@ function SignUpBank() {
         elevation={3}
         sx={{ p: 4, borderRadius: 3, backgroundColor: "#fff", mb: 4 }}
       >
-        <Typography variant="h6" mb={1}>
+        <Typography variant="h6" mb={3}>
           은행 회원가입
         </Typography>
+
         <Box
           component="form"
           onSubmit={handleSignUp}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          sx={{ display: "flex", flexDirection: "column", gap: 4 }}
         >
-          {/* ✅ 계정정보 */}
-          <Typography variant="body1">계정정보</Typography>
-          <Divider />
-
-          <Stack flexDirection={"row"} gap={2} mt={2}>
+          <Stack gap={1.5}>
             <TextField
               name="email"
               variant="standard"
@@ -177,123 +177,118 @@ function SignUpBank() {
               sx={{ flex: 1 }}
               onChange={handleInputChange}
             />
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => handleCheckEmail(formData.email)}
-            >
-              중복 확인
-            </Button>
+            <TextField
+              name="password"
+              variant="standard"
+              label="비밀번호"
+              type="password"
+              fullWidth
+              onChange={handleInputChange}
+              error={passwordError}
+              helperText={
+                passwordError
+                  ? "비밀번호가 일치하지 않습니다."
+                  : "비밀번호는 영문자 포함 8자리 이상 입력해주세요."
+              }
+            />
+
+            <TextField
+              name="confirmPassword"
+              variant="standard"
+              label="비밀번호 확인"
+              type="password"
+              fullWidth
+              onChange={handleInputChange}
+              error={passwordError}
+              helperText={
+                passwordError
+                  ? "비밀번호가 일치하지 않습니다."
+                  : "비밀번호를 한 번 더 입력해주세요."
+              }
+            />
           </Stack>
 
-          <TextField
-            name="password"
-            variant="standard"
-            label="비밀번호"
-            type="password"
-            fullWidth
-            onChange={handleInputChange}
-            error={passwordError}
-            helperText={
-              passwordError
-                ? "비밀번호가 일치하지 않습니다."
-                : "비밀번호는 영문자 포함 8자리 이상 입력해주세요."
-            }
-          />
+          <Stack gap={1.5}>
+            <FormControl>
+              <InputLabel variant="standard" htmlFor="bank-select">
+                은행명
+              </InputLabel>
+              <Select
+                name="branch"
+                variant="standard"
+                displayEmpty
+                fullWidth
+                value={formData.branch}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, branch: e.target.value }))
+                }
+                inputProps={{
+                  id: "bank-select",
+                }}
+              >
+                <MenuItem value="" disabled>
+                  {/* 은행 선택 */}
+                </MenuItem>
+                {bankList.map((bank) => (
+                  <MenuItem key={bank} value={bank}>
+                    {bank}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-          <TextField
-            name="confirmPassword"
-            variant="standard"
-            label="비밀번호 확인"
-            type="password"
-            fullWidth
-            onChange={handleInputChange}
-            error={passwordError}
-            helperText={
-              passwordError
-                ? "비밀번호가 일치하지 않습니다."
-                : "비밀번호를 한 번 더 입력해주세요."
-            }
-          />
-
-          <TextField
-            name="name"
-            variant="standard"
-            label="이름"
-            fullWidth
-            onChange={handleInputChange}
-          />
-          <TextField
-            name="phoneNumber"
-            variant="standard"
-            label="휴대폰 번호"
-            fullWidth
-            onChange={handleInputChange}
-          />
-
-          {/* ✅ 은행 정보 */}
-          <Typography variant="body1" mt={2}>
-            은행 정보
-          </Typography>
-          <Divider />
-
-          <Select
-            name="branch"
-            variant="standard"
-            displayEmpty
-            fullWidth
-            value={formData.branch}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, branch: e.target.value }))
-            }
-          >
-            <MenuItem value="" disabled>
-              지점 선택
-            </MenuItem>
-            {bankList.map((bank) => (
-              <MenuItem key={bank} value={bank}>
-                {bank}
-              </MenuItem>
-            ))}
-          </Select>
-
-          {/* ✅ 소재지 */}
-          <Typography variant="body1" mt={2}>
-            소재지
-          </Typography>
-          <AddressSearch
-            selectedLocation={formData.location}
-            setSelectedLocation={(location) =>
-              setFormData((prev) => ({ ...prev, location }))
-            }
-            address={formData.address}
-            setAddress={handleAddressChange}
-          />
-
-          {/* ✅ 증빙사진 (파일 업로드) */}
-          <Typography variant="body2" mt={2}>
-            증빙서류 (명함)
-          </Typography>
-          <Box width="100%" display="flex" justifyContent="center" mt={1}>
-            <label
-              htmlFor="file-upload"
-              style={{ cursor: "pointer", width: "100%" }}
-            >
-              <Image
-                src="/images/common/select-file.png"
-                height={172}
-                width={408}
-                style={{ minWidth: "100%", height: "auto" }}
-                alt=""
-              />
-            </label>
-            <input
-              id="file-upload"
-              type="file"
-              hidden
-              onChange={handleFileUpload}
+            <AddressSearch
+              label="소재지"
+              selectedLocation={formData.location}
+              setSelectedLocation={(location) =>
+                setFormData((prev) => ({ ...prev, location }))
+              }
+              address={formData.address}
+              setAddress={handleAddressChange}
             />
-          </Box>
+          </Stack>
+
+          <Stack gap={1.5}>
+            <TextField
+              name="name"
+              variant="standard"
+              label="이름"
+              fullWidth
+              onChange={handleInputChange}
+            />
+            <TextField
+              name="phoneNumber"
+              variant="standard"
+              label="휴대폰 번호"
+              fullWidth
+              onChange={handleInputChange}
+            />
+            <Stack>
+              <Typography variant="body2" mt={2}>
+                증빙자료(명함)
+              </Typography>
+              <Box width="100%" display="flex" justifyContent="center" mt={1}>
+                <label
+                  htmlFor="file-upload"
+                  style={{ cursor: "pointer", width: "100%" }}
+                >
+                  <Image
+                    src="/images/common/select-file.png"
+                    height={172}
+                    width={408}
+                    style={{ minWidth: "100%", height: "auto" }}
+                    alt=""
+                  />
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  hidden
+                  onChange={handleFileUpload}
+                />
+              </Box>
+            </Stack>
+          </Stack>
 
           {uploadedFiles.length > 0 && (
             <Box mt={2}>

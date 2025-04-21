@@ -124,7 +124,7 @@ function SignUpCorporate() {
           mb: 4,
         }}
       >
-        <Typography variant="h6" mb={6}>
+        <Typography variant="h6" mb={3}>
           기업 회원가입
         </Typography>
 
