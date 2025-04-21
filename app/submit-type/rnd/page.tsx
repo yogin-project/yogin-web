@@ -488,7 +488,7 @@ export default function CompanyRNDForm() {
                         borderBottomColor: "action.hover",
                       }}
                     >
-                      매출액 (억)
+                      전년도 매출액
                     </FormLabel>
                     <TextField
                       id="sales"
@@ -534,7 +534,7 @@ export default function CompanyRNDForm() {
                         borderBottomColor: "action.hover",
                       }}
                     >
-                      수출액 (억)
+                      전년도 수출액
                     </FormLabel>
                     <TextField
                       id="exportStatus"
