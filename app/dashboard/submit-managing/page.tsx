@@ -1,25 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
 import {
+  Alert,
   Box,
-  Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
   Paper,
   TextField,
-  Button,
-  MenuItem,
-  Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  Typography,
 } from "@mui/material";
+import React, { useState } from "react";
+
 import { useManagement } from "@/app/hooks/apis/useManagement";
 
 function SubmitManaging() {
   const [applyType, setApplyType] = useState("R&D");
   const [message, setMessage] = useState("");
-  const {mutate} = useManagement();
+  const { mutate } = useManagement();
   const [showApplyDialog, setShowApplyDialog] = useState(false);
   const [showAppliedDialog, setShowAppliedDialog] = useState(false);
 
@@ -31,7 +32,7 @@ function SubmitManaging() {
         },
         body: {
           mgrType: applyType,
-	        description: message
+          description: message,
         },
       },
       {
@@ -40,18 +41,18 @@ function SubmitManaging() {
           setShowAppliedDialog(true);
         },
         onError: (error) => {
-          console.error("매니징 신청 실패:", error);
-          alert("매니징 신청에 실패했습니다. 다시 시도해주세요.")
-        }
+          console.error("매니저 신청 실패:", error);
+          alert("매니저 신청에 실패했습니다. 다시 시도해주세요.");
+        },
       }
-    )
-  }
+    );
+  };
 
   const handleApplyComplete = () => {
     setShowAppliedDialog(false);
     setApplyType("R&D");
     setMessage("");
-  }
+  };
 
   return (
     <Box mt={4} maxWidth={600} mx="auto">
@@ -96,24 +97,32 @@ function SubmitManaging() {
             fullWidth
           />
 
-          <Button variant="contained" color="primary" onClick={() => setShowApplyDialog(true)}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setShowApplyDialog(true)}
+          >
             매니지 신청하기
           </Button>
 
           <Dialog open={showApplyDialog} fullWidth>
-            <DialogTitle>매니징 신청</DialogTitle>
+            <DialogTitle>매니저 신청</DialogTitle>
             <DialogContent>매니징을 신청하시겠습니까?</DialogContent>
             <DialogActions>
               <Button onClick={() => setShowApplyDialog(false)}>닫기</Button>
-              <Button variant="contained" onClick={handleApplyRequest}>확인</Button>
+              <Button variant="contained" onClick={handleApplyRequest}>
+                확인
+              </Button>
             </DialogActions>
           </Dialog>
 
           <Dialog open={showAppliedDialog} fullWidth>
-            <DialogTitle>매니징 신청 완료</DialogTitle>
-            <DialogContent>매니징 신청이 완료되었습니다.</DialogContent>
+            <DialogTitle>매니저 신청 완료</DialogTitle>
+            <DialogContent>매니저 신청이 완료되었습니다.</DialogContent>
             <DialogActions>
-              <Button variant="contained" onClick={handleApplyComplete}>확인</Button>
+              <Button variant="contained" onClick={handleApplyComplete}>
+                확인
+              </Button>
             </DialogActions>
           </Dialog>
         </Box>

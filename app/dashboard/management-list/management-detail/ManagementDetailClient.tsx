@@ -1,6 +1,7 @@
 "use client";
 
-import { Box, Typography, Paper, Chip, Divider, Stack } from "@mui/material";
+import { Box, Chip, Divider, Paper, Stack, Typography } from "@mui/material";
+
 import { useSearchParams } from "next/navigation";
 
 export default function ManagementDetailClient() {
@@ -26,7 +27,7 @@ export default function ManagementDetailClient() {
   return (
     <Box maxWidth="800px" mx="auto" mt={6}>
       <Typography variant="h5" fontWeight={700} gutterBottom>
-        매니징 신청 상세 정보
+        매니저 신청 상세 정보
       </Typography>
 
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
