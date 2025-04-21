@@ -79,159 +79,165 @@ const HeaderDesktop = () => {
     >
       <Stack
         ml="auto"
-        width={{
+        width="100%"
+        maxWidth={{
           xs: "100%",
           md: pathname.startsWith("/dashboard")
             ? `calc(100% - ${DRAWER_WIDTH}px)`
             : "100%",
         }}
-        maxWidth={BREAKPOINTS.desktop}
-        height={80}
-        direction={"row"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
       >
         <Stack
+          mx="auto"
+          width="100%"
+          maxWidth={BREAKPOINTS.desktop}
+          height={80}
           direction={"row"}
-          sx={{
-            gap: 4,
-            [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
-              gap: 2,
-            },
-          }}
+          justifyContent={"space-between"}
+          alignItems={"center"}
         >
           <Stack
+            direction={"row"}
             sx={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 2,
+              gap: 4,
+              [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
+                gap: 2,
+              },
             }}
           >
             <Stack
-              component="figure"
-              position="relative"
-              minWidth={90.5}
-              minHeight={30}
-              width="100%"
-              height="100%"
-              sx={{ cursor: "pointer" }}
+              sx={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 2,
+              }}
             >
               <Stack
-                component={Image}
-                onClick={() => handleRouteHeader("")}
-                src="/images/common/logo-full_landscape.png"
-                fill
-                alt="yogin logo"
-                sx={{ objectFit: "contain" }}
-              />
-            </Stack>
-            <Typography
-              onClick={() => handleRouteHeader("")}
-              fontSize="0.9rem"
-              fontWeight={800}
-              letterSpacing={-0.25}
-              lineHeight={1}
-              whiteSpace="nowrap"
-              color="tertiary.light"
-              sx={{
-                cursor: "pointer",
-              }}
-            >
-              요긴하게 이용하세요
-            </Typography>
-          </Stack>
-          {type == "CORPORATE" && (
-            <ButtonBase
-              onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
-              sx={{ verticalAlign: "baseline" }}
-            >
-              <Typography whiteSpace="nowrap">자금신청</Typography>
+                component="figure"
+                position="relative"
+                minWidth={90.5}
+                minHeight={30}
+                width="100%"
+                height="100%"
+                sx={{ cursor: "pointer" }}
+              >
+                <Stack
+                  component={Image}
+                  onClick={() => handleRouteHeader("")}
+                  src="/images/common/logo-full_landscape.png"
+                  fill
+                  alt="yogin logo"
+                  sx={{ objectFit: "contain" }}
+                />
+              </Stack>
               <Typography
-                component="span"
-                color="primary.main"
-                fontSize="0.75rem"
-                fontWeight={600}
-                whiteSpace="nowrap"
+                onClick={() => handleRouteHeader("")}
+                fontSize="0.9rem"
+                fontWeight={800}
+                letterSpacing={-0.25}
                 lineHeight={1}
+                whiteSpace="nowrap"
+                color="tertiary.light"
                 sx={{
-                  marginLeft: "0.5rem",
-                  [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
-                    marginLeft: 0,
-                    position: "absolute",
-                    top: "calc(50% + 0.9rem)",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                  },
+                  cursor: "pointer",
                 }}
               >
-                정책자금 / R&D
+                요긴하게 이용하세요
               </Typography>
-            </ButtonBase>
-          )}
+            </Stack>
+            {type == "CORPORATE" && (
+              <ButtonBase
+                onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
+                sx={{ verticalAlign: "baseline" }}
+              >
+                <Typography whiteSpace="nowrap">자금신청</Typography>
+                <Typography
+                  component="span"
+                  color="primary.main"
+                  fontSize="0.75rem"
+                  fontWeight={600}
+                  whiteSpace="nowrap"
+                  lineHeight={1}
+                  sx={{
+                    marginLeft: "0.5rem",
+                    [`@media (max-width:${BREAKPOINTS.tablet}px)`]: {
+                      marginLeft: 0,
+                      position: "absolute",
+                      top: "calc(50% + 0.9rem)",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                    },
+                  }}
+                >
+                  정책자금 / R&D
+                </Typography>
+              </ButtonBase>
+            )}
 
-          {(type === "MANAGER" || type == "PROFESSOR") && (
-            <ButtonBase
-              onClick={() => {
-                if (type === "MANAGER") {
-                  handleRendSearch(profileInfo?.type, router);
-                } else {
-                  handleRNDSearch(profileInfo?.type, router);
-                }
-              }}
-              sx={{
-                cursor: "pointer",
-              }}
-            >
-              <Typography whiteSpace="nowrap">전문가 신청</Typography>
-            </ButtonBase>
-          )}
-        </Stack>
-        <Stack direction={"row"} gap={1} alignItems={"center"}>
-          {isLogin ? (
-            <>
-              {profileInfo?.type !== "ADMIN" ? (
-                <ButtonBase onClick={() => router.push("/noti-list")}>
-                  <NotificationsIcon
+            {(type === "MANAGER" || type == "PROFESSOR") && (
+              <ButtonBase
+                onClick={() => {
+                  if (type === "MANAGER") {
+                    handleRendSearch(profileInfo?.type, router);
+                  } else {
+                    handleRNDSearch(profileInfo?.type, router);
+                  }
+                }}
+                sx={{
+                  cursor: "pointer",
+                }}
+              >
+                <Typography whiteSpace="nowrap">전문가 신청</Typography>
+              </ButtonBase>
+            )}
+          </Stack>
+          <Stack direction={"row"} gap={1} alignItems={"center"}>
+            {isLogin ? (
+              <>
+                {profileInfo?.type !== "ADMIN" ? (
+                  <ButtonBase onClick={() => router.push("/noti-list")}>
+                    <NotificationsIcon
+                      sx={{
+                        cursor: "pointer",
+                        width: 28,
+                        height: 28,
+                      }}
+                    />
+                  </ButtonBase>
+                ) : null}
+
+                <ButtonBase onClick={() => router.push("/dashboard")}>
+                  <Avatar
                     sx={{
                       cursor: "pointer",
-                      width: 28,
-                      height: 28,
+                      width: 32,
+                      height: 32,
                     }}
                   />
                 </ButtonBase>
-              ) : null}
-
-              <ButtonBase onClick={() => router.push("/dashboard")}>
-                <Avatar
-                  sx={{
-                    cursor: "pointer",
-                    width: 32,
-                    height: 32,
-                  }}
-                />
-              </ButtonBase>
-            </>
-          ) : (
-            <>
-              <Button
-                size="small"
-                color="primary"
-                onClick={() => handleRouteHeader("sign-in")}
-                sx={{ whiteSpace: "nowrap" }}
-              >
-                {t("login")}
-              </Button>
-              <Button
-                size="small"
-                variant="contained"
-                color="primary"
-                onClick={() => handleRouteHeader("sign-up")}
-                sx={{ whiteSpace: "nowrap" }}
-              >
-                {t("sign_up")}
-              </Button>
-            </>
-          )}
+              </>
+            ) : (
+              <>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => handleRouteHeader("sign-in")}
+                  sx={{ whiteSpace: "nowrap" }}
+                >
+                  {t("login")}
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleRouteHeader("sign-up")}
+                  sx={{ whiteSpace: "nowrap" }}
+                >
+                  {t("sign_up")}
+                </Button>
+              </>
+            )}
+          </Stack>
         </Stack>
       </Stack>
     </Stack>
