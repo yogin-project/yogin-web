@@ -2,28 +2,29 @@
 
 import {
   Box,
-  Typography,
-  Paper,
-  Grid,
-  TextField,
   Button,
-  Input,
-  useMediaQuery,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
+  Input,
+  Paper,
+  TextField,
+  Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { profileAtom } from "@/app/store/profileAtom";
 import { useAtom, useAtomValue } from "jotai";
-import { useTheme } from "@mui/material/styles";
-import { usePatchUser } from "@/app/hooks/apis/usePatchUser";
-import { useDeleteUser } from "@/app/hooks/apis/useDeleteUser";
-import { useRouter } from "next/navigation";
-import { isLoginAtom } from "@/app/store/authAtom";
-import { useProfileLazyQuery } from "@/app/hooks/apis/useProfile";
+
 import CommonModal from "@/app/components/CommonModal";
+import { isLoginAtom } from "@/app/store/authAtom";
+import { profileAtom } from "@/app/store/profileAtom";
+import { useDeleteUser } from "@/app/hooks/apis/useDeleteUser";
+import { usePatchUser } from "@/app/hooks/apis/usePatchUser";
+import { useProfileLazyQuery } from "@/app/hooks/apis/useProfile";
+import { useRouter } from "next/navigation";
+import { useTheme } from "@mui/material/styles";
 
 export default function MemberInfo() {
   const [profile, setProfile] = useAtom(profileAtom);
@@ -184,7 +185,7 @@ export default function MemberInfo() {
       case "MANAGER":
         return "은행 매니저";
       case "PROFESSOR":
-        return "교수 회원";
+        return "전문가";
       default:
         return "회원";
     }

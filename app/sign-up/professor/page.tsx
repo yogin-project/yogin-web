@@ -1,30 +1,31 @@
 "use client";
 
-import MobileWrapper from "@/app/layout/MobileWrapper";
 import {
   Box,
   Button,
   Divider,
+  IconButton,
+  MenuItem,
+  Paper,
+  Select,
   Stack,
   TextField,
   Typography,
-  Select,
-  MenuItem,
-  IconButton,
-  Paper,
 } from "@mui/material";
 import React, { useState } from "react";
-import Image from "next/image";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import AgreementSection from "../_components/AgreementSection";
-import { useRouter } from "next/navigation";
+
 import AddressSearch from "@/app/components/AddSearch";
-import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
-import { isValidPassword } from "@/app/utils";
+import AgreementSection from "../_components/AgreementSection";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Image from "next/image";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import MobileWrapper from "@/app/layout/MobileWrapper";
 import SuccessModal from "../_components/SuccessModal";
+import { isValidPassword } from "@/app/utils";
 import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
+import { useRouter } from "next/navigation";
+import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
 
 function SignUpProfessor() {
   const router = useRouter();
@@ -172,7 +173,7 @@ function SignUpProfessor() {
         }}
       >
         <Typography variant="h6" mb={1}>
-          교수 회원가입
+          전문가 회원가입
         </Typography>
 
         <Box

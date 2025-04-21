@@ -13,9 +13,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { usePostPush } from "@/app/hooks/apis/usePostPush";
+
 import { locations } from "@/app/utils";
+import { usePostPush } from "@/app/hooks/apis/usePostPush";
+import { useState } from "react";
 
 const types = ["LOCATION", "LOAN", "FUND", "RND", "CORP"] as const;
 
@@ -39,7 +40,7 @@ const subTypeLabels: Record<string, string> = {
   ALL: "전체 사용자",
   CORP: "기업 회원",
   MANAGER: "지점 매니저",
-  PROFESSOR: "교수 회원",
+  PROFESSOR: "전문가",
   APPROVED: "승인 대상자",
   REJECT: "반려 대상자",
   APPLY: "매니저 신청한 기업",

@@ -217,7 +217,7 @@ function UserDetailPage() {
 
           {user.type === "PROFESSOR" && (
             <>
-              <Typography variant="h6">교수 정보</Typography>
+              <Typography variant="h6">전문가 정보</Typography>
               <Typography>
                 <b>소속:</b> {user.organization}
               </Typography>
