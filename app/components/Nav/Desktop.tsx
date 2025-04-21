@@ -140,7 +140,7 @@ const HeaderDesktop = () => {
               요긴하게 이용하세요
             </Typography>
           </Stack>
-          {(type == "CORPORATE" || type == "ADMIN") && (
+          {type == "CORPORATE" && (
             <ButtonBase
               onClick={() => handleCorporateSubmit(profileInfo?.type, router)}
               sx={{ verticalAlign: "baseline" }}
@@ -169,9 +169,15 @@ const HeaderDesktop = () => {
             </ButtonBase>
           )}
 
-          {(type == "PROFESSOR" || type == "ADMIN") && (
+          {(type === "MANAGER" || type == "PROFESSOR") && (
             <ButtonBase
-              onClick={() => handleRNDSearch(profileInfo?.type, router)}
+              onClick={() => {
+                if (type === "MANAGER") {
+                  handleRendSearch(profileInfo?.type, router);
+                } else {
+                  handleRNDSearch(profileInfo?.type, router);
+                }
+              }}
               sx={{
                 cursor: "pointer",
               }}
