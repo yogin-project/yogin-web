@@ -49,7 +49,7 @@ const routeMap = {
     { label: "서비스 신청 현황", path: "/dashboard/submit-list" },
     { label: "매니저 신청", path: "/dashboard/submit-managing" },
     { label: "재무 진단 요약", path: "/dashboard/finance-summary" },
-    { label: "미니저 신청 현황", path: "/dashboard/management-list" },
+    { label: "매니저 신청 현황", path: "/dashboard/management-list" },
   ],
   MANAGER: [
     { label: "회원 정보", path: "/dashboard/member-info" },
@@ -80,7 +80,7 @@ const iconMap: Record<string, JSX.Element> = {
   "서비스 신청 현황": <RequestQuoteIcon />,
   "매니저 신청": <HowToRegIcon />,
   "재무 진단 요약": <AssessmentIcon />,
-  "미니저 신청 현황": <ListAltIcon />,
+  "매니저 신청 현황": <ListAltIcon />,
   "담당 기업 조회": <BusinessIcon />,
   "회원 목록 조회": <PeopleAltIcon />,
   "자금 신청 목록 조회": <AssignmentIcon />,
