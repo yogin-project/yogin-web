@@ -65,8 +65,8 @@ export default function MemberInfo() {
         phoneNumber: profile.phoneNumber || "",
         location: profile.location || "",
         address: profile.address || "",
-        branchName: profile.branchName || "",
-        organization: profile.additionalInfo.expertInfoOrganization || "",
+        branchName: profile.additionalInfo?.expertInfoBranchNameanchName || "",
+        organization: profile.additionalInfo?.expertInfoOrganization || "",
         verificationPhoto: null,
       });
     }
@@ -240,12 +240,12 @@ export default function MemberInfo() {
                 value={form.address}
                 onChange={handleChange}
               /> */}
-              {type === "MANAGER" && (
+              {type === "MANAGER" && additionalInfo?.expertInfoBranchName && (
                 <TextField
                   label="지점명"
                   name="branchName"
                   fullWidth
-                  value={form.branchName}
+                  value={additionalInfo.expertInfoBranchName}
                   onChange={handleChange}
                 />
               )}

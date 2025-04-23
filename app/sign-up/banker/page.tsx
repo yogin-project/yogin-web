@@ -3,9 +3,7 @@
 import {
   Box,
   Button,
-  Divider,
   FormControl,
-  FormLabel,
   IconButton,
   InputLabel,
   MenuItem,
@@ -45,7 +43,7 @@ function SignUpBank() {
     name: "",
     location: "서울",
     address: "",
-    branch: "",
+    branchName: "",
     file: null,
   });
 
@@ -148,7 +146,7 @@ function SignUpBank() {
     formData.confirmPassword &&
     formData.phoneNumber &&
     formData.name &&
-    formData.branch &&
+    formData.branchName &&
     formData.location &&
     formData.address &&
     formData.file;
@@ -214,13 +212,16 @@ function SignUpBank() {
                 은행명
               </InputLabel>
               <Select
-                name="branch"
+                name="branchName"
                 variant="standard"
                 displayEmpty
                 fullWidth
-                value={formData.branch}
+                value={formData.branchName}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, branch: e.target.value }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    branchName: e.target.value,
+                  }))
                 }
                 inputProps={{
                   id: "bank-select",
