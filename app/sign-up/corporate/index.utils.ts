@@ -8,7 +8,6 @@ export const initialFormData = {
   password: "",
   confirmPassword: "",
   phoneNumber: "",
-  name: "",
   corpName: "",
   ceoName: "",
   businessNo: "",
@@ -64,7 +63,6 @@ export const isSignupEnabled = ({
     formData.password &&
     formData.confirmPassword &&
     formData.phoneNumber &&
-    formData.name &&
     formData.corpName &&
     formData.ceoName &&
     formData.businessNo &&

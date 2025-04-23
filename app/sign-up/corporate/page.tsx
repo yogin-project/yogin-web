@@ -234,14 +234,6 @@ function SignUpCorporate() {
             />
 
             <TextField
-              name="name"
-              variant="standard"
-              label="이름"
-              fullWidth
-              onChange={handleInputChange}
-            />
-
-            <TextField
               name="phoneNumber"
               variant="standard"
               label="휴대폰 번호 ( - 없이 입력하세요)"
