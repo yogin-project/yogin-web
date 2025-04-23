@@ -2,28 +2,29 @@
 
 import {
   Box,
-  Typography,
-  Paper,
-  Grid,
-  TextField,
   Button,
-  Input,
-  useMediaQuery,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
+  Input,
+  Paper,
+  TextField,
+  Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { profileAtom } from "@/app/store/profileAtom";
-import { useAtom, useAtomValue } from "jotai";
-import { useTheme } from "@mui/material/styles";
-import { usePatchUser } from "@/app/hooks/apis/usePatchUser";
-import { useDeleteUser } from "@/app/hooks/apis/useDeleteUser";
-import { useRouter } from "next/navigation";
-import { isLoginAtom } from "@/app/store/authAtom";
-import { useProfileLazyQuery } from "@/app/hooks/apis/useProfile";
+
 import CommonModal from "@/app/components/CommonModal";
+import { isLoginAtom } from "@/app/store/authAtom";
+import { profileAtom } from "@/app/store/profileAtom";
+import { useAtom } from "jotai";
+import { useDeleteUser } from "@/app/hooks/apis/useDeleteUser";
+import { usePatchUser } from "@/app/hooks/apis/usePatchUser";
+import { useProfileLazyQuery } from "@/app/hooks/apis/useProfile";
+import { useRouter } from "next/navigation";
+import { useTheme } from "@mui/material/styles";
 
 export default function MemberInfo() {
   const [profile, setProfile] = useAtom(profileAtom);
@@ -64,8 +65,8 @@ export default function MemberInfo() {
         phoneNumber: profile.phoneNumber || "",
         location: profile.location || "",
         address: profile.address || "",
-        branchName: profile.branchName || "",
-        organization: profile.additionalInfo.expertInfoOrganization || "",
+        branchName: profile.additionalInfo?.expertInfoBranchNameanchName || "",
+        organization: profile.additionalInfo?.expertInfoOrganization || "",
         verificationPhoto: null,
       });
     }
@@ -177,54 +178,45 @@ export default function MemberInfo() {
     additionalInfo,
   } = profile;
 
-  const getUserTypeLabel = (type: string) => {
-    switch (type) {
-      case "CORPORATE":
-        return "기업 회원";
-      case "MANAGER":
-        return "은행 매니저";
-      case "PROFESSOR":
-        return "교수 회원";
-      default:
-        return "회원";
-    }
-  };
-
   return (
     <Box mt={4} maxWidth={600} mx="auto">
-      <Typography variant="h6" gutterBottom>
-        회원 정보
-      </Typography>
       <Paper sx={{ p: 4 }} elevation={3}>
+        <Typography variant="h6" mb={6}>
+          회원 정보
+        </Typography>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12}>
             <Box display="flex" flexDirection="column" gap={2}>
-              <TextField
-                label="이름"
-                name="name"
-                fullWidth
-                value={form.name}
-                onChange={handleChange}
-              />
+              {additionalInfo?.corporateInfoCorpName && (
+                <TextField
+                  label="기업명"
+                  fullWidth
+                  value={additionalInfo?.corporateInfoCorpName}
+                  disabled
+                />
+              )}
+              {additionalInfo?.corporateInfoCeoName && (
+                <TextField
+                  label="대표명"
+                  fullWidth
+                  value={additionalInfo?.corporateInfoCeoName}
+                  disabled
+                />
+              )}
+              {type != "CORPORATE" && (
+                <TextField
+                  label="이름"
+                  name="name"
+                  fullWidth
+                  value={form.name}
+                  onChange={handleChange}
+                />
+              )}
               <TextField
                 label="이메일"
                 name="email"
                 fullWidth
                 value={form.email}
-                onChange={handleChange}
-              />
-              <TextField
-                label="소재지"
-                name="location"
-                fullWidth
-                value={form.location}
-                onChange={handleChange}
-              />
-              <TextField
-                label="주소"
-                name="address"
-                fullWidth
-                value={form.address}
                 onChange={handleChange}
               />
               <TextField
@@ -235,17 +227,25 @@ export default function MemberInfo() {
                 onChange={handleChange}
               />
               <TextField
-                label="회원유형"
+                label="소재지"
+                name="location"
                 fullWidth
-                value={getUserTypeLabel(type)}
-                disabled
+                value={form.location}
+                onChange={handleChange}
               />
-              {type === "MANAGER" && (
+              {/* <TextField
+                label="주소"
+                name="address"
+                fullWidth
+                value={form.address}
+                onChange={handleChange}
+              /> */}
+              {type === "MANAGER" && additionalInfo?.expertInfoBranchName && (
                 <TextField
                   label="지점명"
                   name="branchName"
                   fullWidth
-                  value={form.branchName}
+                  value={additionalInfo.expertInfoBranchName}
                   onChange={handleChange}
                 />
               )}

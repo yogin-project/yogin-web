@@ -1,34 +1,35 @@
 "use client";
 
-import React, { useState } from "react";
-import MobileWrapper from "../layout/MobileWrapper";
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
   Divider,
   FormControlLabel,
-  Stack,
-  TextField,
-  Typography,
-  ToggleButton,
-  ToggleButtonGroup,
   Paper,
   Snackbar,
-  Alert,
+  Stack,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
-import { ChevronRight } from "@mui/icons-material";
-import { useRouteSignInPage } from "./index.hooks";
-import { useSignInMutation } from "../hooks/apis/useSignIn";
-import { useSignInCorpMutation } from "../hooks/apis/useSignInCorp";
-import { useRouter } from "next/navigation";
-import { isLoginAtom } from "../store/authAtom";
+import React, { useState } from "react";
 import { useAtom, useSetAtom } from "jotai";
 import {
   useProfileLazyQuery,
   useProfileMutation,
 } from "../hooks/apis/useProfile";
+
+import { ChevronRight } from "@mui/icons-material";
+import MobileWrapper from "../layout/MobileWrapper";
+import { isLoginAtom } from "../store/authAtom";
 import { profileAtom } from "../store/profileAtom";
+import { useRouteSignInPage } from "./index.hooks";
+import { useRouter } from "next/navigation";
+import { useSignInCorpMutation } from "../hooks/apis/useSignInCorp";
+import { useSignInMutation } from "../hooks/apis/useSignIn";
 
 function SignIn() {
   const handleRouting = useRouteSignInPage();
@@ -113,7 +114,18 @@ function SignIn() {
               setOpenSnackbar(true);
               setProfile(data.data);
               setIsLogin(true);
-              router.push("/");
+              switch (data?.data?.type) {
+                case "MANAGER":
+                  router.push("/rend");
+                  break;
+                case "PROFESSOR":
+                  router.push("/rnd");
+                  break;
+                case "CORPORATE":
+                default:
+                  router.push("/");
+                  break;
+              }
             });
           }
         },

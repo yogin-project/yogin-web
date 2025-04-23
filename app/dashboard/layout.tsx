@@ -46,10 +46,10 @@ const routeMap = {
   CORPORATE: [
     { label: "회원 정보", path: "/dashboard/member-info" },
     { label: "비밀번호 변경", path: "/dashboard/password-change" },
-    { label: "자금 신청 현황", path: "/dashboard/submit-list" },
-    { label: "매니징 신청", path: "/dashboard/submit-managing" },
+    { label: "서비스 신청 현황", path: "/dashboard/submit-list" },
+    { label: "매니저 신청", path: "/dashboard/submit-managing" },
     { label: "재무 진단 요약", path: "/dashboard/finance-summary" },
-    { label: "매니지먼트 신청 목록 조회", path: "/dashboard/management-list" },
+    { label: "매니저 신청 현황", path: "/dashboard/management-list" },
   ],
   MANAGER: [
     { label: "회원 정보", path: "/dashboard/member-info" },
@@ -77,10 +77,10 @@ const routeMap = {
 const iconMap: Record<string, JSX.Element> = {
   "회원 정보": <AccountCircleIcon />,
   "비밀번호 변경": <LockIcon />,
-  "자금 신청 현황": <RequestQuoteIcon />,
-  "매니징 신청": <HowToRegIcon />,
+  "서비스 신청 현황": <RequestQuoteIcon />,
+  "매니저 신청": <HowToRegIcon />,
   "재무 진단 요약": <AssessmentIcon />,
-  "매니지먼트 신청 목록 조회": <ListAltIcon />,
+  "매니저 신청 현황": <ListAltIcon />,
   "담당 기업 조회": <BusinessIcon />,
   "회원 목록 조회": <PeopleAltIcon />,
   "자금 신청 목록 조회": <AssignmentIcon />,

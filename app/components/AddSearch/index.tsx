@@ -1,19 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Box,
   Button,
+  Dialog,
+  FormControl,
+  InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Stack,
   TextField,
-  Dialog,
 } from "@mui/material";
+import React, { useState } from "react";
+
 import DaumPostcode from "react-daum-postcode";
 import { locations } from "@/app/utils";
 
 interface AddressSearchProps {
+  label?: string;
   selectedLocation: string;
   setSelectedLocation: (value: string) => void;
   address: string;
@@ -21,6 +26,7 @@ interface AddressSearchProps {
 }
 
 function AddressSearch({
+  label,
   selectedLocation,
   setSelectedLocation,
   address,
@@ -30,9 +36,7 @@ function AddressSearch({
   const [baseAddress, setBaseAddress] = useState("");
   const [detailedAddress, setDetailedAddress] = useState("");
 
-  const handleLocationChange = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
+  const handleLocationChange = (event: SelectChangeEvent<string>) => {
     setSelectedLocation(event.target.value as string);
   };
 
@@ -59,22 +63,31 @@ function AddressSearch({
 
   return (
     <>
-      <Select
-        variant="standard"
-        displayEmpty
-        fullWidth
-        value={selectedLocation}
-        onChange={handleLocationChange}
-      >
-        {locations.map((location) => (
-          <MenuItem key={location} value={location}>
-            {location}
-          </MenuItem>
-        ))}
-      </Select>
+      <FormControl>
+        {label && (
+          <InputLabel variant="standard" htmlFor="location-select">
+            {label}
+          </InputLabel>
+        )}
+        <Select
+          variant="standard"
+          displayEmpty
+          fullWidth
+          value={selectedLocation}
+          onChange={handleLocationChange}
+          inputProps={{
+            id: "location-select",
+          }}
+        >
+          {locations.map((location) => (
+            <MenuItem key={location} value={location}>
+              {location}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-      <Box height={8} />
-      <Stack flexDirection="row" gap={2} mt={2}>
+      <Stack flexDirection="row" gap={2}>
         <TextField
           variant="standard"
           label="주소 검색"

@@ -1,35 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Box,
-  Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  Paper,
   TablePagination,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Grid,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
-import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
-import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
-import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
+import React, { useState } from "react";
+
 import CommonModal from "@/app/components/CommonModal";
+import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
 import { useAddSubmit } from "@/app/hooks/apis/useAddSubmit";
 import { useApproveFinal } from "@/app/hooks/apis/useApproveFinal";
+import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
+import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
 
 const applicationStates = [
   { label: "등록완료", value: "REGISTERED" },
@@ -169,9 +170,10 @@ function SubmitList() {
       mx="auto"
       component={Paper}
       sx={{ overflowX: "auto" }}
+      p={3}
     >
-      <Typography variant="h6" gutterBottom>
-        자금 신청 내역
+      <Typography variant="h6" mb={6}>
+        서비스 신청 현황
       </Typography>
 
       {/* 필터 */}

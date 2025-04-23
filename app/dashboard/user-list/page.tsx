@@ -1,32 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Box,
-  Typography,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  Paper,
   TablePagination,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Button,
+  TableRow,
+  Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useAdminList } from "@/app/hooks/apis/useAdminList";
+import React, { useState } from "react";
+
 import { locations } from "@/app/utils";
+import { useAdminList } from "@/app/hooks/apis/useAdminList";
+import { useRouter } from "next/navigation";
 
 const userTypes = [
   { value: "CORPORATE", label: "기업" },
   { value: "MANAGER", label: "은행" },
-  { value: "PROFESSOR", label: "교수" },
+  { value: "PROFESSOR", label: "전문가" },
 ];
 
 const states = [

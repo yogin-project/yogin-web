@@ -1,17 +1,18 @@
 "use client";
 
-import React from "react";
-import MobileWrapper from "../layout/MobileWrapper";
 import {
   Button,
   Divider,
   Grid2,
+  Paper,
   Stack,
   Typography,
-  Paper,
 } from "@mui/material";
-import { useIsMobile } from "../hooks/useIsMobileSize";
+
+import MobileWrapper from "../layout/MobileWrapper";
+import React from "react";
 import { fullVhWithoutHeader } from "../utils";
+import { useIsMobile } from "../hooks/useIsMobileSize";
 import { useRouter } from "next/navigation";
 
 function SubmitType() {
@@ -19,8 +20,8 @@ function SubmitType() {
   const router = useRouter();
 
   const typeOptions = [
-    { key: "rnd", label: "R&D 신청" },
-    { key: "loan", label: "대출신청" },
+    { key: "loan", label: "대출" },
+    { key: "rnd", label: "R&D" },
   ];
 
   return (

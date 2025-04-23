@@ -21,16 +21,15 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { BREAKPOINTS } from "@/app/libs/theme";
 import { ChevronRightRounded } from "@mui/icons-material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
-import { useState } from "react";
-
-import { useAtomValue } from "jotai";
-import { profileAtom } from "@/app/store/profileAtom";
-import { useFirstApplicationId } from "@/app/hooks/apis/useFirstApplicationId";
-import { useCompanyApplication } from "@/app/hooks/apis/useCompanyApplication";
 import CommonModal from "@/app/components/CommonModal";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { profileAtom } from "@/app/store/profileAtom";
+import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
+import { useAtomValue } from "jotai";
+import { useCompanyApplication } from "@/app/hooks/apis/useCompanyApplication";
+import { useFirstApplicationId } from "@/app/hooks/apis/useFirstApplicationId";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -489,7 +488,7 @@ export default function CompanyRNDForm() {
                         borderBottomColor: "action.hover",
                       }}
                     >
-                      매출액 (억)
+                      전년도 매출액
                     </FormLabel>
                     <TextField
                       id="sales"
@@ -535,7 +534,7 @@ export default function CompanyRNDForm() {
                         borderBottomColor: "action.hover",
                       }}
                     >
-                      수출액 (억)
+                      전년도 수출액
                     </FormLabel>
                     <TextField
                       id="exportStatus"

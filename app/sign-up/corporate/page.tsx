@@ -3,7 +3,6 @@
 import {
   Box,
   Button,
-  Divider,
   Paper,
   Stack,
   TextField,
@@ -111,7 +110,7 @@ function SignUpCorporate() {
   const signupEnabled = isSignupEnabled({
     agreements,
     formData,
-    isEmailChecked,
+    isEmailChecked: true,
   });
 
   return (
@@ -125,32 +124,16 @@ function SignUpCorporate() {
           mb: 4,
         }}
       >
-        <Typography variant="h6" mb={6}>
+        <Typography variant="h6" mb={3}>
           기업 회원가입
         </Typography>
 
         <Box
           component="form"
           onSubmit={handleSignUp}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          sx={{ display: "flex", flexDirection: "column", gap: 4 }}
         >
-          <Typography variant="body1">계정정보</Typography>
-          <Divider />
-
-          <Stack flexDirection={"row"} gap={2} mt={2}>
-            <TextField
-              name="businessNo"
-              variant="standard"
-              label="사업자 번호"
-              placeholder="- 없이 입력해주세요"
-              fullWidth
-              sx={{ flex: 1 }}
-              onChange={handleInputChange}
-              disabled={isBusinessNoChecked}
-            />
-          </Stack>
-
-          <Stack flexDirection={"row"} gap={2} mt={2}>
+          <Stack gap={1}>
             <TextField
               name="ceoName"
               variant="standard"
@@ -160,38 +143,87 @@ function SignUpCorporate() {
               onChange={handleChangeOwnerName}
               disabled={isBusinessNoChecked}
             />
-          </Stack>
-
-          <Stack flexDirection={"row"} gap={2} mt={2}>
-            <DatePicker
-              label="개업일자"
-              value={businessStartDate}
-              onChange={handleChangeDate}
-              maxDate={dayjs()}
+            <TextField
+              name="businessNo"
+              variant="standard"
+              label="사업자 번호"
+              placeholder="- 없이 입력해주세요"
+              helperText="사업자 번호는 추후 ID로 사용됩니다."
+              fullWidth
+              sx={{ flex: 1 }}
+              onChange={handleInputChange}
               disabled={isBusinessNoChecked}
             />
-            <Button
-              variant="contained"
-              size="medium"
-              disabled={
-                formData.businessNo === "" ||
-                ceoName === "" ||
-                businessStartDate === null ||
-                isBusinessNoChecked
-              }
-              onClick={(e) =>
-                handleCheckBusinessNo(
-                  formData.businessNo,
-                  ceoName,
-                  businessStartDate
-                )
-              }
-            >
-              사업자번호 검증
-            </Button>
+            <Stack flexDirection={"row"} gap={2}>
+              <DatePicker
+                label="개업일자"
+                value={businessStartDate}
+                onChange={handleChangeDate}
+                maxDate={dayjs()}
+                disabled={isBusinessNoChecked}
+              />
+              <Button
+                variant="contained"
+                size="medium"
+                disabled={
+                  formData.businessNo === "" ||
+                  ceoName === "" ||
+                  businessStartDate === null ||
+                  isBusinessNoChecked
+                }
+                onClick={(e) =>
+                  handleCheckBusinessNo(
+                    formData.businessNo,
+                    ceoName,
+                    businessStartDate
+                  )
+                }
+              >
+                사업자번호 검증
+              </Button>
+            </Stack>
           </Stack>
 
-          <Stack flexDirection={"row"} gap={2} mt={2}>
+          <Stack gap={1}>
+            <TextField
+              name="password"
+              variant="standard"
+              label="비밀번호"
+              type="password"
+              fullWidth
+              onChange={handleInputChange}
+              error={passwordError}
+              helperText={
+                passwordError
+                  ? "비밀번호가 일치하지 않습니다."
+                  : "비밀번호는 영문자 포함 8자리 이상 입력해주세요."
+              }
+            />
+            <TextField
+              name="confirmPassword"
+              variant="standard"
+              label="비밀번호 확인"
+              type="password"
+              fullWidth
+              onChange={handleInputChange}
+              error={passwordError}
+              helperText={
+                passwordError
+                  ? "비밀번호가 일치하지 않습니다."
+                  : "비밀번호를 한 번 더 입력해주세요."
+              }
+            />
+          </Stack>
+
+          <Stack gap={1}>
+            <TextField
+              name="corpName"
+              variant="standard"
+              label="기업명"
+              fullWidth
+              onChange={handleInputChange}
+            />
+
             <TextField
               name="email"
               variant="standard"
@@ -200,83 +232,27 @@ function SignUpCorporate() {
               sx={{ flex: 1 }}
               onChange={handleInputChange}
             />
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => handleCheckEmail(formData.email)}
-            >
-              중복 확인
-            </Button>
+
+            <TextField
+              name="phoneNumber"
+              variant="standard"
+              label="휴대폰 번호 ( - 없이 입력하세요)"
+              fullWidth
+              onChange={handleInputChange}
+            />
+
+            <AddressSearch
+              label="소재지"
+              selectedLocation={formData.location}
+              setSelectedLocation={(location) =>
+                setFormData((prev) => ({ ...prev, location }))
+              }
+              address={formData.address}
+              setAddress={(address) =>
+                setFormData((prev) => ({ ...prev, address }))
+              }
+            />
           </Stack>
-
-          <TextField
-            name="password"
-            variant="standard"
-            label="비밀번호"
-            type="password"
-            fullWidth
-            onChange={handleInputChange}
-            error={passwordError}
-            helperText={
-              passwordError
-                ? "비밀번호가 일치하지 않습니다."
-                : "비밀번호는 영문자 포함 8자리 이상 입력해주세요."
-            }
-          />
-          <TextField
-            name="confirmPassword"
-            variant="standard"
-            label="비밀번호 확인"
-            type="password"
-            fullWidth
-            onChange={handleInputChange}
-            error={passwordError}
-            helperText={
-              passwordError
-                ? "비밀번호가 일치하지 않습니다."
-                : "비밀번호를 한 번 더 입력해주세요."
-            }
-          />
-          <TextField
-            name="name"
-            variant="standard"
-            label="이름"
-            fullWidth
-            onChange={handleInputChange}
-          />
-          <TextField
-            name="phoneNumber"
-            variant="standard"
-            label="휴대폰 번호 ( - 없이 입력하세요)"
-            fullWidth
-            onChange={handleInputChange}
-          />
-
-          <Typography variant="body1" mt={2}>
-            기업정보
-          </Typography>
-          <Divider />
-          <TextField
-            name="corpName"
-            variant="standard"
-            label="기업명"
-            fullWidth
-            onChange={handleInputChange}
-          />
-
-          <Typography variant="body1" mt={4}>
-            소재지
-          </Typography>
-          <AddressSearch
-            selectedLocation={formData.location}
-            setSelectedLocation={(location) =>
-              setFormData((prev) => ({ ...prev, location }))
-            }
-            address={formData.address}
-            setAddress={(address) =>
-              setFormData((prev) => ({ ...prev, address }))
-            }
-          />
 
           <AgreementSection
             agreements={agreements}

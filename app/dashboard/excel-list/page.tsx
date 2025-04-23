@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -12,8 +12,9 @@ import {
   Select,
   Snackbar,
   Typography,
-  Alert,
 } from "@mui/material";
+import React, { useEffect, useState } from "react";
+
 import { locations } from "@/app/utils";
 
 const ExcelDownloadPage = () => {
@@ -91,7 +92,7 @@ const ExcelDownloadPage = () => {
           >
             <MenuItem value="CORPORATE">사업자</MenuItem>
             <MenuItem value="MANAGER">지점장</MenuItem>
-            <MenuItem value="PROFESSOR">교수</MenuItem>
+            <MenuItem value="PROFESSOR">전문가</MenuItem>
           </Select>
         </FormControl>
 
