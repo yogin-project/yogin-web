@@ -2,11 +2,6 @@
 
 import { Avatar, Button, ButtonBase, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {
-  handleCorporateSubmit,
-  handleRNDSearch,
-  handleRendSearch,
-} from "./index.utils";
 import { useAtomValue, useSetAtom } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -14,6 +9,7 @@ import { BREAKPOINTS } from "@/app/libs/theme";
 import { DRAWER_WIDTH } from "@/app/libs/contstant";
 import Image from "next/image";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { handleCorporateSubmit } from "./index.utils";
 import { isAuthenticated } from "@/app/utils";
 import { isLoginAtom } from "@/app/store/authAtom";
 import { profileAtom } from "@/app/store/profileAtom";
@@ -123,7 +119,15 @@ const HeaderDesktop = () => {
               >
                 <Stack
                   component={Image}
-                  onClick={() => handleRouteHeader("")}
+                  onClick={() =>
+                    handleRouteHeader(
+                      profileInfo?.type === "MANAGER"
+                        ? "rend"
+                        : profileInfo?.type === "PROFESSOR"
+                        ? "rnd"
+                        : ""
+                    )
+                  }
                   src="/images/common/logo-full_landscape.png"
                   fill
                   alt="yogin logo"
@@ -131,7 +135,15 @@ const HeaderDesktop = () => {
                 />
               </Stack>
               <Typography
-                onClick={() => handleRouteHeader("")}
+                onClick={() =>
+                  handleRouteHeader(
+                    profileInfo?.type === "MANAGER"
+                      ? "rend"
+                      : profileInfo?.type === "PROFESSOR"
+                      ? "rnd"
+                      : ""
+                  )
+                }
                 fontSize="0.9rem"
                 fontWeight={800}
                 letterSpacing={-0.25}
@@ -171,23 +183,6 @@ const HeaderDesktop = () => {
                 >
                   정책자금 / R&D
                 </Typography>
-              </ButtonBase>
-            )}
-
-            {(type === "MANAGER" || type == "PROFESSOR") && (
-              <ButtonBase
-                onClick={() => {
-                  if (type === "MANAGER") {
-                    handleRendSearch(profileInfo?.type, router);
-                  } else {
-                    handleRNDSearch(profileInfo?.type, router);
-                  }
-                }}
-                sx={{
-                  cursor: "pointer",
-                }}
-              >
-                <Typography whiteSpace="nowrap">전문가 신청</Typography>
               </ButtonBase>
             )}
           </Stack>

@@ -1,24 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Box,
-  Typography,
+  Button,
+  Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   TablePagination,
-  Paper,
-  Button,
-  Stack,
+  TableRow,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+
 import { useApllicationList } from "../hooks/apis/useApplicationList";
+import { useRouter } from "next/navigation";
 
 function REND() {
   const router = useRouter();
@@ -100,7 +101,7 @@ function REND() {
                   (r: any) => r.year === "2024"
                 )?.revenue;
 
-                const debt2024 = item.debtStatus?.[0]?.debtAmount ?? "-";
+                const debt2024 = item.debtStatus?.[0]?.debtAmount;
 
                 return (
                   <TableRow key={item.id}>
