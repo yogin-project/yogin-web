@@ -14,6 +14,8 @@ import {
   InputAdornment,
   MenuItem,
   Paper,
+  Radio,
+  RadioGroup,
   Select,
   Stack,
   TextField,
@@ -480,6 +482,63 @@ export default function Loan() {
                       variant="standard"
                       sx={{ gridColumnStart: 2 }}
                     />
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={3}
+                      sx={{
+                        gridColumnStart: 2,
+                        height: "2.5rem",
+                        mt: "-0.25rem", // 겹침 조정
+                        ml: "-0.25rem", // 좌측 여백 맞춤
+                      }}
+                    >
+                      <FormControl component="fieldset" sx={{ m: 0, p: 0 }}>
+                        <RadioGroup
+                          row
+                          name="isCorpLocationOwned"
+                          value={form.isCorpLocationOwned ? "self" : "rent"}
+                          onChange={(e) =>
+                            setForm((prev) => ({
+                              ...prev,
+                              isCorpLocationOwned: e.target.value === "self",
+                            }))
+                          }
+                        >
+                          <FormControlLabel
+                            value="self"
+                            control={<Radio size="small" />}
+                            label="자가"
+                            style={{
+                              backgroundColor: "unset",
+                            }}
+                            sx={{
+                              m: 0,
+                              "& .MuiFormControlLabel-label": {
+                                fontSize: "0.875rem",
+                                fontWeight: 400,
+                              },
+                            }}
+                          />
+                          <FormControlLabel
+                            value="rent"
+                            control={<Radio size="small" />}
+                            label="임차"
+                            style={{
+                              backgroundColor: "unset",
+                            }}
+                            sx={{
+                              m: 0,
+                              ml: 2,
+                              "& .MuiFormControlLabel-label": {
+                                fontSize: "0.875rem",
+                                fontWeight: 400,
+                              },
+                            }}
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Stack>
                   </Stack>
 
                   <Stack
@@ -529,41 +588,63 @@ export default function Loan() {
                       </Select>
                     </FormControl>
                   </Stack>
-
                   <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                    spacing={3}
                     sx={{
                       gridColumnStart: 2,
-                      [`@media (max-width:${BREAKPOINTS.mobile}px)`]: {
-                        gridColumnStart: 1,
-                      },
+                      height: "2.5rem",
+                      mt: "-0.25rem", // 겹침 조정
+                      ml: "-0.25rem", // 좌측 여백 맞춤
                     }}
-                    display="grid"
-                    rowGap={0.5}
-                    gridColumn={2}
-                    gridTemplateColumns="1fr 2fr"
-                    gridAutoRows="2.5rem"
-                    justifyContent="end"
                   >
-                    <FormControlLabel
-                      sx={{
-                        p: "0 !important",
-                        bgcolor: "transparent !important",
-                        gridColumnStart: 2,
-                      }}
-                      control={
-                        <Checkbox
-                          name="selfOwned"
-                          checked={form.selfOwned}
-                          onChange={(e) =>
-                            setForm((prev) => ({
-                              ...prev,
-                              selfOwned: e.target.checked,
-                            }))
-                          }
+                    <FormControl component="fieldset" sx={{ m: 0, p: 0 }}>
+                      <RadioGroup
+                        row
+                        name="isCorpLocationOwned"
+                        value={form.isCorpLocationOwned ? "self" : "rent"}
+                        onChange={(e) =>
+                          setForm((prev) => ({
+                            ...prev,
+                            isCorpLocationOwned: e.target.value === "self",
+                          }))
+                        }
+                      >
+                        <FormControlLabel
+                          value="self"
+                          control={<Radio size="small" />}
+                          label="자가"
+                          style={{
+                            backgroundColor: "unset",
+                          }}
+                          sx={{
+                            m: 0,
+                            "& .MuiFormControlLabel-label": {
+                              fontSize: "0.875rem",
+                              fontWeight: 400,
+                            },
+                          }}
                         />
-                      }
-                      label="소재지 자가 여부"
-                    />
+                        <FormControlLabel
+                          value="rent"
+                          control={<Radio size="small" />}
+                          label="임차"
+                          style={{
+                            backgroundColor: "unset",
+                          }}
+                          sx={{
+                            m: 0,
+                            ml: 2,
+                            "& .MuiFormControlLabel-label": {
+                              fontSize: "0.875rem",
+                              fontWeight: 400,
+                            },
+                          }}
+                        />
+                      </RadioGroup>
+                    </FormControl>
                   </Stack>
 
                   <Stack
