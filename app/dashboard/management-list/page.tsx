@@ -1,24 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Box,
-  Typography,
-  Paper,
-  Select,
-  MenuItem,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableContainer,
-  TablePagination,
+  Button,
+  Chip,
   FormControl,
   InputLabel,
-  Chip,
-  Button,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
 } from "@mui/material";
+import React, { useState } from "react";
+
 import { useManagementList } from "@/app/hooks/apis/useManagementList";
 import { useRouter } from "next/navigation";
 
@@ -26,6 +28,7 @@ const mgrTypeOptions = [
   { label: "전체", value: "" },
   { label: "대출신청", value: "대출신청" },
   { label: "R&D", value: "R%26D" },
+  { label: "기타", value: "ETC" },
 ];
 
 function ManagementList() {
@@ -56,7 +59,7 @@ function ManagementList() {
     setPage(0);
   };
 
-  const handleFilterChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
     setMgrType(event.target.value as string);
     setPage(0);
   };
@@ -109,12 +112,24 @@ function ManagementList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((row: any, index) => (
+              {items.map((row: any) => (
                 <TableRow key={row.id}>
                   <TableCell>
                     <Chip
-                      label={row.mgrType === "대출신청" ? "대출신청" : "R&D"}
-                      color={row.mgrType === "R&D" ? "primary" : "secondary"}
+                      label={
+                        row.mgrType === "대출신청"
+                          ? "대출신청"
+                          : row.mgrType === "R&D"
+                          ? "R&D"
+                          : "기타"
+                      }
+                      color={
+                        row.mgrType === "R&D"
+                          ? "primary"
+                          : row.mgrType === "대출신청"
+                          ? "secondary"
+                          : "default"
+                      }
                       size="small"
                     />
                   </TableCell>

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Alert,
   Box,
   Button,
   Dialog,
@@ -89,7 +88,7 @@ function SubmitManaging() {
           >
             <MenuItem value="대출신청">대출</MenuItem>
             <MenuItem value="R&D">R&D</MenuItem>
-            <MenuItem value="기타">기타</MenuItem>
+            <MenuItem value="ETC">기타</MenuItem>
           </TextField>
 
           <TextField
