@@ -47,14 +47,14 @@ const types = [
 ];
 
 const sortOptions = [
-  { label: "최신순", value: "ASC" },
-  { label: "과거순", value: "DESC" },
+  { label: "과거순", value: "ASC" },
+  { label: "최신순", value: "DESC" },
 ];
 
 function SubmitList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [sort, setSort] = useState("ASC");
+  const [sort, setSort] = useState("DESC");
   const [type, setType] = useState("FUND");
   const [state, setState] = useState("REGISTERED");
 

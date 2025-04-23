@@ -103,9 +103,10 @@ export default function Loan() {
     ceoLocation: "",
     companyLocation: profile?.location ?? "서울",
     establishmentDate: "",
-    selfOwned: false,
     businessNumber: profile?.additionalInfo?.corporateInfoBusinessNo,
     businessType: "",
+    isCorpLocationOwned: false,
+    isOwnerLocationOwned: false,
     patent: "",
     sales2022: "",
     sales2023: "",
@@ -192,8 +193,8 @@ export default function Loan() {
     const data = {
       type: "FUND",
       ownerLocation: form.ceoLocation,
-      isOwnerLocationOwned: form.selfOwned,
-      isCorpLocationOwned: form.selfOwned,
+      isOwnerLocationOwned: form.isOwnerLocationOwned,
+      isCorpLocationOwned: form.isCorpLocationOwned,
       foundDate: form.establishmentDate,
       businessRegistrationNo: form.businessNumber,
       businessCategory: form.businessType,
@@ -603,12 +604,12 @@ export default function Loan() {
                     <FormControl component="fieldset" sx={{ m: 0, p: 0 }}>
                       <RadioGroup
                         row
-                        name="isCorpLocationOwned"
-                        value={form.isCorpLocationOwned ? "self" : "rent"}
+                        name="isOwnerLocationOwned"
+                        value={form.isOwnerLocationOwned ? "self" : "rent"}
                         onChange={(e) =>
                           setForm((prev) => ({
                             ...prev,
-                            isCorpLocationOwned: e.target.value === "self",
+                            isOwnerLocationOwned: e.target.value === "self",
                           }))
                         }
                       >
