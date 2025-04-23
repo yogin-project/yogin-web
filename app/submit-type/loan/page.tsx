@@ -470,7 +470,7 @@ export default function Loan() {
                     </FormLabel>
                     <TextField
                       disabled
-                      value={profile?.location ?? "서울"}
+                      value={profile?.address ?? "서울"}
                       id="companyLocation"
                       autoComplete="off"
                       fullWidth
@@ -682,7 +682,7 @@ export default function Loan() {
                   }}
                 >
                   <FormLabel
-                    htmlFor="sales2022"
+                    htmlFor="sales2024"
                     sx={{
                       gridColumnStart: 1,
                       borderTopWidth: 1,
@@ -693,13 +693,13 @@ export default function Loan() {
                       borderBottomColor: "action.hover",
                     }}
                   >
-                    2022년 매출액 (억)
+                    2024년 매출액 (억)
                   </FormLabel>
                   <TextField
-                    id="sales2022"
+                    id="sales2024"
                     autoComplete="off"
                     fullWidth
-                    name="sales2022"
+                    name="sales2024"
                     hiddenLabel
                     onChange={handleChange}
                     variant="standard"
@@ -754,9 +754,8 @@ export default function Loan() {
                       },
                     }}
                   />
-
                   <FormLabel
-                    htmlFor="sales2024"
+                    htmlFor="sales2022"
                     sx={{
                       gridColumnStart: 1,
                       borderTopWidth: 1,
@@ -767,13 +766,13 @@ export default function Loan() {
                       borderBottomColor: "action.hover",
                     }}
                   >
-                    2024년 매출액 (억)
+                    2022년 매출액 (억)
                   </FormLabel>
                   <TextField
-                    id="sales2024"
+                    id="sales2022"
                     autoComplete="off"
                     fullWidth
-                    name="sales2024"
+                    name="sales2022"
                     hiddenLabel
                     onChange={handleChange}
                     variant="standard"
