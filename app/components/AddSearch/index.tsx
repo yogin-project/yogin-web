@@ -15,7 +15,7 @@ import {
 import React, { useState } from "react";
 
 import DaumPostcode from "react-daum-postcode";
-import { locations } from "@/app/utils";
+import { LOCATIONS } from "@/app/libs/contstant";
 
 interface AddressSearchProps {
   label?: string;
@@ -79,7 +79,7 @@ function AddressSearch({
             id: "location-select",
           }}
         >
-          {locations.map((location) => (
+          {LOCATIONS.map((location) => (
             <MenuItem key={location} value={location}>
               {location}
             </MenuItem>

@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-import { locations } from "@/app/utils";
+import { LOCATIONS } from "@/app/libs/contstant";
 
 const ExcelDownloadPage = () => {
   const [type, setType] = useState("");
@@ -119,7 +119,7 @@ const ExcelDownloadPage = () => {
             onChange={(e) => setRegion(e.target.value)}
           >
             <MenuItem value="">전체</MenuItem>
-            {locations.map((loc) => (
+            {LOCATIONS.map((loc) => (
               <MenuItem key={loc} value={loc}>
                 {loc}
               </MenuItem>

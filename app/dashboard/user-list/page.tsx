@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
-import { locations } from "@/app/utils";
+import { LOCATIONS } from "@/app/libs/contstant";
 import { useAdminList } from "@/app/hooks/apis/useAdminList";
 import { useRouter } from "next/navigation";
 
@@ -154,7 +154,7 @@ function UserList() {
           <InputLabel>지역</InputLabel>
           <Select value={location} label="지역" onChange={handleLocationChange}>
             <MenuItem value="전체">전체</MenuItem>
-            {locations.map((loc) => (
+            {LOCATIONS.map((loc) => (
               <MenuItem key={loc} value={loc}>
                 {loc}
               </MenuItem>

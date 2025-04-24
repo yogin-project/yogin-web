@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { locations } from "@/app/utils";
+import { LOCATIONS } from "@/app/libs/contstant";
 import { usePostPush } from "@/app/hooks/apis/usePostPush";
 import { useState } from "react";
 
@@ -133,7 +133,7 @@ export default function PushMessagePage() {
               onChange={(e: SelectChangeEvent) => setTarget(e.target.value)}
             >
               <MenuItem value="전체">전체</MenuItem>
-              {locations.map((loc) => (
+              {LOCATIONS.map((loc) => (
                 <MenuItem key={loc} value={loc}>
                   {loc}
                 </MenuItem>
