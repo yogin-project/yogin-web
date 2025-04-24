@@ -18,9 +18,9 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { LOCATIONS, SORT_OPTIONS } from "@/app/libs/contstant";
 import React, { useState } from "react";
 
-import { LOCATIONS } from "@/app/libs/contstant";
 import { useAdminList } from "@/app/hooks/apis/useAdminList";
 import { useRouter } from "next/navigation";
 
@@ -34,11 +34,6 @@ const states = [
   { value: "PENDING", label: "대기" },
   { value: "APPROVED", label: "승인" },
   { value: "REJECTED", label: "반려" },
-];
-
-const sortOptions = [
-  { value: "DESC", label: "최신순" },
-  { value: "ASC", label: "과거순" },
 ];
 
 function UserList() {
@@ -142,7 +137,7 @@ function UserList() {
         <FormControl sx={{ minWidth: 120 }} size="small">
           <InputLabel>정렬</InputLabel>
           <Select value={sort} label="정렬" onChange={handleSortChange}>
-            {sortOptions.map((item) => (
+            {SORT_OPTIONS.map((item) => (
               <MenuItem key={item.value} value={item.value}>
                 {item.label}
               </MenuItem>

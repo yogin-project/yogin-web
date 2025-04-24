@@ -1,6 +1,10 @@
 "use client";
 
 import {
+  APPLICATION_STATE_DETAIL_MAP,
+  SORT_OPTIONS,
+} from "@/app/libs/contstant";
+import {
   Box,
   Button,
   Dialog,
@@ -25,7 +29,6 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
-import { APPLICATION_STATE_DETAIL_MAP } from "@/app/libs/contstant";
 import CommonModal from "@/app/components/CommonModal";
 import { useAddSubmit } from "@/app/hooks/apis/useAddSubmit";
 import { useApproveFinal } from "@/app/hooks/apis/useApproveFinal";
@@ -35,11 +38,6 @@ import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
 const types = [
   { label: "대출", value: "FUND" },
   { label: "R&D", value: "RND" },
-];
-
-const sortOptions = [
-  { label: "과거순", value: "ASC" },
-  { label: "최신순", value: "DESC" },
 ];
 
 function SubmitList() {
@@ -180,7 +178,7 @@ function SubmitList() {
                 setPage(0);
               }}
             >
-              {sortOptions.map((option) => (
+              {SORT_OPTIONS.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
