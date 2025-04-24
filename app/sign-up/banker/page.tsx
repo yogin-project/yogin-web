@@ -14,15 +14,16 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { bankList, isValidPassword } from "@/app/utils";
 
 import AddressSearch from "@/app/components/AddSearch";
 import AgreementSection from "../_components/AgreementSection";
+import { BANKS } from "@/app/libs/contstant";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Image from "next/image";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import MobileWrapper from "@/app/layout/MobileWrapper";
 import SuccessModal from "../_components/SuccessModal";
+import { isValidPassword } from "@/app/utils";
 import { useCheckMailHandler } from "@/app/hooks/utils/useCheckMailHandler";
 import { useRouter } from "next/navigation";
 import { useSignUpMutation } from "@/app/hooks/apis/useSignUp";
@@ -230,7 +231,7 @@ function SignUpBank() {
                 <MenuItem value="" disabled>
                   {/* 은행 선택 */}
                 </MenuItem>
-                {bankList.map((bank) => (
+                {BANKS.map((bank) => (
                   <MenuItem key={bank} value={bank}>
                     {bank}
                   </MenuItem>

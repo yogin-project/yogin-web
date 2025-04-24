@@ -29,33 +29,6 @@ export const objToUrl = (obj: any, encode = true) => {
   return url;
 };
 
-export const bankList = [
-  "기업",
-  "우리",
-  "하나",
-  "지역농축협",
-  "한국씨티",
-  "국민",
-  "신한",
-  "농협",
-  "sc",
-  "우체국",
-  "경남",
-  "im(구 대구은행)",
-  "부산",
-  "산업",
-  "새마을금고",
-  "광주",
-  "산림조합",
-  "저축",
-  "수협",
-  "전북",
-  "제주",
-  "카카오뱅크",
-  "케이뱅크",
-  "토스뱅크",
-];
-
 export const isAuthenticated = (): boolean => {
   if (typeof window === "undefined") return false; // SSR 환경 방어
 

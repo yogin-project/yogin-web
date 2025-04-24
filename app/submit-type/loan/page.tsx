@@ -1,5 +1,6 @@
 "use client";
 
+import { BANKS_FULLNAME, LOCATIONS } from "@/app/libs/contstant";
 import {
   Button,
   Card,
@@ -28,7 +29,6 @@ import { BREAKPOINTS } from "@/app/libs/theme";
 import { ChevronRightRounded } from "@mui/icons-material";
 import CommonModal from "@/app/components/CommonModal";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { LOCATIONS } from "@/app/libs/contstant";
 import { profileAtom } from "@/app/store/profileAtom";
 import { useApplicationTemp } from "@/app/hooks/apis/useApplicationTemp";
 import { useAtomValue } from "jotai";
@@ -48,33 +48,6 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
-
-const bankList = [
-  "기업은행",
-  "우리은행",
-  "하나은행",
-  "지역농축협",
-  "한국씨티은행",
-  "국민은행",
-  "신한은행",
-  "농협은행",
-  "sc은행",
-  "우체국",
-  "경남은행",
-  "im은행(구 대구은행)",
-  "부산은행",
-  "산업은행",
-  "새마을금고",
-  "광주은행",
-  "산림조합",
-  "저축은행",
-  "수협",
-  "전북은행",
-  "제주은행",
-  "카카오뱅크",
-  "케이뱅크",
-  "토스뱅크",
-];
 
 export default function Loan() {
   const { mutate, isPending } = useApplicationTemp();
@@ -971,7 +944,7 @@ export default function Loan() {
                             variant="standard"
                             sx={{ gridColumnStart: 2 }}
                           >
-                            {bankList.map((bank, i) => (
+                            {BANKS_FULLNAME.map((bank, i) => (
                               <MenuItem key={i} value={bank}>
                                 {bank}
                               </MenuItem>
