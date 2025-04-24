@@ -1,26 +1,18 @@
 import {
-  APPLICATION_STATES_OBJ,
-  APPLICATION_TYPES_OBJ,
-  FUND_REQUIREMENTS_OBJ,
-} from "@/app/libs/contstant";
-import {
   Button,
   Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListSubheader,
   Stack,
   Typography,
 } from "@mui/material";
 
+import { APPLICATION_TYPES_OBJ } from "@/app/libs/contstant";
 import FUNDApplication from "./FUNDApplication";
 import RNDApplication from "./RNDApplication";
+import { stateLabelMap } from "@/app/utils";
 
 interface ApplicationDetailDialogProps {
   onClose: () => void;
@@ -57,7 +49,7 @@ export default function ApplicationDetailDialog({
           <Typography variant="h6">{item.corpName}</Typography>
         </Stack>
         <Typography whiteSpace="pre">
-          {APPLICATION_STATES_OBJ[state as keyof typeof APPLICATION_STATES_OBJ]}
+          {stateLabelMap[state as keyof typeof stateLabelMap]}
         </Typography>
       </Stack>
 

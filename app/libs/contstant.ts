@@ -9,27 +9,6 @@ export const APPLICATION_TYPES = [
   { label: "대출", value: "FUND" },
   { label: "R&D", value: "RND" },
 ];
-// 신청상태
-export const APPLICATION_STATES_OBJ = {
-  REGISTERED: "등록완료",
-  TEMP: "임시저장",
-  REVIEWING: "전문가 확인중",
-  ADDITIONAL_INFO_REQUIRED: "추가 자료 요청됨",
-  APPROVED: "전문가 승인",
-  REJECTED: "전문가 부결",
-};
-export const APPLICATION_STATES = [
-  { label: "등록완료", value: "REGISTERED", color: "secondary" },
-  { label: "임시저장", value: "TEMP", color: "secondary" },
-  { label: "전문가 확인중", value: "REVIEWING", color: "primary" },
-  {
-    label: "추가 자료 요청됨",
-    value: "ADDITIONAL_INFO_REQUIRED",
-    color: "warning",
-  },
-  { label: "전문가 승인", value: "APPROVED", color: "success" },
-  { label: "전문가 부결", value: "REJECTED", color: "error" },
-];
 
 export const LOCATIONS = [
   "서울",
