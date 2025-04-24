@@ -18,17 +18,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { LOCATIONS, SORT_OPTIONS } from "@/app/libs/contstant";
+import { LOCATIONS, SORT_OPTIONS, USER_TYPES } from "@/app/libs/contstant";
 import React, { useState } from "react";
 
 import { useAdminList } from "@/app/hooks/apis/useAdminList";
 import { useRouter } from "next/navigation";
-
-const userTypes = [
-  { value: "CORPORATE", label: "기업" },
-  { value: "MANAGER", label: "은행" },
-  { value: "PROFESSOR", label: "전문가" },
-];
 
 const states = [
   { value: "PENDING", label: "대기" },
@@ -113,7 +107,7 @@ function UserList() {
         <FormControl sx={{ minWidth: 120 }} size="small">
           <InputLabel>회원 타입</InputLabel>
           <Select value={type} label="회원 타입" onChange={handleTypeChange}>
-            {userTypes.map((item) => (
+            {USER_TYPES.map((item) => (
               <MenuItem key={item.value} value={item.value}>
                 {item.label}
               </MenuItem>

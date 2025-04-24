@@ -1,3 +1,24 @@
+export const USER_TYPES = [
+  { value: "CORPORATE", label: "기업" },
+  { value: "MANAGER", label: "은행" },
+  { value: "PROFESSOR", label: "전문가" },
+];
+
+export const USER_STATE_MAP: Record<string, string> = {
+  PENDING: "승인 대기",
+  APPROVED: "승인 완료",
+  REJECTED: "승인 거부",
+};
+
+export const USER_STATE_DETAIL_MAP: Record<
+  keyof typeof USER_STATE_MAP,
+  { label: string; value: string }
+> = {
+  PENDING: { label: "승인 대기", value: "PENDING" },
+  APPROVED: { label: "승인 완료", value: "APPROVED" },
+  REJECTED: { label: "승인 거부", value: "REJECTED" },
+};
+
 export const SORT_OPTIONS = [
   { value: "DESC", label: "최신순" },
   { value: "ASC", label: "과거순" },
