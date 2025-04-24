@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  APPLICATION_STATE_DETAIL_MAP,
+  APPLICATION_STATE_MAP,
   APPLICATION_TYPES,
   APPLICATION_TYPES_OBJ,
   LOCATIONS,
@@ -26,7 +28,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { stateLabelDetailMap, stateLabelMap } from "@/app/utils";
 
 import ApplicationDetailDialog from "./ApplicationDetailDialog";
 import { useAdminApplicationListMutation } from "@/app/hooks/apis/useAdminApplicationList";
@@ -125,7 +126,7 @@ function ApplicationList() {
           <InputLabel>상태</InputLabel>
           <Select value={status} label="상태" onChange={handleStateChange}>
             <MenuItem value="전체">전체</MenuItem>
-            {Object.values(stateLabelDetailMap).map((item) => (
+            {Object.values(APPLICATION_STATE_DETAIL_MAP).map((item) => (
               <MenuItem key={item.value} value={item.value}>
                 {item.label}
               </MenuItem>
@@ -187,7 +188,11 @@ function ApplicationList() {
                   />
                 </TableCell>
                 <TableCell>
-                  {stateLabelMap[row.state as keyof typeof stateLabelMap]}
+                  {
+                    APPLICATION_STATE_MAP[
+                      row.state as keyof typeof APPLICATION_STATE_MAP
+                    ]
+                  }
                 </TableCell>
                 <TableCell>{row.corpName}</TableCell>
                 <TableCell>{row.businessCategory}</TableCell>

@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
-import { stateLabelMap } from "@/app/utils";
+import { APPLICATION_STATE_MAP } from "@/app/libs/contstant";
 import { useExportApllicationList } from "@/app/hooks/apis/useExpertAppplicationList";
 import { useRouter } from "next/navigation";
 
@@ -135,7 +135,7 @@ function MyListLoan() {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      {stateLabelMap?.[item.state] ?? item.state ?? "-"}
+                      {APPLICATION_STATE_MAP?.[item.state] ?? item.state ?? "-"}
                     </TableCell>
                   </TableRow>
                 );

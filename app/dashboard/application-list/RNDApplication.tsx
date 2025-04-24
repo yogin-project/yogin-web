@@ -1,11 +1,13 @@
+import {
+  APPLICATION_STATE_MAP,
+  APPLICATION_TYPES_OBJ,
+} from "@/app/libs/contstant";
 import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import { CustomStackGrid, CustomStackGridColumn } from "./components";
 
-import { APPLICATION_TYPES_OBJ } from "@/app/libs/contstant";
 import { ChevronRightRounded } from "@mui/icons-material";
 import Link from "next/link";
 import React from "react";
-import { stateLabelMap } from "@/app/utils";
 
 interface RNDApplicationProps {
   item: any;
@@ -283,7 +285,11 @@ export default function RNDApplication({ item }: RNDApplicationProps) {
               <CustomStackGridColumn
                 start={1}
                 label="검토 상태"
-                value={stateLabelMap[state as keyof typeof stateLabelMap]}
+                value={
+                  APPLICATION_STATE_MAP[
+                    state as keyof typeof APPLICATION_STATE_MAP
+                  ]
+                }
               />
               <CustomStackGridColumn
                 start={2}

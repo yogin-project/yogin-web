@@ -1,4 +1,8 @@
-import { APPLICATION_TYPES_OBJ, FUND_REQUIREMENTS } from "@/app/libs/contstant";
+import {
+  APPLICATION_STATE_MAP,
+  APPLICATION_TYPES_OBJ,
+  FUND_REQUIREMENTS,
+} from "@/app/libs/contstant";
 import {
   Button,
   Card,
@@ -13,7 +17,6 @@ import { CustomStackGrid, CustomStackGridColumn } from "./components";
 import { ChevronRightRounded } from "@mui/icons-material";
 import Link from "next/link";
 import React from "react";
-import { stateLabelMap } from "@/app/utils";
 
 interface FUNDApplicationProps {
   item: any;
@@ -286,7 +289,11 @@ export default function FUNDApplication({ item }: FUNDApplicationProps) {
               <CustomStackGridColumn
                 start={1}
                 label="검토 상태"
-                value={stateLabelMap[state as keyof typeof stateLabelMap]}
+                value={
+                  APPLICATION_STATE_MAP[
+                    state as keyof typeof APPLICATION_STATE_MAP
+                  ]
+                }
               />
               <CustomStackGridColumn
                 start={2}

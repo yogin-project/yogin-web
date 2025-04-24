@@ -25,21 +25,12 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
+import { APPLICATION_STATE_DETAIL_MAP } from "@/app/libs/contstant";
 import CommonModal from "@/app/components/CommonModal";
-import { useAddRequire } from "@/app/hooks/apis/useAddRequire";
 import { useAddSubmit } from "@/app/hooks/apis/useAddSubmit";
 import { useApproveFinal } from "@/app/hooks/apis/useApproveFinal";
 import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
 import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
-
-const applicationStates = [
-  { label: "등록완료", value: "REGISTERED" },
-
-  { label: "전문가 확인중", value: "REVIEWING" },
-  { label: "추가 자료 요청됨", value: "ADDITIONAL_INFO_REQUIRED" },
-  { label: "전문가 승인", value: "APPROVED" },
-  { label: "전문가 부결", value: "REJECTED" },
-];
 
 const types = [
   { label: "대출", value: "FUND" },
@@ -227,7 +218,7 @@ function SubmitList() {
                 setPage(0);
               }}
             >
-              {applicationStates.map((option) => (
+              {Object.values(APPLICATION_STATE_DETAIL_MAP).map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>

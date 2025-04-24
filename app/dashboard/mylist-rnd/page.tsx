@@ -1,25 +1,26 @@
 "use client";
 
-import { useExportApllicationList } from "@/app/hooks/apis/useExpertAppplicationList";
-import { stateLabelMap } from "@/app/utils";
 import {
   Box,
-  Typography,
-  Stack,
-  ToggleButtonGroup,
-  ToggleButton,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Button,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
   TablePagination,
+  TableRow,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+
+import { APPLICATION_STATE_MAP } from "@/app/libs/contstant";
+import { useExportApllicationList } from "@/app/hooks/apis/useExpertAppplicationList";
+import { useRouter } from "next/navigation";
 
 function MyListRND() {
   const router = useRouter();
@@ -131,7 +132,7 @@ function MyListRND() {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      {stateLabelMap?.[item.state] ?? item.state ?? "-"}
+                      {APPLICATION_STATE_MAP?.[item.state] ?? item.state ?? "-"}
                     </TableCell>
                   </TableRow>
                 );

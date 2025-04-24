@@ -10,6 +10,39 @@ export const APPLICATION_TYPES = [
   { label: "R&D", value: "RND" },
 ];
 
+export const APPLICATION_STATE_MAP: Record<string, string> = {
+  TEMP: "임시저장",
+  REGISTERED: "등록완료",
+  REVIEWING: "전문가 확인중",
+  ADDITIONAL_INFO_REQUIRED: "추가 자료 요청됨",
+  APPROVED: "전문가 승인",
+  REJECTED: "전문가 부결",
+  DELETED: "삭제됨",
+  FINAL_APPROVED: "최종 승인",
+};
+
+export const APPLICATION_STATE_DETAIL_MAP: Record<
+  keyof typeof APPLICATION_STATE_MAP,
+  { label: string; value: string; color: string }
+> = {
+  REGISTERED: { label: "등록완료", value: "REGISTERED", color: "secondary" },
+  TEMP: { label: "임시저장", value: "TEMP", color: "secondary" },
+  REVIEWING: { label: "전문가 확인중", value: "REVIEWING", color: "primary" },
+  ADDITIONAL_INFO_REQUIRED: {
+    label: "추가 자료 요청됨",
+    value: "ADDITIONAL_INFO_REQUIRED",
+    color: "warning",
+  },
+  APPROVED: { label: "전문가 승인", value: "APPROVED", color: "success" },
+  REJECTED: { label: "전문가 부결", value: "REJECTED", color: "error" },
+  DELETED: { label: "삭제됨", value: "DELETED", color: "error" },
+  FINAL_APPROVED: {
+    label: "최종 승인",
+    value: "FINAL_APPROVED",
+    color: "success",
+  },
+};
+
 export const LOCATIONS = [
   "서울",
   "부산",
@@ -28,6 +61,33 @@ export const LOCATIONS = [
   "경북",
   "경남",
   "제주",
+];
+
+export const BANKS = [
+  "기업",
+  "우리",
+  "하나",
+  "지역농축협",
+  "한국씨티",
+  "국민",
+  "신한",
+  "농협",
+  "sc",
+  "우체국",
+  "경남",
+  "im(구 대구은행)",
+  "부산",
+  "산업",
+  "새마을금고",
+  "광주",
+  "산림조합",
+  "저축",
+  "수협",
+  "전북",
+  "제주",
+  "카카오뱅크",
+  "케이뱅크",
+  "토스뱅크",
 ];
 
 export const FUND_REQUIREMENTS_OBJ = {

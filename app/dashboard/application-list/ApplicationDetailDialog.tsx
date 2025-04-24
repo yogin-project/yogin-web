@@ -1,4 +1,8 @@
 import {
+  APPLICATION_STATE_MAP,
+  APPLICATION_TYPES_OBJ,
+} from "@/app/libs/contstant";
+import {
   Button,
   Chip,
   Dialog,
@@ -9,10 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import { APPLICATION_TYPES_OBJ } from "@/app/libs/contstant";
 import FUNDApplication from "./FUNDApplication";
 import RNDApplication from "./RNDApplication";
-import { stateLabelMap } from "@/app/utils";
 
 interface ApplicationDetailDialogProps {
   onClose: () => void;
@@ -49,7 +51,7 @@ export default function ApplicationDetailDialog({
           <Typography variant="h6">{item.corpName}</Typography>
         </Stack>
         <Typography whiteSpace="pre">
-          {stateLabelMap[state as keyof typeof stateLabelMap]}
+          {APPLICATION_STATE_MAP[state as keyof typeof APPLICATION_STATE_MAP]}
         </Typography>
       </Stack>
 
