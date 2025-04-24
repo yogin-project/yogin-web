@@ -1,25 +1,26 @@
 "use client";
 
-import { useExportApllicationList } from "@/app/hooks/apis/useExpertAppplicationList";
-import { stateLabelMap } from "@/app/utils";
 import {
   Box,
-  Typography,
-  Stack,
-  ToggleButtonGroup,
-  ToggleButton,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Button,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
   TablePagination,
+  TableRow,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+
+import { stateLabelMap } from "@/app/utils";
+import { useExportApllicationList } from "@/app/hooks/apis/useExpertAppplicationList";
+import { useRouter } from "next/navigation";
 
 function MyListLoan() {
   const router = useRouter();
@@ -103,7 +104,7 @@ function MyListLoan() {
                   (r: any) => r.year === "2024"
                 )?.revenue;
 
-                const debt2024 = item.debtStatus?.[0]?.debtAmount ?? "-";
+                const debt2024 = item.debtStatus?.[0]?.debtAmount;
 
                 return (
                   <TableRow key={item.id}>

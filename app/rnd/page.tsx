@@ -1,23 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
-import { useApllicationList } from "../hooks/apis/useApplicationList";
 import {
   Box,
-  Typography,
-  Stack,
-  ToggleButtonGroup,
-  ToggleButton,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Button,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
   TablePagination,
+  TableRow,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
+import React, { useState } from "react";
+
+import { useApllicationList } from "../hooks/apis/useApplicationList";
 import { useRouter } from "next/navigation";
 
 function RND() {
@@ -101,8 +102,6 @@ function RND() {
             </TableHead>
             <TableBody>
               {applications.map((item: any) => {
-                const debt2024 = item.debtStatus?.[0]?.debtAmount ?? "-";
-
                 return (
                   <TableRow key={item.id}>
                     <TableCell>
