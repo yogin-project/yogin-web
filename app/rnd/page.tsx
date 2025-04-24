@@ -38,8 +38,6 @@ function RND() {
 
   const { data, isLoading } = useApllicationList(queryParams);
 
-  console.log("data: ", data);
-
   const applications = data?.data?.applications || [];
   const isLast = data?.data?.isLast;
 

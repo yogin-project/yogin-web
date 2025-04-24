@@ -13,9 +13,12 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
+import {
+  LOCATIONS,
+  USER_STATE_DETAIL_MAP,
+  USER_STATE_MAP,
+} from "@/app/libs/contstant";
 import React, { useEffect, useState } from "react";
-
-import { LOCATIONS } from "@/app/libs/contstant";
 
 const ExcelDownloadPage = () => {
   const [type, setType] = useState("");
@@ -104,9 +107,11 @@ const ExcelDownloadPage = () => {
               label="회원 상태"
               onChange={(e) => setState(e.target.value)}
             >
-              <MenuItem value="PENDING">승인 대기중</MenuItem>
-              <MenuItem value="APPROVED">승인</MenuItem>
-              <MenuItem value="REJECTED">반려</MenuItem>
+              {Object.values(USER_STATE_DETAIL_MAP).map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         )}

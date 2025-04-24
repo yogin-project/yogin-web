@@ -18,17 +18,16 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { LOCATIONS, SORT_OPTIONS, USER_TYPES } from "@/app/libs/contstant";
+import {
+  LOCATIONS,
+  SORT_OPTIONS,
+  USER_STATE_DETAIL_MAP,
+  USER_TYPES,
+} from "@/app/libs/contstant";
 import React, { useState } from "react";
 
 import { useAdminList } from "@/app/hooks/apis/useAdminList";
 import { useRouter } from "next/navigation";
-
-const states = [
-  { value: "PENDING", label: "대기" },
-  { value: "APPROVED", label: "승인" },
-  { value: "REJECTED", label: "반려" },
-];
 
 function UserList() {
   const router = useRouter();
@@ -119,9 +118,9 @@ function UserList() {
           <FormControl sx={{ minWidth: 120 }} size="small">
             <InputLabel>상태</InputLabel>
             <Select value={state} label="상태" onChange={handleStateChange}>
-              {states.map((item) => (
-                <MenuItem key={item.value} value={item.value}>
-                  {item.label}
+              {Object.values(USER_STATE_DETAIL_MAP).map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
