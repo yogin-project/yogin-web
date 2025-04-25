@@ -2,6 +2,7 @@
 
 import {
   APPLICATION_STATE_DETAIL_MAP,
+  APPLICATION_TYPES,
   SORT_OPTIONS,
 } from "@/app/libs/contstant";
 import {
@@ -34,11 +35,6 @@ import { useAddSubmit } from "@/app/hooks/apis/useAddSubmit";
 import { useApproveFinal } from "@/app/hooks/apis/useApproveFinal";
 import { useCompanyApplicationCancel } from "@/app/hooks/apis/useCompanyApplicationCancel";
 import { useCompanyFundList } from "@/app/hooks/apis/useCompanyFundList";
-
-const types = [
-  { label: "대출", value: "FUND" },
-  { label: "R&D", value: "RND" },
-];
 
 function SubmitList() {
   const [page, setPage] = useState(0);
@@ -197,7 +193,7 @@ function SubmitList() {
                 setPage(0);
               }}
             >
-              {types.map((option) => (
+              {APPLICATION_TYPES.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>

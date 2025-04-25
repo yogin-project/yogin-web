@@ -3,15 +3,15 @@
 "use client";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
   Box,
-  Stack,
+  Button,
+  Dialog,
+  DialogActions,
   IconButton,
+  Stack,
+  Typography,
 } from "@mui/material";
+
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 

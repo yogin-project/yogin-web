@@ -13,11 +13,7 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
-import {
-  LOCATIONS,
-  USER_STATE_DETAIL_MAP,
-  USER_STATE_MAP,
-} from "@/app/libs/contstant";
+import { LOCATIONS, USER_STATE_DETAIL_MAP } from "@/app/libs/contstant";
 import React, { useEffect, useState } from "react";
 
 const ExcelDownloadPage = () => {

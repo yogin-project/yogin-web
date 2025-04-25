@@ -22,6 +22,7 @@ import {
   LOCATIONS,
   SORT_OPTIONS,
   USER_STATE_DETAIL_MAP,
+  USER_STATE_MAP,
   USER_TYPES,
 } from "@/app/libs/contstant";
 import React, { useState } from "react";
@@ -173,8 +174,8 @@ function UserList() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.phoneNumber}</TableCell>
                   <TableCell>{user.location || "-"}</TableCell>
-                  {type !== "CORPORATE" && (
-                    <TableCell>{user.state || "-"}</TableCell>
+                  {type !== "CORPORATE" && user?.state && (
+                    <TableCell>{USER_STATE_MAP?.[user.state] || "-"}</TableCell>
                   )}
                   <TableCell>
                     <Button size="small" onClick={() => handleViewDetail(user)}>
